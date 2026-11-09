@@ -1,0 +1,146 @@
+[
+  {
+    "id": "first-program",
+    "expected": "Hello, Ada!",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "numbers",
+    "expected": "42\noverflow rejected=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "collections",
+    "expected": "Ada\nLinus\nGrace\ncount=3",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "functions",
+    "expected": "mean=80\nempty=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "references",
+    "expected": "Hello, Ada Lovelace\nname empty=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "invariants",
+    "expected": "90\nscore 0..100",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "raii",
+    "expected": "acquire\nwork\nrelease\nfailed",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "moves",
+    "expected": "first empty=1\nsecond=page 7\nsecond empty=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "sorting",
+    "expected": "1 Ada\n2 Linus\n3 Grace\nfound=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "maps",
+    "expected": "inserted=1\nduplicate=1\nAda\nmissing=1\nsize=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "ranges",
+    "expected": "75\n95\noriginal=70",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "concepts",
+    "expected": "9",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "borrowing",
+    "expected": "Ada\n22\nAda",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "parsing",
+    "expected": "42: valid\n42x: invalid\n-1: invalid\n0: invalid\n99999999999999999999: invalid",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "failure",
+    "expected": "empty name\npreserved=Ada\ncommitted=Grace",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "sum-types",
+    "expected": "90\nscore outside 0..100",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "row-model",
+    "expected": "good=1\nbad=0",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "crud",
+    "expected": "inserted=1\nduplicate=1\nAda 95\nremoved=1\ncount=0",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "byte-format",
+    "expected": "78 56 34 12 \nroundtrip=1",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "persistence",
+    "expected": "reopened: 1 Ada 90",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "contracts",
+    "expected": "3 contracts passed",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "portability",
+    "expected": "byte bits=8\nuint32 bits=32\nportable format uses explicit bytes",
+    "native": false,
+    "flags": ""
+  },
+  {
+    "id": "threads",
+    "expected": "count=20000",
+    "native": true,
+    "flags": "-pthread"
+  },
+  {
+    "id": "publication",
+    "expected": "snapshot sum=60",
+    "native": true,
+    "flags": "-pthread"
+  }
+]

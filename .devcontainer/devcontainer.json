@@ -1,0 +1,9 @@
+{
+  "name":"C++ Foundry",
+  "image":"mcr.microsoft.com/devcontainers/cpp:1-ubuntu-24.04",
+  "features":{"ghcr.io/devcontainers/features/node:1":{"version":"24"}},
+  "postCreateCommand":"npm ci && python3 tools/prepare_toolchain.py",
+  "forwardPorts":[8080],
+  "portsAttributes":{"8080":{"label":"C++ Foundry"}},
+  "customizations":{"vscode":{"extensions":["ms-vscode.cpptools"]}}
+}
