@@ -1,3 +1,5 @@
+import {extend,parts} from './curriculum.js';
+export {parts};
 export const chapters = [
   {id:'values',title:'Values before pointers',description:'Write useful programs with strings, vectors, and small functions.',project:'Build a score summary that handles an empty collection.'},
   {id:'ownership',title:'Ownership and lifetimes',description:'Make resource cleanup a property of your types.',project:'Design a move-only resource owner with a clear lifetime.'},
@@ -567,4 +569,5 @@ int main() {
   'Publication establishes visibility of prior writes. It does not synchronize future conflicting accesses.',
   'Draw the happens-before chain from vector initialization to the reader. Extend to immutable snapshots using shared ownership and a documented replacement protocol.',{native:true,flags:'-pthread'});
 
+extend(chapters,lessons);
 export const byId = new Map(lessons.map(item => [item.id,item]));

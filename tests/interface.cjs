@@ -11,13 +11,15 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(url);
     await page.locator('.hero').waitFor();
-    assert.equal(await page.locator('.chapter-card').count(),6);
+    assert.equal(await page.locator('.chapter-card').count(),9);
     await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
     await page.locator('nav [data-nav=course]').click();
     await page.locator('.outline-chapter').first().waitFor();
-    assert.equal(await page.locator('.lesson-links li').count(),24);
-    assert.equal(await page.locator('.lesson-links .tag').count(),2);
     const lessons=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../native/lessons.json'),'utf8'));
+    assert.equal(await page.locator('.outline-chapter').count(),44);
+    assert.equal(await page.locator('.course-part').count(),9);
+    assert.equal(await page.locator('.lesson-links li').count(),lessons.length);
+    assert.equal(await page.locator('.lesson-links .tag').count(),lessons.filter(l=>l.native).length);
     for(const lesson of lessons){
       await page.goto(url+'#/lesson/'+lesson.id);
       await page.waitForFunction(id=>document.querySelector('.contents [aria-current="page"]')?.getAttribute('href')==='#/lesson/'+id,lesson.id);
@@ -27,7 +29,15 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
       if(lesson.native){assert.equal(await page.locator('.editor').count(),0);assert.ok(await page.locator('.native-command').innerText());}
       else assert.ok((await page.locator('.source').inputValue()).includes('int main'));
     }
-    console.log('PASS all 24 routes, readings, questions, experiments, native/browser controls');
+    console.log(`PASS all ${lessons.length} routes, readings, questions, experiments, native/browser controls`);
+    await page.goto(url+'#/lesson/bplus-routing');await page.locator('#part-select').waitFor();
+    assert.equal(await page.locator('#part-select').inputValue(),'reliability');
+    await page.locator('#part-select').selectOption('advanced');
+    await page.waitForFunction(()=>location.hash==='#/lesson/lost-update-schedule'&&document.querySelector('#part-select')?.value==='advanced');
+    await page.goto(url+'#/course/reliability');await page.waitForFunction(()=>document.querySelectorAll('.course-part').length===1);
+    assert.equal(await page.locator('.outline-chapter').count(),4);
+    assert.equal(await page.locator('.lesson-links li').count(),29);
+    console.log('PASS part selector and filtered course navigation');
     await page.goto(url+'#/lesson/first-program');
     await page.locator('.source').waitFor();
     await page.locator('[data-choice="0"]').click();

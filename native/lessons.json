@@ -1,146 +1,1810 @@
 [
   {
     "id": "first-program",
+    "chapter": "values",
     "expected": "Hello, Ada!",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "numbers",
+    "chapter": "values",
     "expected": "42\noverflow rejected=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "collections",
+    "chapter": "values",
     "expected": "Ada\nLinus\nGrace\ncount=3",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "functions",
+    "chapter": "values",
     "expected": "mean=80\nempty=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "branch-contracts",
+    "chapter": "control-flow",
+    "expected": "retry\npass\npass",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "short-circuit",
+    "chapter": "control-flow",
+    "expected": "0\n1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "loop-invariants",
+    "chapter": "control-flow",
+    "expected": "0:0\n1:3\n2:4\ntotal=8",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "switch-enums",
+    "chapter": "control-flow",
+    "expected": "scan rows\npublish snapshot",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "termination",
+    "chapter": "control-flow",
+    "expected": "13 6 3 1 steps=4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "value-parameters",
+    "chapter": "functions-build",
+    "expected": "Ada!\nAda",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "return-results",
+    "chapter": "functions-build",
+    "expected": "2 9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "overload-resolution",
+    "chapter": "functions-build",
+    "expected": "integer\nfloating",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "declarations-linking",
+    "chapter": "functions-build",
+    "expected": "36",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "header-guards",
+    "chapter": "functions-build",
+    "expected": "100",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "string-bytes",
+    "chapter": "text-sequences",
+    "expected": "bytes=4\nZoë",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "vector-capacity",
+    "chapter": "text-sequences",
+    "expected": "size=2 enough=1\n0 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "line-input",
+    "chapter": "text-sequences",
+    "expected": "[LIST]\n[]\n[SAVE]",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "erase-remove",
+    "chapter": "text-sequences",
+    "expected": "removed=2 remaining=3\n135",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "safe-slicing",
+    "chapter": "text-sequences",
+    "expected": "Love\nrejected=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "aggregate-init",
+    "chapter": "user-types",
+    "expected": "Ada 90\nGrace 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "enum-status",
+    "chapter": "user-types",
+    "expected": "duplicate",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "explicit-construction",
+    "chapter": "user-types",
+    "expected": "7",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "member-const",
+    "chapter": "user-types",
+    "expected": "3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "value-equality",
+    "chapter": "user-types",
+    "expected": "1 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "iterator-ranges",
+    "chapter": "standard-library",
+    "expected": "4\nabsent=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "transform-output",
+    "chapter": "standard-library",
+    "expected": "1 4 9 size=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "optional-observation",
+    "chapter": "standard-library",
+    "expected": "present=1 value=0\nmissing=1 fallback=-1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "container-selection",
+    "chapter": "standard-library",
+    "expected": "123 input=4 unique=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "algorithm-predicates",
+    "chapter": "standard-library",
+    "expected": "Ada\nGrace\nLinus",
+    "native": false,
+    "flags": "",
+    "input": ""
   },
   {
     "id": "references",
+    "chapter": "ownership",
     "expected": "Hello, Ada Lovelace\nname empty=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "invariants",
+    "chapter": "ownership",
     "expected": "90\nscore 0..100",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "raii",
+    "chapter": "ownership",
     "expected": "acquire\nwork\nrelease\nfailed",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "moves",
+    "chapter": "ownership",
     "expected": "first empty=1\nsecond=page 7\nsecond empty=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
-    "id": "sorting",
-    "expected": "1 Ada\n2 Linus\n3 Grace\nfound=1",
+    "id": "observer-owner",
+    "chapter": "lifetimes-views",
+    "expected": "42\nempty=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
-    "id": "maps",
-    "expected": "inserted=1\nduplicate=1\nAda\nmissing=1\nsize=1",
+    "id": "temporary-lifetime",
+    "chapter": "lifetimes-views",
+    "expected": "Ada Lovelace",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
-    "id": "ranges",
-    "expected": "75\n95\noriginal=70",
+    "id": "vector-invalidation",
+    "chapter": "lifetimes-views",
+    "expected": "20 size=3",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
-    "id": "concepts",
-    "expected": "9",
+    "id": "view-mutation",
+    "chapter": "lifetimes-views",
+    "expected": "193",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "shared-weak",
+    "chapter": "lifetimes-views",
+    "expected": "7\nexpired=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "rule-zero",
+    "chapter": "copy-move",
+    "expected": "Ada Changed",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "move-only-types",
+    "chapter": "copy-move",
+    "expected": "1 12",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "copy-custom-owner",
+    "chapter": "copy-move",
+    "expected": "5 9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "noexcept-moves",
+    "chapter": "copy-move",
+    "expected": "1\n0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "return-elision",
+    "chapter": "copy-move",
+    "expected": "ready",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "deduction",
+    "chapter": "templates",
+    "expected": "7\n7.5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "requires-expressions",
+    "chapter": "templates",
+    "expected": "3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "if-constexpr",
+    "chapter": "templates",
+    "expected": "integral\nother",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "constexpr-evaluation",
+    "chapter": "templates",
+    "expected": "15",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "forwarding",
+    "chapter": "templates",
+    "expected": "9\n4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "virtual-interface",
+    "chapter": "polymorphism",
+    "expected": "3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "virtual-destruction",
+    "chapter": "polymorphism",
+    "expected": "derived\nbase",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "object-slicing",
+    "chapter": "polymorphism",
+    "expected": "1 2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "variant-visitation",
+    "chapter": "polymorphism",
+    "expected": "lookup 7",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "composition",
+    "chapter": "polymorphism",
+    "expected": "1 0",
+    "native": false,
+    "flags": "",
+    "input": ""
   },
   {
     "id": "borrowing",
+    "chapter": "boundaries",
     "expected": "Ada\n22\nAda",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "parsing",
+    "chapter": "boundaries",
     "expected": "42: valid\n42x: invalid\n-1: invalid\n0: invalid\n99999999999999999999: invalid",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "failure",
+    "chapter": "boundaries",
     "expected": "empty name\npreserved=Ada\ncommitted=Grace",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "sum-types",
+    "chapter": "boundaries",
     "expected": "90\nscore outside 0..100",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sorting",
+    "chapter": "algorithms",
+    "expected": "1 Ada\n2 Linus\n3 Grace\nfound=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "maps",
+    "chapter": "algorithms",
+    "expected": "inserted=1\nduplicate=1\nAda\nmissing=1\nsize=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "ranges",
+    "chapter": "algorithms",
+    "expected": "75\n95\noriginal=70",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "concepts",
+    "chapter": "algorithms",
+    "expected": "9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "count-work",
+    "chapter": "complexity",
+    "expected": "absent=4 first=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "growth-bounds",
+    "chapter": "complexity",
+    "expected": "1:5 <= 5\n2:8 <= 10\n4:14 <= 20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "growth-comparison",
+    "chapter": "complexity",
+    "expected": "4 log=2 linear=4 square=16\n8 log=3 linear=8 square=64",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "amortized-append",
+    "chapter": "complexity",
+    "expected": "appends=9 copied=15 capacity=16",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "benchmark-contract",
+    "chapter": "complexity",
+    "expected": "4 8 ratio=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "linear-search-result",
+    "chapter": "searching",
+    "expected": "first=0\nmissing=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "binary-search-invariant",
+    "chapter": "searching",
+    "expected": "1 3 5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "duplicate-range",
+    "chapter": "searching",
+    "expected": "matches=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "partition-point",
+    "chapter": "searching",
+    "expected": "prefix=3 next=9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "index-tradeoffs",
+    "chapter": "searching",
+    "expected": "shifted=1\n1459",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "insertion-sort",
+    "chapter": "sorting-strategies",
+    "expected": "1234 shifts=4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "merge-ranges",
+    "chapter": "sorting-strategies",
+    "expected": "124489",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "stable-order",
+    "chapter": "sorting-strategies",
+    "expected": "BAC",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "selection-topk",
+    "chapter": "sorting-strategies",
+    "expected": "median=5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sort-oracle",
+    "chapter": "sorting-strategies",
+    "expected": "verified=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "recursive-progress",
+    "chapter": "recursion",
+    "expected": "10",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "divide-conquer",
+    "chapter": "recursion",
+    "expected": "20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "memoization",
+    "chapter": "recursion",
+    "expected": "55",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "tabulation",
+    "chapter": "recursion",
+    "expected": "55",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "backtracking-state",
+    "chapter": "recursion",
+    "expected": ".\n2.\n1.\n12.",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "owned-list",
+    "chapter": "lists-queues",
+    "expected": "12",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "remove-owned-node",
+    "chapter": "lists-queues",
+    "expected": "2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "lifo-stack",
+    "chapter": "lists-queues",
+    "expected": "321",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "ring-buffer",
+    "chapter": "lists-queues",
+    "expected": "full=1 first=1\n234",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "fifo-deque",
+    "chapter": "lists-queues",
+    "expected": "10 20 30 empty=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "hash-buckets",
+    "chapter": "hashing",
+    "expected": "bucket=1,1 values=10,80",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "linear-probing",
+    "chapter": "hashing",
+    "expected": "full=1 absent=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "tombstones",
+    "chapter": "hashing",
+    "expected": "deleted=1 survivor=80",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "rehashing",
+    "chapter": "hashing",
+    "expected": "10 40",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "hash-reference",
+    "chapter": "hashing",
+    "expected": "model=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "tree-ordering",
+    "chapter": "balanced-trees",
+    "expected": "12346 found=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "avl-height",
+    "chapter": "balanced-trees",
+    "expected": "root=4 height=3 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "avl-single-rotation",
+    "chapter": "balanced-trees",
+    "expected": "20 20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "avl-double-rotation",
+    "chapter": "balanced-trees",
+    "expected": "20 left=10 right=30 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "avl-delete-oracle",
+    "chapter": "balanced-trees",
+    "expected": "delete verified=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "heap-order",
+    "chapter": "heaps",
+    "expected": "minimum=1 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sift-up",
+    "chapter": "heaps",
+    "expected": "7654",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sift-down",
+    "chapter": "heaps",
+    "expected": "1258 empty=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "priority-ties",
+    "chapter": "heaps",
+    "expected": "1:1 1:2 2:0 done",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "heap-reference",
+    "chapter": "heaps",
+    "expected": "verified=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "adjacency-values",
+    "chapter": "graphs",
+    "expected": "0:2 1:1 2:0 vertices=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "breadth-first",
+    "chapter": "graphs",
+    "expected": "0112",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "depth-first",
+    "chapter": "graphs",
+    "expected": "012",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "topological-order",
+    "chapter": "graphs",
+    "expected": "0123 complete=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "weighted-path",
+    "chapter": "graphs",
+    "expected": "2 3",
+    "native": false,
+    "flags": "",
+    "input": ""
   },
   {
     "id": "row-model",
+    "chapter": "records",
     "expected": "good=1\nbad=0",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "crud",
+    "chapter": "records",
     "expected": "inserted=1\nduplicate=1\nAda 95\nremoved=1\ncount=0",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "byte-format",
+    "chapter": "records",
     "expected": "78 56 34 12 \nroundtrip=1",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "persistence",
+    "chapter": "records",
     "expected": "reopened: 1 Ada 90",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sql-tokenization",
+    "chapter": "parsing-sql",
+    "expected": "[SELECT][*][FROM][people][WHERE][id][=][7][;]",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sql-quoted-text",
+    "chapter": "parsing-sql",
+    "expected": "Ada Lovelace\nO'Brien",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sql-select-ast",
+    "chapter": "parsing-sql",
+    "expected": "all=1 id=7",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sql-trailing-rejection",
+    "chapter": "parsing-sql",
+    "expected": "accepted\ntrailing tokens",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sql-parse-before-state",
+    "chapter": "parsing-sql",
+    "expected": "rejected\nexecuted=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "scan-operator",
+    "chapter": "query-execution",
+    "expected": "1 2 3 visited=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "filter-operator",
+    "chapter": "query-execution",
+    "expected": "12 source=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "projection-operator",
+    "chapter": "query-execution",
+    "expected": "Ada fields=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "limit-operator",
+    "chapter": "query-execution",
+    "expected": "12 visited=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "operator-composition",
+    "chapter": "query-execution",
+    "expected": "Grace\nAda",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "codec-exact-bytes",
+    "chapter": "binary-codecs",
+    "expected": "exact=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "codec-bounds",
+    "chapter": "binary-codecs",
+    "expected": "truncated cursor=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "codec-length-prefix",
+    "chapter": "binary-codecs",
+    "expected": "Ada",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "codec-candidate-import",
+    "chapter": "binary-codecs",
+    "expected": "rejected 7,8",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "codec-version-header",
+    "chapter": "binary-codecs",
+    "expected": "1 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "page-units",
+    "chapter": "pager-cache",
+    "expected": "page=7 byte=42 size=16",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "pin-guards",
+    "chapter": "pager-cache",
+    "expected": "all pages pinned\nafter release=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "dirty-eviction",
+    "chapter": "pager-cache",
+    "expected": "reloaded=99",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "cache-hits",
+    "chapter": "pager-cache",
+    "expected": "hits=1 misses=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "guard-moves",
+    "chapter": "pager-cache",
+    "expected": "pins=1 value=7\nreleased=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-routing",
+    "chapter": "bplus-tree",
+    "expected": "leaves=2 route2=0 route3=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-split",
+    "chapter": "bplus-tree",
+    "expected": "2 3 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-range",
+    "chapter": "bplus-tree",
+    "expected": "34567",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-rejection",
+    "chapter": "bplus-tree",
+    "expected": "duplicate=1 bounded=1 preserved=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-borrow",
+    "chapter": "bplus-tree",
+    "expected": "left=2,3 right=4 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-merge",
+    "chapter": "bplus-tree",
+    "expected": "leaves=1 keys=234 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-empty-root",
+    "chapter": "bplus-tree",
+    "expected": "leaves=1 empty=1 missing=1 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "bplus-reference",
+    "chapter": "bplus-tree",
+    "expected": "reference=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "transaction-begin",
+    "chapter": "transactions",
+    "expected": "private=99 committed=10",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "read-own-writes",
+    "chapter": "transactions",
+    "expected": "own=1 external=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "transaction-commit",
+    "chapter": "transactions",
+    "expected": "commit=1 value=99 revision=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "transaction-rollback",
+    "chapter": "transactions",
+    "expected": "value=10 inactive=1 commit=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "stale-commit",
+    "chapter": "transactions",
+    "expected": "stale=1 retained=50,20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "batch-invariant",
+    "chapter": "transactions",
+    "expected": "7+23=30",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "commit-preparation-failure",
+    "chapter": "transactions",
+    "expected": "negative balance\ncommitted=10 revision=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "transaction-lifecycle",
+    "chapter": "transactions",
+    "expected": "first=1 second=0 revision=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-records",
+    "chapter": "wal-recovery",
+    "expected": "bytes=7 value-low=42",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-commit-marker",
+    "chapter": "wal-recovery",
+    "expected": "before=0 after=42",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-torn-tail",
+    "chapter": "wal-recovery",
+    "expected": "value=0 valid=7 tail=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-corrupt-record",
+    "chapter": "wal-recovery",
+    "expected": "valid=0 value=0 tail=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-interleaving",
+    "chapter": "wal-recovery",
+    "expected": "committed=10",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-idempotence",
+    "chapter": "wal-recovery",
+    "expected": "42 42",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-crash-prefix-oracle",
+    "chapter": "wal-recovery",
+    "expected": "prefixes=15 verified=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "wal-native-sync",
+    "chapter": "wal-recovery",
+    "expected": "write=1 sync=1 close=1",
+    "native": true,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "plan-cost",
+    "chapter": "query-planning",
+    "expected": "scan=1000 index=7 choose=index",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "plan-selectivity",
+    "chapter": "query-planning",
+    "expected": "4:index\n1000:scan",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "plan-statistics",
+    "chapter": "query-planning",
+    "expected": "estimated=5 observed=500 ratio=100",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "covering-index",
+    "chapter": "query-planning",
+    "expected": "covered=11 fetch=27",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "explain-plan",
+    "chapter": "query-planning",
+    "expected": "index(id) predicate=id=7 estimated=5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "standard-baseline",
+    "chapter": "cpp-standards",
+    "expected": "C++20 baseline enabled",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "feature-test",
+    "chapter": "cpp-standards",
+    "expected": "span=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "required-headers",
+    "chapter": "cpp-standards",
+    "expected": "elements=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sequencing",
+    "chapter": "cpp-standards",
+    "expected": "1 2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "object-abi",
+    "chapter": "cpp-standards",
+    "expected": "12345678",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "mixed-sign",
+    "chapter": "numeric-boundaries",
+    "expected": "less=1 equal=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "checked-narrowing",
+    "chapter": "numeric-boundaries",
+    "expected": "255:1\n256:0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "checked-multiply",
+    "chapter": "numeric-boundaries",
+    "expected": "42 overflow=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "checked-division",
+    "chapter": "numeric-boundaries",
+    "expected": "4 zero=1 minimum=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "floating-domain",
+    "chapter": "numeric-boundaries",
+    "expected": "close=1 finite_nan=0 self_equal=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "line-endings",
+    "chapter": "host-files-text",
+    "expected": "[LIST]\n[SAVE]",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "binary-zero",
+    "chapter": "host-files-text",
+    "expected": "bytes=3 zeros=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "text-byte-slices",
+    "chapter": "host-files-text",
+    "expected": "bytes=2 lead=c3 continuation=ab",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "path-contracts",
+    "chapter": "host-files-text",
+    "expected": "people.cpf",
+    "native": true,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "eof-state",
+    "chapter": "host-files-text",
+    "expected": "count=2 eof=1 bad=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-octets",
+    "chapter": "storage-audit",
+    "expected": "octets=8 uint32=32",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-endianness",
+    "chapter": "storage-audit",
+    "expected": "fixture=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-header-rejection",
+    "chapter": "storage-audit",
+    "expected": "accepted=0 retained=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-length-arithmetic",
+    "chapter": "storage-audit",
+    "expected": "1 0 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-duplicates",
+    "chapter": "storage-audit",
+    "expected": "accepted=0 retained=4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-trailing-bytes",
+    "chapter": "storage-audit",
+    "expected": "exact=1 trailing=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-rename",
+    "chapter": "storage-audit",
+    "expected": "new",
+    "native": true,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "audit-evidence",
+    "chapter": "storage-audit",
+    "expected": "exact bytes:checked\nrejected import:checked\npower loss:not qualified",
+    "native": false,
+    "flags": "",
+    "input": ""
   },
   {
     "id": "contracts",
+    "chapter": "engineering",
     "expected": "3 contracts passed",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "portability",
+    "chapter": "engineering",
     "expected": "byte bits=8\nuint32 bits=32\nportable format uses explicit bytes",
     "native": false,
-    "flags": ""
+    "flags": "",
+    "input": ""
   },
   {
     "id": "threads",
+    "chapter": "engineering",
     "expected": "count=20000",
     "native": true,
-    "flags": "-pthread"
+    "flags": "-pthread",
+    "input": ""
   },
   {
     "id": "publication",
+    "chapter": "engineering",
     "expected": "snapshot sum=60",
     "native": true,
-    "flags": "-pthread"
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "joined-lifetime",
+    "chapter": "thread-coordination",
+    "expected": "joined=42",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "multi-lock",
+    "chapter": "thread-coordination",
+    "expected": "8 22 total=30",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "condition-queue",
+    "chapter": "thread-coordination",
+    "expected": "sum=15",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "draining-close",
+    "chapter": "thread-coordination",
+    "expected": "rejected=1 values=78 done",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "cooperative-stop",
+    "chapter": "thread-coordination",
+    "expected": "observed=1",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "atomic-rmw",
+    "chapter": "atomics-memory",
+    "expected": "count=20000",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "compare-exchange",
+    "chapter": "atomics-memory",
+    "expected": "changed=0 expected=7 value=7",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "release-acquire-data",
+    "chapter": "atomics-memory",
+    "expected": "batch=42",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "sequential-consistency",
+    "chapter": "atomics-memory",
+    "expected": "allowed=1",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "atomic-snapshot-owner",
+    "chapter": "atomics-memory",
+    "expected": "1 3",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "locked-store",
+    "chapter": "concurrent-storage",
+    "expected": "revision=0 value=10",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "revision-under-lock",
+    "chapter": "concurrent-storage",
+    "expected": "1 1 value=20",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "reader-writer-lock",
+    "chapter": "concurrent-storage",
+    "expected": "7 7 final=9",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "compound-storage-invariant",
+    "chapter": "concurrent-storage",
+    "expected": "free=6 used=4 total=10",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "snapshot-reclamation",
+    "chapter": "concurrent-storage",
+    "expected": "retained=1 released=1",
+    "native": true,
+    "flags": "-pthread",
+    "input": ""
+  },
+  {
+    "id": "lost-update-schedule",
+    "chapter": "isolation",
+    "expected": "actual=17 intended=22",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "dirty-read-boundary",
+    "chapter": "isolation",
+    "expected": "reader=10 committed=10 pending=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "repeatable-observation",
+    "chapter": "isolation",
+    "expected": "read_committed=10,20 snapshot=10,10",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "write-skew",
+    "chapter": "isolation",
+    "expected": "on_call=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "serial-validation",
+    "chapter": "isolation",
+    "expected": "second=0 invariant=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "version-intervals",
+    "chapter": "mvcc",
+    "expected": "10 20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "stable-snapshot",
+    "chapter": "mvcc",
+    "expected": "snapshot=10 current=30",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "versioned-delete",
+    "chapter": "mvcc",
+    "expected": "old=10 current_missing=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "snapshot-registration",
+    "chapter": "mvcc",
+    "expected": "retained=2 reader=10",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "oldest-reader-gc",
+    "chapter": "mvcc",
+    "expected": "while_reading=3 after_release=1 current=30",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "nested-loop-join",
+    "chapter": "joins-aggregates",
+    "expected": "AX\nAY",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "hash-join-buckets",
+    "chapter": "joins-aggregates",
+    "expected": "AX\nAY",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "left-outer-join",
+    "chapter": "joins-aggregates",
+    "expected": "1:X\n2:<missing>",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "grouped-aggregate",
+    "chapter": "joins-aggregates",
+    "expected": "1 count=2 sum=30\n2 count=1 sum=7",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "aggregate-empty-null",
+    "chapter": "joins-aggregates",
+    "expected": "rows=3 present=2 sum=5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "page-compaction",
+    "chapter": "maintenance",
+    "expected": "AdaGrace offsets=0,3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "generation-handles",
+    "chapter": "maintenance",
+    "expected": "stale_rejected=1 current=20",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "checkpoint-cutoff",
+    "chapter": "maintenance",
+    "expected": "covered=2 recovered=30",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "generation-publication",
+    "chapter": "maintenance",
+    "expected": "old_size=3 new_size=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "statistics-refresh",
+    "chapter": "maintenance",
+    "expected": "old=1 refreshed=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "permutation-oracle",
+    "chapter": "release",
+    "expected": "cases=6 valid=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "failure-injection",
+    "chapter": "release",
+    "expected": "rejected live=10 owners=0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "schedule-model",
+    "chapter": "release",
+    "expected": "orders=2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "benchmark-separation",
+    "chapter": "release",
+    "expected": "input=5 key_comparisons=5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "reproducible-manifest",
+    "chapter": "release",
+    "expected": "deterministic=1",
+    "native": false,
+    "flags": "",
+    "input": ""
   }
 ]

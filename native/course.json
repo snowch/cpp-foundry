@@ -1,0 +1,359 @@
+{
+  "parts": [
+    {
+      "id": "language",
+      "title": "Learn modern C++",
+      "description": "Values, control flow, interfaces, text, and the standard library."
+    },
+    {
+      "id": "ownership",
+      "title": "Own resources and design types",
+      "description": "Lifetimes, move semantics, templates, polymorphism, and failures."
+    },
+    {
+      "id": "algorithms",
+      "title": "Reason about algorithms",
+      "description": "Complexity, invariants, searching, sorting, and recursion."
+    },
+    {
+      "id": "structures",
+      "title": "Build data structures",
+      "description": "Ownership-aware lists, hash tables, trees, heaps, and graphs."
+    },
+    {
+      "id": "database",
+      "title": "Build the database",
+      "description": "Parsing, execution, byte formats, and page ownership."
+    },
+    {
+      "id": "reliability",
+      "title": "Index, transact, and recover",
+      "description": "B+ trees, transaction state, redo logging, and query planning."
+    },
+    {
+      "id": "portability",
+      "title": "Write portable C++",
+      "description": "Standards, numeric contracts, files, text, and storage audits."
+    },
+    {
+      "id": "concurrency",
+      "title": "Coordinate concurrent work",
+      "description": "Threads, locks, atomics, queues, and storage ownership."
+    },
+    {
+      "id": "advanced",
+      "title": "Extend the database",
+      "description": "Isolation, snapshots, joins, maintenance, and release contracts."
+    }
+  ],
+  "chapters": [
+    {
+      "id": "values",
+      "title": "Values before pointers",
+      "description": "Write useful programs with strings, vectors, and small functions.",
+      "project": "Build a score summary that handles an empty collection.",
+      "part": "language"
+    },
+    {
+      "part": "language",
+      "id": "control-flow",
+      "title": "Decisions and loops",
+      "description": "Make branch conditions, loop invariants, and termination visible.",
+      "project": "Build a bounded command dispatcher and check all exit paths."
+    },
+    {
+      "part": "language",
+      "id": "functions-build",
+      "title": "Functions and program boundaries",
+      "description": "Design value-based interfaces and understand translation units.",
+      "project": "Split a checked calculator into declarations, implementation, and a test caller."
+    },
+    {
+      "part": "language",
+      "id": "text-sequences",
+      "title": "Text and sequences",
+      "description": "Own, inspect, transform, and validate sequences.",
+      "project": "Build a line-oriented report without borrowing from destroyed input."
+    },
+    {
+      "part": "language",
+      "id": "user-types",
+      "title": "Design small domain types",
+      "description": "Use initialization, enums, access control, and operators deliberately.",
+      "project": "Design an ID type that cannot represent a missing record."
+    },
+    {
+      "part": "language",
+      "id": "standard-library",
+      "title": "Use the standard library",
+      "description": "Choose algorithms, containers, and result types by their contracts.",
+      "project": "Replace hand-written collection plumbing while preserving independent checks."
+    },
+    {
+      "id": "ownership",
+      "title": "Ownership and lifetimes",
+      "description": "Make resource cleanup a property of your types.",
+      "project": "Design a move-only resource owner with a clear lifetime.",
+      "part": "ownership"
+    },
+    {
+      "part": "ownership",
+      "id": "lifetimes-views",
+      "title": "Lifetimes and borrowed views",
+      "description": "Track owners, observers, invalidation, and temporary lifetimes.",
+      "project": "Audit every borrowed reference in a record-search API."
+    },
+    {
+      "part": "ownership",
+      "id": "copy-move",
+      "title": "Copying, moving, and value semantics",
+      "description": "Understand generated operations and design exception-safe owners.",
+      "project": "Implement an independently copied value type and test moving it."
+    },
+    {
+      "part": "ownership",
+      "id": "templates",
+      "title": "Templates and generic interfaces",
+      "description": "Deduce types, constrain operations, and distinguish compile-time choices.",
+      "project": "Write a constrained, checked aggregation interface."
+    },
+    {
+      "part": "ownership",
+      "id": "polymorphism",
+      "title": "Runtime and static polymorphism",
+      "description": "Compare virtual dispatch, variants, and composition.",
+      "project": "Add a storage interface without sharing ownership accidentally."
+    },
+    {
+      "id": "boundaries",
+      "title": "Boundaries and errors",
+      "description": "Parse input, borrow safely, and preserve invariants when things fail.",
+      "project": "Reject malformed input without changing valid state.",
+      "part": "ownership"
+    },
+    {
+      "id": "algorithms",
+      "title": "Algorithms and generic code",
+      "description": "Use the standard library, then understand the costs.",
+      "project": "Build a searchable, sorted record index.",
+      "part": "algorithms"
+    },
+    {
+      "part": "algorithms",
+      "id": "complexity",
+      "title": "Complexity and correctness",
+      "description": "Count operations, state assumptions, and prove loop invariants.",
+      "project": "Predict and check growth on absent-key search workloads."
+    },
+    {
+      "part": "algorithms",
+      "id": "searching",
+      "title": "Searching and partition points",
+      "description": "Implement scans, binary search, bounds, and indexed access.",
+      "project": "Build a duplicate-aware sorted lookup API."
+    },
+    {
+      "part": "algorithms",
+      "id": "sorting-strategies",
+      "title": "Sorting and algorithm strategies",
+      "description": "Compare stable sorting, partitioning, merging, and selection.",
+      "project": "Check sort properties against an independent reference."
+    },
+    {
+      "part": "algorithms",
+      "id": "recursion",
+      "title": "Recursion and dynamic programming",
+      "description": "Define base cases, progress measures, and reusable subproblems.",
+      "project": "Compare recursive, memoized, and iterative implementations."
+    },
+    {
+      "part": "structures",
+      "id": "lists-queues",
+      "title": "Lists, stacks, and queues",
+      "description": "Keep structural ownership separate from borrowed links.",
+      "project": "Build a queue with explicit empty/full behavior."
+    },
+    {
+      "part": "structures",
+      "id": "hashing",
+      "title": "Hash tables and collisions",
+      "description": "Implement bucket selection, probing, deletion, and resizing.",
+      "project": "Check a bounded hash table against std::map."
+    },
+    {
+      "part": "structures",
+      "id": "balanced-trees",
+      "title": "Search trees and balancing",
+      "description": "Preserve ordering, ownership, and height through updates.",
+      "project": "Validate a small AVL implementation after every operation."
+    },
+    {
+      "part": "structures",
+      "id": "heaps",
+      "title": "Heaps and priority queues",
+      "description": "Maintain a partial order for repeated minimum extraction.",
+      "project": "Build a scheduler with deterministic tie-breaking."
+    },
+    {
+      "part": "structures",
+      "id": "graphs",
+      "title": "Graphs and traversal",
+      "description": "Represent adjacency and maintain visited/path state.",
+      "project": "Implement reachability and shortest paths with independent fixtures."
+    },
+    {
+      "id": "records",
+      "title": "Build a persistent record store",
+      "description": "Connect value types, validation, byte formats, and file ownership.",
+      "project": "Extend the working record store in the Workbench.",
+      "part": "database"
+    },
+    {
+      "part": "database",
+      "id": "parsing-sql",
+      "title": "Lexing and a SQL subset",
+      "description": "Separate tokens, syntax, and validation before execution.",
+      "project": "Parse a documented SELECT subset and reject trailing tokens."
+    },
+    {
+      "part": "database",
+      "id": "query-execution",
+      "title": "Query execution operators",
+      "description": "Compose scans, filters, projections, and bounded result production.",
+      "project": "Build an explainable scan/filter/project pipeline."
+    },
+    {
+      "part": "database",
+      "id": "binary-codecs",
+      "title": "Binary records and validation",
+      "description": "Define byte contracts and preserve state on rejected imports.",
+      "project": "Write a record codec with exact independent byte fixtures."
+    },
+    {
+      "part": "database",
+      "id": "pager-cache",
+      "title": "Pages, guards, and caching",
+      "description": "Own page buffers and define pin/dirty/eviction contracts.",
+      "project": "Build a bounded page cache with scoped pin guards."
+    },
+    {
+      "part": "reliability",
+      "id": "bplus-tree",
+      "title": "A bounded B+ tree",
+      "description": "Implement leaf routing, splitting, borrowing, merging, and invariant checks.",
+      "project": "Extend the bounded root/leaf index while retaining a reference-model oracle."
+    },
+    {
+      "part": "reliability",
+      "id": "transactions",
+      "title": "Transaction state and commit",
+      "description": "Keep tentative writes separate from committed state.",
+      "project": "Add explicit begin/commit/rollback and stale-commit rejection."
+    },
+    {
+      "part": "reliability",
+      "id": "wal-recovery",
+      "title": "Redo logging and recovery",
+      "description": "Validate complete records and recover only committed work.",
+      "project": "Enumerate crash prefixes and check recovery against a committed-state model."
+    },
+    {
+      "part": "reliability",
+      "id": "query-planning",
+      "title": "Planning and access costs",
+      "description": "Choose access paths using explicit statistics and assumptions.",
+      "project": "Explain and compare scan and index plans for changing workloads."
+    },
+    {
+      "part": "portability",
+      "id": "cpp-standards",
+      "title": "C++ standards and library contracts",
+      "description": "Separate language versions, feature detection, and implementation choices.",
+      "project": "Document the language, library, and host assumptions of your project."
+    },
+    {
+      "part": "portability",
+      "id": "numeric-boundaries",
+      "title": "Numeric boundaries in depth",
+      "description": "Check narrowing, arithmetic, floating values, and comparisons.",
+      "project": "Build a boundary-focused numeric test table."
+    },
+    {
+      "part": "portability",
+      "id": "host-files-text",
+      "title": "Files, text, and host boundaries",
+      "description": "Distinguish byte formats, text conventions, names, and host behavior.",
+      "project": "Exchange a documented fixture between two native hosts."
+    },
+    {
+      "part": "portability",
+      "id": "storage-audit",
+      "title": "Audit the storage boundary",
+      "description": "Turn portability assumptions and rejection rules into executable checks.",
+      "project": "Audit the CPF1 capstone and record the limits of each host adapter."
+    },
+    {
+      "id": "engineering",
+      "title": "Engineering beyond the browser",
+      "description": "Test contracts, draw platform boundaries, and coordinate shared state.",
+      "project": "Run native investigations and document your storage guarantees.",
+      "part": "concurrency"
+    },
+    {
+      "part": "concurrency",
+      "id": "thread-coordination",
+      "title": "Threads, queues, and shutdown",
+      "description": "Coordinate ownership transfer and deterministic shutdown.",
+      "project": "Build a draining producer/consumer queue with a close contract."
+    },
+    {
+      "part": "concurrency",
+      "id": "atomics-memory",
+      "title": "Atomics and the memory model",
+      "description": "Reason about atomic operations and happens-before relations.",
+      "project": "Explain each edge in a single-publication protocol."
+    },
+    {
+      "part": "concurrency",
+      "id": "concurrent-storage",
+      "title": "Concurrent storage ownership",
+      "description": "Protect compound invariants and reject stale updates.",
+      "project": "Implement a synchronized record store with a documented reader contract."
+    },
+    {
+      "part": "advanced",
+      "id": "isolation",
+      "title": "Isolation and multi-client contracts",
+      "description": "Model anomalies and distinguish isolation from durability.",
+      "project": "Write schedules that expose and prevent lost updates."
+    },
+    {
+      "part": "advanced",
+      "id": "mvcc",
+      "title": "Snapshots and version ownership",
+      "description": "Choose visible versions and delay reclamation until readers finish.",
+      "project": "Build a bounded version store with registered snapshots."
+    },
+    {
+      "part": "advanced",
+      "id": "joins-aggregates",
+      "title": "Joins, grouping, and richer queries",
+      "description": "Implement relational operators with explicit empty/duplicate behavior.",
+      "project": "Add a join and grouped aggregate with independent expected rows."
+    },
+    {
+      "part": "advanced",
+      "id": "maintenance",
+      "title": "Maintenance and checkpointing",
+      "description": "Compact, checkpoint, and publish generations without invalidating readers.",
+      "project": "Model generation replacement and old-reader retention."
+    },
+    {
+      "part": "advanced",
+      "id": "release",
+      "title": "Reliability and release work",
+      "description": "Test contracts, inject failures, benchmark honestly, and ship reproducibly.",
+      "project": "Publish a reproducible release with a written failure model."
+    }
+  ]
+}

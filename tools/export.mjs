@@ -1,8 +1,9 @@
 import fs from 'node:fs';
-import {lessons,chapters} from '../dist/course.js';
+import {lessons,chapters,parts} from '../dist/course.js';
 fs.mkdirSync('native/examples',{recursive:true});
-for(const lesson of lessons) fs.writeFileSync(`native/examples/${lesson.id}.cpp`,lesson.code+'\n');
-fs.writeFileSync('native/lessons.json',JSON.stringify(lessons.map(({id,expected,native,flags})=>({id,expected,native:!!native,flags:flags||''})),null,2)+'\n');
+for(const lesson of lessons) fs.writeFileSync(`native/examples/${lesson.id}.cpp`,lesson.code.trimEnd()+'\n');
+fs.writeFileSync('native/lessons.json',JSON.stringify(lessons.map(({id,chapter,expected,native,flags,input})=>({id,chapter,expected,native:!!native,flags:flags||'',input:input||''})),null,2)+'\n');
+fs.writeFileSync('native/course.json',JSON.stringify({parts,chapters},null,2)+'\n');
 for(const chapter of chapters){
   const content=lessons.filter(l=>l.chapter===chapter.id);
   fs.mkdirSync(`native/chapters/${chapter.id}`,{recursive:true});
