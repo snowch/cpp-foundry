@@ -74,7 +74,7 @@ npm run serve
 
 Preparing browser assets requires **Linux x86_64, Python 3.12+, and curl**. The dev container and Pages workflow provide that build host. Preparation downloads pinned Clang/LLD binaries and an official WASI SDK, verifies their SHA-256 hashes, builds memfs, and packs an exception-enabled sysroot. Assets are generated into `dist/compiler/` and excluded from Git; they are included in the deployed Pages artifact. The first uncached setup downloads about 247 MB. Later setups reuse verified archives in `.cache/toolchain/`.
 
-The browser site itself is a static directory; there is no application build or server compilation API. Serve `dist/` from the repository subpath or domain root. Hash routes and relative asset URLs support GitHub Pages project hosting.
+For deployment, run `npm run build` and serve `.build/site/` from the repository subpath or domain root. The build gives the application, every imported course module, styles, worker runtime, and capstone source versioned filenames so returning browsers load a consistent release despite GitHub Pages caching. `dist/` remains directly usable for development. Hash routes and relative asset URLs support GitHub Pages project hosting; compilation runs in the browser.
 
 ```sh
 make example EXAMPLE=raii
@@ -102,7 +102,7 @@ Independent model workloads check 4,000 mixed operations each for hashing, AVL t
 
 Interface checks cover all 226 lesson routes, part filtering/selection, question feedback, draft/completion persistence, tab reconciliation, compilation after network requests are blocked, Stop/recovery, database reload/download/import, stale-tab preservation, and 390/768/1024px layouts. Screenshots are produced in `test-results/` and uploaded by Actions.
 
-`.github/workflows/pages.yml` verifies generated readings, runs native and real-browser checks, uploads `dist/`, and deploys through `actions/deploy-pages` after success. The repository’s Pages source must be **GitHub Actions**. Pushes to `main` and manual workflow runs can deploy; pull requests run checks without publishing.
+`.github/workflows/pages.yml` verifies generated readings, runs native and real-browser checks against the versioned build, uploads `.build/site/`, and deploys through `actions/deploy-pages` after success. A release regression check blocks all original application URLs to simulate a stale browser cache, verifies all 226 lessons are available, and compiles through the versioned worker. The repository’s Pages source must be **GitHub Actions**. Pushes to `main` and manual workflow runs can deploy; pull requests run checks without publishing.
 
 ## Runtime and limits
 

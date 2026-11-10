@@ -1,7 +1,8 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
-const root=path.resolve(__dirname,'../dist');
+const defaultRoot=process.env.SITE_ROOT?path.resolve(process.env.SITE_ROOT):path.resolve(__dirname,'../dist');
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.gz':'application/gzip','.cpp':'text/plain','.svg':'image/svg+xml'};
-exports.start=async()=>{
+exports.start=async({root=defaultRoot}={})=>{
+  root=path.resolve(root);
   const server=http.createServer((req,res)=>{
     const url=new URL(req.url,'http://localhost');
     if(!url.pathname.startsWith('/cpp-foundry/')){res.writeHead(404).end();return;}

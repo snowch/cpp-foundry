@@ -37,7 +37,10 @@ jobs:
           git diff --exit-code -- native dist/record-store.cpp
       - run: npm run test:native
       - run: npx playwright install --with-deps chromium
+      - run: npm run build
       - run: npm test
+        env:
+          SITE_ROOT: .build/site
       - name: Upload browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,7 +52,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: .build/site
   deploy:
     if: github.event_name != 'pull_request'
     needs: verify
