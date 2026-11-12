@@ -37,7 +37,7 @@ function renderHome(){
 function renderCourse(selected){
   document.title='Course · C++ Foundry';
   const visible=parts.some(p=>p.id===selected)?parts.filter(p=>p.id===selected):parts;
-  main.innerHTML=`<div class="container"><div class="page-top"><div class="eyebrow">The course</div><h1>Learn it. Run it. Make it yours.</h1><p>${parts.length} parts, ${chapters.length} chapters, and ${lessons.length} worked lessons: modern C++, algorithms, data structures, storage, recovery, portability, and concurrency.</p>${progress()}<nav class="part-links" aria-label="Course parts"><a href="#/course" ${visible.length===parts.length?'aria-current="page"':''}>All parts</a>${parts.map((part,index)=>`<a href="#/course/${part.id}" ${selected===part.id?'aria-current="page"':''}>${number(index)} · ${part.title}</a>`).join('')}</nav></div>${visible.map(part=>`<section class="course-part"><div class="part-heading"><div class="eyebrow">Part ${number(parts.indexOf(part))}</div><h2>${part.title}</h2><p>${part.description}</p></div>${chapters.filter(c=>c.part===part.id).map(chapter=>{
+  main.innerHTML=`<div class="container"><div class="page-top"><div class="eyebrow">The course</div><h1>Learn it. Run it. Make it yours.</h1><p>${parts.length} parts, ${chapters.length} chapters, and ${lessons.length} worked lessons: modern C++, algorithms, data structures, storage, recovery, portability, and concurrency.</p>${progress()}<div class="course-filter"><label for="course-part-select">Browse by part</label><select id="course-part-select" class="course-select"><option value="" ${visible.length===parts.length?'selected':''}>All parts · ${chapters.length} chapters</option>${parts.map((part,index)=>`<option value="${part.id}" ${selected===part.id?'selected':''}>${number(index)} · ${part.title}</option>`).join('')}</select></div><nav class="part-links" aria-label="Course parts"><a href="#/course" ${visible.length===parts.length?'aria-current="page"':''}>All parts</a>${parts.map((part,index)=>`<a href="#/course/${part.id}" ${selected===part.id?'aria-current="page"':''}>${number(index)} · ${part.title}</a>`).join('')}</nav></div>${visible.map(part=>`<section class="course-part"><div class="part-heading"><div class="eyebrow">Part ${number(parts.indexOf(part))}</div><h2>${part.title}</h2><p>${part.description}</p></div>${chapters.filter(c=>c.part===part.id).map(chapter=>{
     const content=lessons.filter(l=>l.chapter===chapter.id);
     return `<section class="outline-chapter"><div><div class="eyebrow">Chapter ${number(chapters.indexOf(chapter))}</div><h3>${chapter.title}</h3><p>${chapter.description}</p></div><ol class="lesson-links">${content.map(l=>`<li><a href="#/lesson/${l.id}">${tick(l.id)}<span class="lesson-label">${l.title}</span>${l.native?'<span class="tag">Native lab</span>':''}<span aria-hidden="true">→</span></a></li>`).join('')}</ol></section>`;
   }).join('')}</section>`).join('')}<section class="capstone-callout"><div><h2>Put the pieces together.</h2><p>The Workbench includes an editable record store with persistent browser files. Later chapters provide executable components and bounded models to assemble and extend.</p></div><a href="#/workbench" class="button">Open Workbench →</a></section></div>`;
@@ -127,7 +127,10 @@ function render(){
   window.scrollTo(0,0);
 }
 addEventListener('hashchange',render);
-main.addEventListener('change',event=>{if(event.target.matches('.part-select')){const chapter=chapters.find(c=>c.part===event.target.value);const lesson=lessons.find(l=>l.chapter===chapter.id);location.hash='#/lesson/'+lesson.id;}});
+main.addEventListener('change',event=>{
+  if(event.target.matches('#course-part-select'))location.hash='#/course'+(event.target.value?'/'+event.target.value:'');
+  if(event.target.matches('.part-select')){const chapter=chapters.find(c=>c.part===event.target.value);const lesson=lessons.find(l=>l.chapter===chapter.id);location.hash='#/lesson/'+lesson.id;}
+});
 onStorage(key=>{
   if(!key.startsWith('done:'))return;
   const match=location.hash.match(/^#\/lesson\/([^/]+)/);

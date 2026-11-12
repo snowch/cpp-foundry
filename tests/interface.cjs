@@ -38,6 +38,23 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     assert.equal(await page.locator('.outline-chapter').count(),4);
     assert.equal(await page.locator('.lesson-links li').count(),29);
     console.log('PASS part selector and filtered course navigation');
+    await page.setViewportSize({width:390,height:844});
+    await page.goto(url+'#/course');await page.locator('#course-part-select').waitFor();
+    assert.equal(await page.locator('.part-links').isVisible(),false);
+    assert.equal(await page.locator('#course-part-select option').count(),10);
+    await page.screenshot({path:'test-results/course-mobile.png',fullPage:false});
+    await page.locator('#course-part-select').selectOption('advanced');
+    await page.waitForFunction(()=>location.hash==='#/course/advanced'&&document.querySelectorAll('.course-part').length===1);
+    assert.equal(await page.locator('.outline-chapter').count(),5);
+    assert.equal(await page.locator('.lesson-links li').count(),25);
+    await page.reload();await page.locator('#course-part-select').waitFor();
+    assert.equal(await page.locator('#course-part-select').inputValue(),'advanced');
+    await page.locator('#course-part-select').selectOption('');
+    await page.waitForFunction(()=>location.hash==='#/course'&&document.querySelectorAll('.course-part').length===9);
+    await page.goto(url+'#/lesson/first-program');await page.locator('.lesson-nav').waitFor();
+    assert.equal(await page.locator('.lesson-nav a').last().isVisible(),true);
+    await page.setViewportSize({width:1440,height:1050});
+    console.log('PASS mobile course selector includes all nine parts, restores filters, and retains next-lesson link');
     await page.goto(url+'#/lesson/first-program');
     await page.locator('.source').waitFor();
     await page.locator('[data-choice="0"]').click();
@@ -107,12 +124,16 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     await page.screenshot({path:'test-results/workbench-desktop.png',fullPage:true});
     console.log('PASS stale tab cannot overwrite a newer saved database');
 
-    for(const width of [390,768,1024]){
+    for(const width of [320,390,480,768,1024]){
       await page.setViewportSize({width,height:900});
-      for(const route of ['#/','#/lesson/concepts','#/lesson/threads','#/workbench']){
+      for(const route of ['#/','#/course','#/lesson/concepts','#/lesson/threads','#/workbench']){
         await page.goto(url+route);
         if(route==='#/workbench')await page.locator('.source').waitFor();else await page.locator('main h1').waitFor();
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} ${route}`);
+        if(route==='#/course'){
+          if(width<=780)assert.equal(await page.locator('#course-part-select').isVisible(),true);
+          else assert.equal(await page.locator('.part-links a').last().isVisible(),true);
+        }
       }
       await page.screenshot({path:`test-results/workbench-${width}.png`,fullPage:true});
     }
