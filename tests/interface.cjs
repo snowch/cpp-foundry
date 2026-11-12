@@ -16,7 +16,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     await page.locator('nav [data-nav=course]').click();
     await page.locator('.outline-chapter').first().waitFor();
     const lessons=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../native/lessons.json'),'utf8'));
-    assert.equal(await page.locator('.outline-chapter').count(),44);
+    assert.equal(await page.locator('.outline-chapter').count(),54);
     assert.equal(await page.locator('.course-part').count(),9);
     assert.equal(await page.locator('.lesson-links li').count(),lessons.length);
     assert.equal(await page.locator('.lesson-links .tag').count(),lessons.filter(l=>l.native).length);

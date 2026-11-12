@@ -1,3 +1,4 @@
+import {coverage,coverageChapters} from './parts/coverage.js';
 import {language} from './parts/language.js';
 import {ownership} from './parts/ownership.js';
 import {algorithms} from './parts/algorithms.js';
@@ -60,11 +61,13 @@ const syllabus=[
  ['advanced','release','Reliability and release work','Test contracts, inject failures, benchmark honestly, and ship reproducibly.','Publish a reproducible release with a written failure model.'],
 ];
 
+const orderedSyllabus=parts.flatMap(part=>[...syllabus.filter(row=>row[0]===part.id),...coverageChapters.filter(row=>row[0]===part.id)]);
+
 export function cpp(headers,main,support='') {
   return headers.split(/\s+/).filter(Boolean).map(header=>`#include <${header}>`).join('\n')+'\n\n'+(support?support+'\n\n':'')+'int main() {\n'+main+'\n}\n';
 }
 export function extend(chapters,lessons){
-  for(const [part,id,title,description,project] of syllabus){
+  for(const [part,id,title,description,project] of orderedSyllabus){
     const existing=chapters.find(chapter=>chapter.id===id);
     if(existing)existing.part=part;else chapters.push({part,id,title,description,project});
   }
@@ -74,7 +77,7 @@ export function extend(chapters,lessons){
     const choices=[...wrong];choices.splice(answer,0,correct);
     lessons.push({chapter,id,title,body:explanation.split('\n\n'),code:program,expected,walkthrough,pitfall,question:prompt,choices,answer,feedback:why,experiment,...extra});
   };
-  for(const author of [language,ownership,algorithms,structures,database,reliability,portability,concurrency,advanced])author(add,cpp);
-  chapters.sort((a,b)=>syllabus.findIndex(row=>row[1]===a.id)-syllabus.findIndex(row=>row[1]===b.id));
+  for(const author of [language,ownership,algorithms,structures,database,reliability,portability,concurrency,advanced,coverage])author(add,cpp);
+  chapters.sort((a,b)=>orderedSyllabus.findIndex(row=>row[1]===a.id)-orderedSyllabus.findIndex(row=>row[1]===b.id));
   lessons.sort((a,b)=>chapters.findIndex(c=>c.id===a.chapter)-chapters.findIndex(c=>c.id===b.chapter));
 }

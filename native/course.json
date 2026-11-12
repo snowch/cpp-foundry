@@ -90,6 +90,55 @@
       "project": "Replace hand-written collection plumbing while preserving independent checks."
     },
     {
+      "part": "language",
+      "id": "library-containers",
+      "title": "Container contracts in practice",
+      "description": "Choose sequence, ordered, and unordered containers by stability and complexity.",
+      "project": "Build a frequency index and document invalidation for each update."
+    },
+    {
+      "part": "language",
+      "id": "library-iterators",
+      "title": "Iterator categories and invalidation",
+      "description": "Use iterator capabilities, sentinels, adapters, and erase results safely.",
+      "project": "Write a generic range copier without assuming random access."
+    },
+    {
+      "part": "language",
+      "id": "library-algorithms",
+      "title": "Algorithm contracts and numeric operations",
+      "description": "Apply predicates, ordering, removal, folds, scans, and bounds correctly.",
+      "project": "Build a checked batch report with explicit empty and duplicate behavior."
+    },
+    {
+      "part": "language",
+      "id": "library-ranges",
+      "title": "Ranges, views, and borrowed lifetimes",
+      "description": "Compose lazy views while tracking ownership, repeated work, and projections.",
+      "project": "Create an owned report from a borrowed filtering pipeline."
+    },
+    {
+      "part": "language",
+      "id": "library-values",
+      "title": "Vocabulary types and callable utilities",
+      "description": "Model absence, alternatives, grouped values, and callable ownership explicitly.",
+      "project": "Design a typed command result that cannot confuse absence with failure."
+    },
+    {
+      "part": "language",
+      "id": "library-text-io",
+      "title": "Text conversion, formatting, and stream state",
+      "description": "Check complete parses, preserve stream state, and choose formatting facilities deliberately.",
+      "project": "Build a strict text import with separate syntax and range errors."
+    },
+    {
+      "part": "language",
+      "id": "library-time-random",
+      "title": "Durations, deterministic randomness, and bits",
+      "description": "Separate clock contracts, distribution guarantees, and finite bit representations.",
+      "project": "Build a deterministic workload generator with an explicit time and seed policy."
+    },
+    {
       "id": "ownership",
       "title": "Ownership and lifetimes",
       "description": "Make resource cleanup a property of your types.",
@@ -130,6 +179,13 @@
       "description": "Parse input, borrow safely, and preserve invariants when things fail.",
       "project": "Reject malformed input without changing valid state.",
       "part": "ownership"
+    },
+    {
+      "part": "ownership",
+      "id": "generic-contracts",
+      "title": "Generic code and object-model contracts",
+      "description": "Separate deduction, forwarding, dispatch, and compile-time validation.",
+      "project": "Build a constrained generic wrapper with explicit lifetime and exception contracts."
     },
     {
       "id": "algorithms",
@@ -293,6 +349,13 @@
       "project": "Audit the CPF1 capstone and record the limits of each host adapter."
     },
     {
+      "part": "portability",
+      "id": "library-files-memory",
+      "title": "Filesystem and allocation boundaries",
+      "description": "Handle host errors, path semantics, shared ownership, and allocation lifetimes.",
+      "project": "Design a native file adapter and a bounded temporary-allocation policy."
+    },
+    {
       "id": "engineering",
       "title": "Engineering beyond the browser",
       "description": "Test contracts, draw platform boundaries, and coordinate shared state.",
@@ -319,6 +382,13 @@
       "title": "Concurrent storage ownership",
       "description": "Protect compound invariants and reject stale updates.",
       "project": "Implement a synchronized record store with a documented reader contract."
+    },
+    {
+      "part": "concurrency",
+      "id": "async-results",
+      "title": "Asynchronous results and task contracts",
+      "description": "Transfer results, propagate exceptions, and distinguish scheduling from synchronization.",
+      "project": "Build an asynchronous batch interface with explicit launch, error, and shutdown policies."
     },
     {
       "part": "advanced",

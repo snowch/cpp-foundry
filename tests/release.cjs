@@ -21,8 +21,8 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     await page.goto(url);await page.locator('.hero').waitFor();
     assert.equal(await page.locator('.chapter-card').count(),9);
     await page.goto(url+'#/course');await page.locator('.outline-chapter').first().waitFor();
-    assert.equal(await page.locator('.outline-chapter').count(),44);
-    assert.equal(await page.locator('.lesson-links li').count(),226);
+    assert.equal(await page.locator('.outline-chapter').count(),54);
+    assert.equal(await page.locator('.lesson-links li').count(),266);
     await page.goto(url+'#/workbench');await page.locator('.source').waitFor();
     assert.match(await page.locator('.source').inputValue(),/int main/);
     await page.locator('.source').fill('#include <iostream>\nint main(){std::cout<<"fresh release";}');
@@ -30,6 +30,6 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     await page.waitForFunction(()=>document.querySelector('.editor').dataset.busy==='false',{}, {timeout:120000});
     assert.equal(await page.locator('.output').innerText(),'fresh release');
     assert.deepEqual(unversioned,[]);assert.deepEqual(errors,[]);
-    console.log('PASS versioned release ignores stale application cache, loads all 226 lessons and compiles through versioned worker');
+    console.log('PASS versioned release ignores stale application cache, loads all 266 lessons and compiles through versioned worker');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

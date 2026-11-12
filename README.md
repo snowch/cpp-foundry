@@ -2,21 +2,21 @@
 
 [Open the course](https://snowch.github.io/cpp-foundry/#/course) · [Workbench](https://snowch.github.io/cpp-foundry/#/workbench) · [Open in Codespaces](https://codespaces.new/snowch/cpp-foundry?quickstart=1)
 
-A modern C++20 course with **nine parts, 44 chapters, and 226 authored lessons**, from values and ownership through algorithms, data structures, database internals, recovery, portability, and concurrency. Each lesson includes an explanation, a complete worked program, expected output, a walkthrough, a pitfall, an understanding question with feedback, and an experiment. All readings and programs are also exported into `native/`.
+A modern C++20 course with **nine parts, 54 chapters, and 266 authored lessons**, from values and ownership through algorithms, data structures, database internals, recovery, portability, and concurrency. Each lesson includes an explanation, a complete worked program, expected output, a walkthrough, a pitfall, an understanding question with feedback, and an experiment. All readings and programs are also exported into `native/`.
 
 | Part | Chapters | Lessons | Focus |
 | --- | ---: | ---: | --- |
-| Learn modern C++ | 6 | 29 | Values, control flow, functions/builds, text, domain types, standard library |
-| Own resources and design types | 6 | 28 | Lifetimes, RAII, copy/move, templates, polymorphism, errors |
+| Learn modern C++ | 13 | 57 | Values, control flow, functions/builds, text, domain types, standard library |
+| Own resources and design types | 7 | 32 | Lifetimes, RAII, copy/move, templates, polymorphism, errors |
 | Reason about algorithms | 5 | 24 | Complexity, correctness, searching, sorting, recursion, dynamic programming |
 | Build data structures | 5 | 25 | Owned lists/queues, hash tables, AVL trees, heaps, graphs |
 | Build the database | 5 | 24 | Record contracts, SQL-subset parsing, execution, codecs, page guards/cache |
 | Index, transact, and recover | 4 | 29 | B+ leaves/root, transactions, redo recovery, query planning |
-| Write portable C++ | 4 | 23 | Standards, numeric boundaries, text/files, executable storage audits |
-| Coordinate concurrent work | 4 | 19 | Thread ownership, draining queues, atomics, locked storage, reclamation |
+| Write portable C++ | 5 | 27 | Standards, numeric boundaries, text/files, executable storage audits |
+| Coordinate concurrent work | 5 | 23 | Thread ownership, draining queues, atomics, locked storage, reclamation |
 | Extend the database | 5 | 25 | Isolation, MVCC, joins/aggregates, maintenance, release work |
 
-**206 examples compile and run in the browser.** Twenty native investigations use threads, synchronization facilities, or host filesystem contracts in Codespaces or locally. Native execution commands, platform reasons, and source links appear directly in those lessons. The course now matches C Foundry's 44-chapter/226-lesson scale while teaching C++ ownership, generic code, and library contracts directly.
+**240 examples compile and run in the browser.** Twenty-six native investigations use threads, synchronization facilities, or host filesystem contracts in Codespaces or locally. Native execution commands, platform reasons, and source links appear directly in those lessons. The coverage audit and remaining limits are recorded in [docs/coverage-audit.md](docs/coverage-audit.md).
 
 The home page groups the course into nine parts. The outline supports filtering by part; lesson contents show the active part with a part selector. Counts, chapter-end projects, and navigation are derived from the curriculum. The original 24 lesson URLs and per-lesson draft/completion keys remain valid.
 
@@ -89,20 +89,20 @@ make record-store
 
 ```sh
 npm run export             # regenerate native examples/readings and browser capstone source
-npm run test:native        # all 226 examples, record store, and independent model workloads
+npm run test:native        # all 266 examples, record store, and independent model workloads
 npx playwright install chromium
 npm test                   # real browser compiler and interface checks
 ```
 
 Tests use Playwright’s installed Chromium or `/usr/bin/chromium`; set `CHROMIUM_PATH` to override it. Native checks use `g++` by default; set `CXX` to another compiler. The browser suite serves the site under `/cpp-foundry/` to exercise Pages-relative paths.
 
-Curriculum validation checks nine parts, 44 populated chapters, 226 unique lessons, and every lesson's required teaching fields. The compiler suite executes all 206 browser examples with exact output checks, plus compiler diagnostics, nonzero exits, UTF-8 input/output, and capstone persistence, rejection, update/delete, and corrupt-file handling. All 226 examples also run under strict native C++20 checks. Native capstone checks compare against independently specified exact bytes.
+Curriculum validation checks nine parts, 54 populated chapters, 266 unique lessons, and every lesson's required teaching fields. The compiler suite executes all 240 browser examples with exact output checks, plus compiler diagnostics, nonzero exits, UTF-8 input/output, and capstone persistence, rejection, update/delete, and corrupt-file handling. All 266 examples also run under strict native C++20 checks. Native capstone checks compare against independently specified exact bytes.
 
 Independent model workloads check 4,000 mixed operations each for hashing, AVL trees, the bounded B+ index, and heaps; 2,000 MVCC reader/write/reclamation operations; and 421 crash prefixes plus 420 single-bit log corruptions. Reference maps, sets, multisets, retained histories, and explicit commit boundaries supply the expected logical outcomes.
 
-Interface checks cover all 226 lesson routes, part filtering/selection, question feedback, draft/completion persistence, tab reconciliation, compilation after network requests are blocked, Stop/recovery, database reload/download/import, stale-tab preservation, and 390/768/1024px layouts. Screenshots are produced in `test-results/` and uploaded by Actions.
+Interface checks cover all 266 lesson routes, part filtering/selection, question feedback, draft/completion persistence, tab reconciliation, compilation after network requests are blocked, Stop/recovery, database reload/download/import, stale-tab preservation, and 390/768/1024px layouts. Screenshots are produced in `test-results/` and uploaded by Actions.
 
-`.github/workflows/pages.yml` verifies generated readings, runs native and real-browser checks against the versioned build, uploads `.build/site/`, and deploys through `actions/deploy-pages` after success. A release regression check blocks all original application URLs to simulate a stale browser cache, verifies all 226 lessons are available, and compiles through the versioned worker. The repository’s Pages source must be **GitHub Actions**. Pushes to `main` and manual workflow runs can deploy; pull requests run checks without publishing.
+`.github/workflows/pages.yml` verifies generated readings, runs native and real-browser checks against the versioned build, uploads `.build/site/`, and deploys through `actions/deploy-pages` after success. A release regression check blocks all original application URLs to simulate a stale browser cache, verifies all 266 lessons are available, and compiles through the versioned worker. The repository’s Pages source must be **GitHub Actions**. Pushes to `main` and manual workflow runs can deploy; pull requests run checks without publishing.
 
 ## Runtime and limits
 
