@@ -223,7 +223,7 @@ New terms and notation:
 
 An unsigned integer type represents nonnegative whole numbers. Its arithmetic wraps modulo the number of representable values; that defined wrapping can still be the wrong behavior for a count or size calculation.
 
-A progress measure should move toward a bound on every repetition. Repeatedly halving a positive integer is a simple example: the value decreases until it reaches zero.
+A progress measure should move toward a bound on every repetition. Repeatedly halving a positive integer is a simple example: the value decreases until it reaches zero. The instruction remaining /= 2 means remaining = remaining / 2; dividing whole numbers keeps the whole-number quotient. ++steps increases steps by one.
 
 Unsigned arithmetic is defined modulo its range, so a loop condition such as i >= 0 cannot terminate an unsigned countdown. Choose a condition that reflects the remaining work.
 

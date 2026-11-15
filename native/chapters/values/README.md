@@ -173,7 +173,7 @@ Experiment: Try 59, 60, and 61. Predict the chosen message before running each v
 
 A loop repeats a group of instructions. A while loop checks its condition before every repetition, including the first. When the condition becomes false, execution continues after the loop’s closing brace.
 
-In this example count starts at 1. count <= 3 asks whether it is at most 3. The instruction count = count + 1 replaces it with the next whole number. This change eventually makes the condition false, giving the loop a way to stop.
+In this example count starts at 1. count <= 3 asks whether it is at most 3. The instruction count = count + 1 replaces it with the next whole number. This change eventually makes the condition false, giving the loop a way to stop. C++ also provides ++count as a shorter instruction for increasing count by one; either spelling performs this update when used as its own instruction.
 
 ```cpp
 #include <iostream>

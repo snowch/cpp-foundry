@@ -28,7 +28,7 @@ cpp('iostream',"    for (Command command : {Command::list, Command::save}) {\n  
 ['What prevents the list case from also saving?','break','The enum automatically inserts a return','The order of enum declarations'],'break exits the switch.',
 'Add a count command and handle it in the switch. Compile with warnings enabled and inspect what happens when its case is missing.');
 add('control-flow','termination','Make a decreasing measure visible',
-'A progress measure should move toward a bound on every repetition. Repeatedly halving a positive integer is a simple example: the value decreases until it reaches zero.\n\nUnsigned arithmetic is defined modulo its range, so a loop condition such as i >= 0 cannot terminate an unsigned countdown. Choose a condition that reflects the remaining work.',
+'A progress measure should move toward a bound on every repetition. Repeatedly halving a positive integer is a simple example: the value decreases until it reaches zero. The instruction remaining /= 2 means remaining = remaining / 2; dividing whole numbers keeps the whole-number quotient. ++steps increases steps by one.\n\nUnsigned arithmetic is defined modulo its range, so a loop condition such as i >= 0 cannot terminate an unsigned countdown. Choose a condition that reflects the remaining work.',
 cpp('iostream',"    unsigned remaining = 13, steps = 0;\n    while (remaining != 0) {\n        std::cout << remaining << \" \";\n        remaining /= 2;\n        ++steps;\n    }\n    std::cout << \"steps=\" << steps << \"\\n\";"),'13 6 3 1 steps=4',
 'The sequence reaches zero after four divisions. The counter measures iterations rather than elapsed time.',
 'An unsigned countdown that decrements zero wraps to a large value instead of becoming negative.',
