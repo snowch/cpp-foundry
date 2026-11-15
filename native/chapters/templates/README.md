@@ -4,6 +4,14 @@ Deduce types, constrain operations, and distinguish compile-time choices.
 
 ## Template argument deduction follows the parameter pattern
 
+Before this chapter: [Define an independent copy when the domain needs one](../copy-move/README.md)
+
+New terms and notation:
+
+A template describes a family of types or functions parameterized by types or values. For example, vector<int> selects an integer-element version of vector; template<class T> names a type parameter T in your own generic definition.
+
+Generic code describes an operation for more than one type. A template parameter names the varying type or value, deduction determines it from a call, and a constraint states which operations must be available.
+
 A function template can infer a type from its arguments. For a by-value parameter, deduction produces a value type suitable for the local parameter, while a reference parameter preserves a borrowing relationship.
 
 Deduction and conversion are separate stages. When arguments imply conflicting template types, an explicit design choice may be needed instead of assuming arithmetic conversions will reconcile them.
@@ -44,6 +52,16 @@ Answer: 3. The explicit template argument resolves the intended common domain.
 Experiment: Attempt the mixed call without an explicit argument and read the conflicting-deduction diagnostic before designing an overload.
 
 ## A requires expression can check an operation
+
+Before this chapter: [Define an independent copy when the domain needs one](../copy-move/README.md)
+
+New terms and notation:
+
+A thread is a separate sequence of execution within a program. Threads can access shared objects, so code must coordinate conflicting accesses and ensure objects remain alive until all their users have finished.
+
+pointer->member accesses a member of the object reached through pointer. It is shorthand for (*pointer).member, so the target must exist and be valid for that access.
+
+A requires expression checks whether specified operations are valid for a type. A concept gives such requirements a name. These checks establish available syntax and types, not mathematical laws, safety for every input, or performance guarantees.
 
 A requires expression asks whether a particular expression or declaration is well-formed for a candidate type. A concept packages that structural requirement into a reusable interface constraint.
 
@@ -91,6 +109,12 @@ Experiment: Create a small user type satisfying Sized and a type without size. C
 
 ## Select a compile-time branch
 
+Before this chapter: [Define an independent copy when the domain needs one](../copy-move/README.md)
+
+New terms and notation:
+
+constexpr permits suitable expressions or function calls to be evaluated while compiling. A constexpr variable needs a compile-time value. A constexpr function may also run normally at runtime; constexpr does not force every call to be a compile-time call.
+
 if constexpr discards one branch during template instantiation according to a constant condition. This lets an implementation use operations available only for certain types without requiring the discarded branch to be valid for that instantiation.
 
 Ordinary if chooses at runtime and generally still requires both branch bodies to be well-formed.
@@ -136,6 +160,12 @@ Experiment: Add a branch that calls a method only present on one user type. Cont
 
 ## Constexpr permits evaluation in constant-expression contexts
 
+Before this chapter: [Define an independent copy when the domain needs one](../copy-move/README.md)
+
+New terms and notation:
+
+A counting for loop puts three steps inside its parentheses: a starting instruction, a condition checked before each repetition, and an update after each repetition. Semicolons separate those steps; ++ increases a counter by one.
+
 A constexpr function can participate in compile-time evaluation when its arguments and operations satisfy the constant-expression rules. It can also be called at runtime.
 
 Use static_assert to check a compile-time property, and ordinary validation for runtime inputs. constexpr does not imply that every invocation must execute during compilation.
@@ -174,6 +204,14 @@ Answer: 3. It enables constant evaluation where the context requires or permits 
 Experiment: Add static assertions for zero and one. Specify a bounded input domain that keeps the sum representable.
 
 ## Forward a callable without inventing ownership
+
+Before this chapter: [Define an independent copy when the domain needs one](../copy-move/README.md)
+
+New terms and notation:
+
+std::forward<T>(value) preserves the caller’s value category in a correctly deduced forwarding-reference parameter. T&& in that special template context can accept lvalues and rvalues; ordinary && declarations do not all have that behavior.
+
+An lvalue expression identifies an object that can be referred to again, such as a named variable. An rvalue is a temporary or an expression eligible for value-consuming operations. These categories guide overload selection and moving; they do not say whether an object is const.
 
 A forwarding reference can preserve an argument’s value category through a generic wrapper. std::forward is used with the deduced template parameter when passing that argument onward.
 

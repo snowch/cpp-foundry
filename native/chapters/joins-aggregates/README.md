@@ -4,6 +4,10 @@ Implement relational operators with explicit empty/duplicate behavior.
 
 ## A join must preserve matching multiplicity
 
+Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
+
+A join combines rows matching a condition across inputs. An aggregate combines multiple rows into a result such as a count or sum; grouping computes separate aggregates for different keys. Missing values and empty inputs need explicit rules.
+
 An inner equijoin produces one result for every matching pair of input rows. Duplicate keys on either side therefore multiply results rather than disappearing into one representative.
 
 Nested-loop execution is a clear reference implementation: it checks every left/right pair and supplies an independent oracle for a later indexed or hash join.
@@ -47,6 +51,8 @@ Answer: 3. Join multiplicity follows matching pairs.
 Experiment: Add two left duplicates and predict the cross-product size for that key before running.
 
 ## A hash join bucket owns all matching build rows
+
+Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
 
 A hash join groups build-side rows by key, then probes with the other input. Each bucket must retain all duplicate payloads to preserve inner-join multiplicity.
 
@@ -99,6 +105,8 @@ Experiment: Compare complete result multisets with a nested-loop join across emp
 
 ## An unmatched left row needs an explicit absent payload
 
+Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
+
 A left outer join retains every left row even when no right row matches. The result needs an absent right-side representation rather than inventing a real value such as zero or an empty name.
 
 The example uses optional<string> for the projected right payload. A full relational engine also defines null propagation and predicate semantics explicitly.
@@ -144,6 +152,8 @@ Answer: 3. The left-outer contract retains it with an absent right side.
 Experiment: Add a right-side filter and distinguish placing it in the join condition from placing it after the outer join.
 
 ## Group state by a declared key
+
+Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
 
 Grouping creates one aggregate state per grouping key. A count and a sum have different empty and overflow considerations, and the state should be updated only for rows belonging to that group.
 
@@ -191,6 +201,8 @@ Answer: 2. Rows contribute to their matching group’s state.
 Experiment: Test an empty input and a new group appearing late. Compare results with a hand-computed fixture before optimizing.
 
 ## Distinguish row count, present-value count, and absent sum
+
+Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
 
 An aggregate over optional values can count all rows separately from the number of present values. An absent sum for no contributing values differs from a present sum equal to zero.
 

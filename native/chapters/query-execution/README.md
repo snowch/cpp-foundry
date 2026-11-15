@@ -4,6 +4,10 @@ Compose scans, filters, projections, and bounded result production.
 
 ## A scan produces candidate rows
 
+Before this chapter: [Parse into a typed query value](../parsing-sql/README.md)
+
+A query operator is one stage in producing results, not a C++ arithmetic operator. A scan supplies rows, a filter keeps selected rows, and projection chooses fields. A pipeline connects those stages so later stages consume earlier output.
+
 A table scan visits each logical row and offers it to the next operator. It is a useful baseline because its cost and semantics are easy to state. An index may later reduce candidates without changing the query result.
 
 This model scans owning Row values in a vector. A storage-backed scan also needs page lifetime and invalidation rules.
@@ -52,6 +56,8 @@ Answer: 2. The counter measures candidate production.
 Experiment: Add a selective filter and count candidates separately from result rows. Compare those metrics with an indexed access path.
 
 ## A filter changes membership without changing the source
+
+Before this chapter: [Parse into a typed query value](../parsing-sql/README.md)
 
 A filter applies a predicate to candidate rows and forwards only matches. Keep the predicate’s domain and nullability rules explicit; the bounded teaching schema has no null scores.
 
@@ -103,6 +109,8 @@ Experiment: Test thresholds below all, between values, and above all scores. Def
 
 ## Projection chooses result fields
 
+Before this chapter: [Parse into a typed query value](../parsing-sql/README.md)
+
 Projection converts a row into the requested output shape. It need not preserve every stored field. An owning projected string is appropriate when results must survive the end of the scan or a later page eviction.
 
 A borrowed view can avoid copying only when its owner lifetime is guaranteed through result consumption.
@@ -149,6 +157,8 @@ Answer: 3. Ownership decouples the result lifetime from the scan buffers.
 Experiment: Implement both immediate-consumption and retained-result interfaces. Document when copying is required for correctness.
 
 ## A limit can stop upstream work
+
+Before this chapter: [Parse into a typed query value](../parsing-sql/README.md)
 
 A pull-style execution pipeline can stop requesting candidates after producing the required result count. This can reduce work when combined with a scan, though the exact behavior depends on filters and ordering requirements.
 
@@ -204,6 +214,8 @@ Answer: 1. The pipeline stops requesting work after two emissions.
 Experiment: Make the first row fail the predicate and predict the new visited count. Compare LIMIT before and after a required sort.
 
 ## Compose operators while preserving the query contract
+
+Before this chapter: [Parse into a typed query value](../parsing-sql/README.md)
 
 A query pipeline can separate selection, ordering, and projection into distinct steps with observable intermediate sizes. Reordering operators is legal only when it preserves the documented result.
 

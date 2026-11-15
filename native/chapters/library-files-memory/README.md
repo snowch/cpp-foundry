@@ -4,6 +4,10 @@ Handle host errors, path semantics, shared ownership, and allocation lifetimes.
 
 ## Inspect host filesystem failures without throwing
 
+Before this chapter: [A weak observer can detect expired shared ownership](../lifetimes-views/README.md)
+
+An allocator provides storage for objects; a memory resource lets allocation behavior be selected at runtime. Resource lifetime must cover every live allocation that depends on it. Filesystem operations also report host failures that a path’s spelling cannot predict.
+
 Filesystem operations depend on host state and permissions. Many provide error_code overloads that report operating-system failures without a filesystem_error exception. Paths are names rather than stable object identities, and a successful preflight check does not make a subsequent operation race-free.
 
 ```cpp
@@ -42,6 +46,8 @@ Experiment: Run in a temporary directory, test missing paths through status(erro
 
 ## Treat path normalization as lexical processing
 
+Before this chapter: [A weak observer can detect expired shared ownership](../lifetimes-views/README.md)
+
 A path represents a host-dependent path syntax. lexically_normal simplifies components without accessing the filesystem, while canonical resolves existing objects through the filesystem. Lexical normalization does not prove containment when symbolic links or host-specific path rules are involved.
 
 ```cpp
@@ -78,6 +84,8 @@ Answer: 2. Lexical normalization does not access the filesystem. The filename an
 Experiment: Compare lexically_normal with canonical on an isolated temporary fixture. Explain which operation can fail because an object does not exist.
 
 ## Observe shared state without creating a cycle
+
+Before this chapter: [A weak observer can detect expired shared ownership](../lifetimes-views/README.md)
 
 shared_ptr shares ownership through a control block. weak_ptr observes that ownership without extending the managed object’s lifetime. lock obtains a temporary shared owner atomically with respect to the control block’s lifetime, avoiding a separate check-then-access protocol.
 
@@ -125,6 +133,8 @@ Answer: 2. weak_ptr does not keep the object alive. The first lock keeps the int
 Experiment: Create a parent owning a child and a child observing the parent through weak_ptr. Verify destruction with counters and then contrast a deliberate shared ownership cycle.
 
 ## Bound an allocation resource lifetime
+
+Before this chapter: [A weak observer can detect expired shared ownership](../lifetimes-views/README.md)
 
 Polymorphic allocators select a runtime memory_resource while retaining the container’s value interface. A monotonic resource reclaims allocation storage as a group rather than on each individual deallocation. Its storage and the resource object must outlive every allocation still in use.
 

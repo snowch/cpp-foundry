@@ -4,6 +4,14 @@ Track owners, observers, invalidation, and temporary lifetimes.
 
 ## An observer does not own the object
 
+Before this chapter: [RAII ties cleanup to scope](../ownership/README.md)
+
+New terms and notation:
+
+nullptr is the C++ spelling for a pointer with no target. It is not a valid object to read or write through. Check a possibly empty pointer before using * or -> to access its target.
+
+Lifetime is the interval during which an object exists and can be used as that object. A view describes existing data without owning it. A dangling view or reference is one whose underlying object or storage is no longer usable.
+
 A raw pointer can express observation while another object owns the resource. The observer is usable only while the owner keeps the object alive. Destroying or resetting the owner invalidates the observer even though the pointer variable still contains an address.
 
 Keep ownership visible in the surrounding interface. This example stops using the observer before resetting its unique owner.
@@ -52,6 +60,12 @@ Experiment: Write a function accepting const int* and document whether null is p
 
 ## A named owner can outlive an expression
 
+Before this chapter: [RAII ties cleanup to scope](../ownership/README.md)
+
+New terms and notation:
+
+Undefined behavior means the C++ rules place no requirements on what the program does after that invalid operation. An apparently correct result on one run is not evidence of safety; prevent the invalid operation before executing it.
+
 Temporary objects normally last to the end of their full expression. Borrowing from a temporary and retaining that borrow can therefore leave a dangling view immediately after the statement.
 
 Store an owning result first when later operations need its storage. Binding some references can extend a temporary’s lifetime, but lifetime extension has specific rules and is not propagated through arbitrary returned views.
@@ -95,6 +109,12 @@ Experiment: Draw lifetimes for the safe code and the dangling alternative withou
 
 ## Reallocation invalidates element observers
 
+Before this chapter: [RAII ties cleanup to scope](../ownership/README.md)
+
+New terms and notation:
+
+Reallocation replaces a container’s backing storage with a different storage area. Saved references, pointers, and iterators into the old area may no longer be usable; each container operation has its own invalidation rules.
+
 A vector owns a contiguous allocation. When growth requires a new allocation, its elements move or copy and old element references, pointers, and iterators become invalid.
 
 An index can be reacquired after growth when the operation preserves the logical ordering you rely on. reserve can reduce reallocations, but it is not a general lifetime proof for every future mutation.
@@ -134,6 +154,14 @@ Answer: 1. The access derives a new reference from the current vector.
 Experiment: Insert at the beginning and observe how the same index changes meaning. Design a record lookup around stable IDs instead.
 
 ## A view can expose mutations without owning them
+
+Before this chapter: [RAII ties cleanup to scope](../ownership/README.md)
+
+New terms and notation:
+
+std::array<T, N> stores exactly N elements of type T. Unlike vector, its number of elements is fixed as part of the type; braces provide starting values.
+
+std::span<T> is a view of consecutive T elements owned elsewhere. It gives a starting position and an element count without extending the underlying storage’s lifetime.
 
 A mutable span is a borrowed window into existing elements. Writing through it changes the owner’s elements. A span<const T> instead offers read-only access through that view while still depending on the owner’s lifetime.
 
@@ -177,6 +205,12 @@ Answer: 2. A span packages access; ownership stays with the array.
 Experiment: Pass a span<const int> to a sum function accepting arrays and vectors. Document which caller mutations would invalidate the borrow.
 
 ## A weak observer can detect expired shared ownership
+
+Before this chapter: [RAII ties cleanup to scope](../ownership/README.md)
+
+New terms and notation:
+
+std::weak_ptr<T> observes an object managed by shared ownership without keeping it alive. lock() attempts to obtain a temporary shared owner; check whether that attempt succeeded before using the value.
 
 shared_ptr represents shared lifetime ownership, which should be chosen only when the design needs several independent owners. weak_ptr observes the shared ownership state without extending the object’s lifetime.
 

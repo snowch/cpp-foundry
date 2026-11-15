@@ -4,6 +4,10 @@ Keep structural ownership separate from borrowed links.
 
 ## Own each linked node exactly once
 
+Before this chapter: [Cache results for repeated subproblems](../recursion/README.md)
+
+A node is an object holding a value and links to other nodes. A stack removes the most recently added item first; a queue removes the oldest item first. A ring buffer reuses fixed storage by wrapping positions back to the beginning.
+
 A singly linked list can represent structural ownership with unique_ptr links. The head owns the first node and each node owns the next. Traversal uses borrowed pointers that never delete nodes.
 
 This small acyclic chain delegates cleanup to the ownership structure. Very long recursive destruction chains may need an iterative teardown strategy.
@@ -55,6 +59,8 @@ Answer: 2. The chain has one owning link per node.
 Experiment: Add a third node and draw owners separately from observer pointers. Explain why an owning back-link would create a different lifetime problem.
 
 ## Detach an owner before destroying a node
+
+Before this chapter: [Cache results for repeated subproblems](../recursion/README.md)
 
 Removing a head node requires transferring ownership of its successor before the old head is destroyed. Use a local owner to keep the removed node alive while its next link is detached.
 
@@ -109,6 +115,8 @@ Experiment: Handle an empty list and a single-node list. Return an optional remo
 
 ## A stack exposes last-in, first-out behavior
 
+Before this chapter: [Cache results for repeated subproblems](../recursion/README.md)
+
 A stack restricts operations to the most recently added item. This matches nested work such as undo history or an explicit replacement for recursion. The backing container’s broader operations should not leak into a narrow stack contract.
 
 Check emptiness before observing or removing the top item; standard adaptors do not return an optional for an empty pop.
@@ -152,6 +160,8 @@ Answer: 1. LIFO refers to insertion history rather than numeric order.
 Experiment: Implement the same interface with a vector and compare the empty-state contract. Use the stack to traverse a small tree iteratively.
 
 ## Separate a ring’s logical order from its array positions
+
+Before this chapter: [Cache results for repeated subproblems](../recursion/README.md)
 
 A bounded ring queue reuses an array by wrapping physical positions. The logical head and live count determine the next insertion slot. Count distinguishes empty from full even when modular positions coincide.
 
@@ -224,6 +234,8 @@ Answer: 2. Count is zero when empty and capacity when full.
 Experiment: Test several complete wrap cycles and a rejected insertion. Compare every popped value with a deque reference model.
 
 ## A queue preserves arrival order
+
+Before this chapter: [Cache results for repeated subproblems](../recursion/README.md)
 
 A FIFO queue removes the oldest pending item. deque supports efficient insertion at one end and removal at the other without requiring every remaining element to shift.
 

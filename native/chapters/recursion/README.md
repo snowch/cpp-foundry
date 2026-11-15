@@ -4,6 +4,14 @@ Define base cases, progress measures, and reusable subproblems.
 
 ## A recursive call needs a smaller problem
 
+Before this chapter: [Insertion sort maintains a sorted prefix](../sorting-strategies/README.md)
+
+New terms and notation:
+
+Recursion is a function solving a problem by calling itself on a smaller or simpler problem. A base case stops the calls, and a progress measure explains why repeated calls reach it.
+
+A subproblem is a smaller instance of a problem. Recursive code solves one by calling itself; a base case stops that process. Memoization stores completed answers for reuse, while tabulation builds a table of answers in a chosen order.
+
 A recursive definition needs a base case and a progress measure that reaches it. Summing the first n positive integers reduces n by one until zero. The return combines the solved smaller problem with the current contribution.
 
 Stack usage grows with recursion depth. Keep this teaching input small and do not generalize it into a safe interface for arbitrary unsigned values.
@@ -42,6 +50,8 @@ Answer: 1. Each non-base call uses n-1.
 Experiment: Trace the calls for zero and one. Add a documented input bound that keeps both arithmetic and stack use acceptable.
 
 ## Split a range and combine subproblem results
+
+Before this chapter: [Insertion sort maintains a sorted prefix](../sorting-strategies/README.md)
 
 Divide-and-conquer separates a problem into smaller ranges, solves them, and combines the answers. A span can express each borrowed subrange without copying its elements.
 
@@ -89,6 +99,8 @@ Answer: 3. The original array owns all elements until the calls finish.
 Experiment: Instrument visits and confirm each element contributes once. Compare recursion depth with a linear recursive summation.
 
 ## Cache results for repeated subproblems
+
+Before this chapter: [Insertion sort maintains a sorted prefix](../sorting-strategies/README.md)
 
 Naive Fibonacci recursion revisits the same subproblems. Memoization stores each computed result so later calls reuse it. The cache changes work from an exponential recursion tree to a linear number of distinct states.
 
@@ -143,6 +155,8 @@ Experiment: Count newly computed states and cache hits separately. Reject n beyo
 
 ## Choose an order that makes dependencies available
 
+Before this chapter: [Insertion sort maintains a sorted prefix](../sorting-strategies/README.md)
+
 Bottom-up dynamic programming fills states in an order where prerequisites are already computed. For Fibonacci, state n depends only on the previous two states, allowing constant auxiliary storage.
 
 Reducing storage does not remove the need for a bounded numeric domain. Checked arithmetic is still required when the requested state can exceed the result type.
@@ -183,6 +197,8 @@ Answer: 2. The temporary preserves the recurrence’s inputs until the new state
 Experiment: Compare against the memoized implementation for every n from zero to ten. Add a checked-addition failure path.
 
 ## Undo tentative state before exploring a sibling
+
+Before this chapter: [Insertion sort maintains a sorted prefix](../sorting-strategies/README.md)
 
 Backtracking explores a choice, recursively explores its consequences, and restores the state before trying another choice. Ownership of the mutable path should be clear so sibling branches do not inherit one another’s tentative additions.
 

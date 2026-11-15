@@ -4,6 +4,10 @@ Compact, checkpoint, and publish generations without invalidating readers.
 
 ## Compaction changes offsets while preserving logical records
 
+Before this chapter: [Reclaim only versions older than every active reader needs](../mvcc/README.md)
+
+Compaction repacks live data to recover space. A generation identifies one published storage version; old readers may keep using an older generation after a new one is published. Publication and reclaiming the old storage are separate steps.
+
 A slotted-page representation can separate stable slot identity from the current byte offset of a payload. Compaction packs live payloads and updates offsets, removing gaps left by deleted entries.
 
 Any borrowed pointer into the old byte buffer can be invalidated. Keep record identity and pin ownership separate from a transient payload address.
@@ -53,6 +57,8 @@ Answer: 1. Physical positions change while logical identity should remain stable
 Experiment: Add explicit slot IDs and verify lookup by ID returns the same live text before and after candidate compaction.
 
 ## A reused slot needs a generation check
+
+Before this chapter: [Reclaim only versions older than every active reader needs](../mvcc/README.md)
 
 A numeric slot can be freed and later reused for a different object. A stale handle containing only that slot number may then accidentally access the new object. A generation tag lets lookup reject a handle from the earlier lifetime.
 
@@ -105,6 +111,8 @@ Experiment: Specify a generation-exhaustion policy and test stale handles after 
 
 ## A checkpoint covers a precise committed prefix
 
+Before this chapter: [Reclaim only versions older than every active reader needs](../mvcc/README.md)
+
 A checkpoint represents a committed state at a particular log position. Recovery combines that state with the log suffix after the checkpoint’s covered prefix. Truncating more log than the checkpoint covers can lose committed updates.
 
 The fixture models positions and state values in memory. Durable checkpoint publication needs checked host ordering before old log storage can be retired.
@@ -147,6 +155,8 @@ Answer: 2. The checkpoint covers a prefix, not future commits.
 Experiment: Enumerate crashes around candidate write, publication, and log retirement. Define the retained recovery source at each boundary.
 
 ## Publish a replacement without invalidating old readers
+
+Before this chapter: [Reclaim only versions older than every active reader needs](../mvcc/README.md)
 
 Compaction or checkpointing can produce a new immutable generation while readers still use the old one. Publish an owning handle to the new generation, then retire old storage only after retained readers finish.
 
@@ -196,6 +206,8 @@ Answer: 3. Retained ownership separates publication from reclamation.
 Experiment: Add a weak observer and verify expiration after the old reader releases ownership. Document the synchronized publication mechanism separately.
 
 ## Refresh statistics from the state they describe
+
+Before this chapter: [Reclaim only versions older than every active reader needs](../mvcc/README.md)
 
 A maintenance pass can rebuild statistics after data changes. Record which committed generation or revision the statistics summarize so a planner can reason about stale estimates.
 

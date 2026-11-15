@@ -4,6 +4,10 @@ Maintain a partial order for repeated minimum extraction.
 
 ## A heap maintains a partial ordering
 
+Before this chapter: [Keep stored heights consistent with structure](../balanced-trees/README.md)
+
+A priority queue returns an item chosen by priority rather than arrival time. A heap implements it using parent/child comparisons. Sifting repairs the ordering after an insertion or removal; it does not sort all elements.
+
 In a binary min-heap, every parent is no greater than its children. This guarantees a minimum at the root without fully sorting the array. Child positions follow arithmetic indices in the owned vector.
 
 Heap validation should compare every parent-child edge, not require the entire array to be sorted.
@@ -92,6 +96,8 @@ Experiment: Print the internal array and compare heap validity with global sorte
 
 ## Restore order after appending a leaf
 
+Before this chapter: [Keep stored heights consistent with structure](../balanced-trees/README.md)
+
 A newly appended heap element can violate order only along its ancestor path. Sift-up swaps it with a larger parent until the local relation holds or it reaches the root.
 
 The vector owns all elements throughout the operation. An index is reacquired after push_back, avoiding observers into an allocation that may have moved.
@@ -175,6 +181,8 @@ Answer: 2. The root has no parent.
 Experiment: Count swaps for increasing and decreasing insertions. Relate the maximum path length to the heap height.
 
 ## Restore order after removing the minimum
+
+Before this chapter: [Keep stored heights consistent with structure](../balanced-trees/README.md)
 
 Removing the root leaves a hole filled by the final element. Only a downward path can now violate min-heap order. Choose the smaller child before deciding whether to swap.
 
@@ -260,6 +268,12 @@ Experiment: Test zero, one, and two elements, plus equal keys. Validate the heap
 
 ## Make scheduling ties deterministic
 
+Before this chapter: [Keep stored heights consistent with structure](../balanced-trees/README.md)
+
+New terms and notation:
+
+std::pair<A, B> groups two values, whose members are named first and second. The types can differ. A structured binding can give those components local names, but the API still needs to explain what each component means.
+
 A priority queue orders tasks by a comparator. When output order matters, define a tie-breaker such as a monotonically assigned sequence number. Numeric priority alone does not specify the order of equal-priority tasks.
 
 The standard priority_queue is a max-priority adaptor under its comparator convention; choose the comparison carefully for a minimum-first scheduler.
@@ -308,6 +322,8 @@ Answer: 1. The second pair component is an explicit tie-breaker.
 Experiment: Replace pairs with a named Task type and an explicit comparator. Test equivalent priorities in several insertion orders.
 
 ## Use an independent sorted extraction oracle
+
+Before this chapter: [Keep stored heights consistent with structure](../balanced-trees/README.md)
 
 A heap workload can be validated by collecting every extracted value and comparing it with an independently sorted copy of the inputs. This checks both ordering and multiplicity.
 

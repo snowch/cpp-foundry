@@ -1,9 +1,12 @@
 #include <iostream>
-#include <string>
 #include <vector>
+
 int main() {
-    std::vector<std::string> names{"Ada", "Linus"};
-    names.push_back("Grace");
-    for (const auto& name : names) std::cout << name << '\n';
-    std::cout << "count=" << names.size() << '\n';
+    std::vector<int> scores{70, 80, 90};
+    scores.push_back(100);
+    for (int score : scores) {
+        std::cout << score << "\n";
+    }
+    std::cout << "count=" << scores.size() << "\n";
+    return 0;
 }

@@ -10,15 +10,31 @@
   {
     "id": "numbers",
     "chapter": "values",
-    "expected": "42\noverflow rejected=1",
+    "expected": "42",
     "native": false,
     "flags": "",
     "input": ""
   },
   {
-    "id": "collections",
+    "id": "text-values",
     "chapter": "values",
-    "expected": "Ada\nLinus\nGrace\ncount=3",
+    "expected": "Ada\nHello, Grace!",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "decisions-basics",
+    "chapter": "values",
+    "expected": "pass",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "loop-basics",
+    "chapter": "values",
+    "expected": "1\n2\n3",
     "native": false,
     "flags": "",
     "input": ""
@@ -26,7 +42,23 @@
   {
     "id": "functions",
     "chapter": "values",
-    "expected": "mean=80\nempty=1",
+    "expected": "12",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "collections",
+    "chapter": "values",
+    "expected": "70\n80\n90\n100\ncount=4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "scope-basics",
+    "chapter": "values",
+    "expected": "12\n10",
     "native": false,
     "flags": "",
     "input": ""
@@ -187,6 +219,262 @@
     "id": "value-equality",
     "chapter": "user-types",
     "expected": "1 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "references",
+    "chapter": "ownership",
+    "expected": "Hello, Ada Lovelace\nname empty=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "invariants",
+    "chapter": "ownership",
+    "expected": "90\nscore 0..100",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "raii",
+    "chapter": "ownership",
+    "expected": "acquire\nwork\nrelease\nfailed",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "moves",
+    "chapter": "ownership",
+    "expected": "first empty=1\nsecond=page 7\nsecond empty=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "observer-owner",
+    "chapter": "lifetimes-views",
+    "expected": "42\nempty=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "temporary-lifetime",
+    "chapter": "lifetimes-views",
+    "expected": "Ada Lovelace",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "vector-invalidation",
+    "chapter": "lifetimes-views",
+    "expected": "20 size=3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "view-mutation",
+    "chapter": "lifetimes-views",
+    "expected": "193",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "shared-weak",
+    "chapter": "lifetimes-views",
+    "expected": "7\nexpired=1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "rule-zero",
+    "chapter": "copy-move",
+    "expected": "Ada Changed",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "move-only-types",
+    "chapter": "copy-move",
+    "expected": "1 12",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "copy-custom-owner",
+    "chapter": "copy-move",
+    "expected": "5 9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "noexcept-moves",
+    "chapter": "copy-move",
+    "expected": "1\n0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "return-elision",
+    "chapter": "copy-move",
+    "expected": "ready",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "deduction",
+    "chapter": "templates",
+    "expected": "7\n7.5",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "requires-expressions",
+    "chapter": "templates",
+    "expected": "3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "if-constexpr",
+    "chapter": "templates",
+    "expected": "integral\nother",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "constexpr-evaluation",
+    "chapter": "templates",
+    "expected": "15",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "forwarding",
+    "chapter": "templates",
+    "expected": "9\n4",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "virtual-interface",
+    "chapter": "polymorphism",
+    "expected": "3",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "virtual-destruction",
+    "chapter": "polymorphism",
+    "expected": "derived\nbase",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "object-slicing",
+    "chapter": "polymorphism",
+    "expected": "1 2",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "variant-visitation",
+    "chapter": "polymorphism",
+    "expected": "lookup 7",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "composition",
+    "chapter": "polymorphism",
+    "expected": "1 0",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "borrowing",
+    "chapter": "boundaries",
+    "expected": "Ada\n22\nAda",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "parsing",
+    "chapter": "boundaries",
+    "expected": "42: valid\n42x: invalid\n-1: invalid\n0: invalid\n99999999999999999999: invalid",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "failure",
+    "chapter": "boundaries",
+    "expected": "empty name\npreserved=Ada\ncommitted=Grace",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "sum-types",
+    "chapter": "boundaries",
+    "expected": "90\nscore outside 0..100",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "gap-forwarding",
+    "chapter": "generic-contracts",
+    "expected": "lvalue rvalue ",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "gap-concept-requires",
+    "chapter": "generic-contracts",
+    "expected": "5 1",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "gap-constexpr-validation",
+    "chapter": "generic-contracts",
+    "expected": "9",
+    "native": false,
+    "flags": "",
+    "input": ""
+  },
+  {
+    "id": "gap-virtual-destruction",
+    "chapter": "generic-contracts",
+    "expected": "7 1 1",
     "native": false,
     "flags": "",
     "input": ""
@@ -451,262 +739,6 @@
     "id": "lib-bit-utilities",
     "chapter": "library-time-random",
     "expected": "3 5 1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "references",
-    "chapter": "ownership",
-    "expected": "Hello, Ada Lovelace\nname empty=1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "invariants",
-    "chapter": "ownership",
-    "expected": "90\nscore 0..100",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "raii",
-    "chapter": "ownership",
-    "expected": "acquire\nwork\nrelease\nfailed",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "moves",
-    "chapter": "ownership",
-    "expected": "first empty=1\nsecond=page 7\nsecond empty=1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "observer-owner",
-    "chapter": "lifetimes-views",
-    "expected": "42\nempty=1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "temporary-lifetime",
-    "chapter": "lifetimes-views",
-    "expected": "Ada Lovelace",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "vector-invalidation",
-    "chapter": "lifetimes-views",
-    "expected": "20 size=3",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "view-mutation",
-    "chapter": "lifetimes-views",
-    "expected": "193",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "shared-weak",
-    "chapter": "lifetimes-views",
-    "expected": "7\nexpired=1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "rule-zero",
-    "chapter": "copy-move",
-    "expected": "Ada Changed",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "move-only-types",
-    "chapter": "copy-move",
-    "expected": "1 12",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "copy-custom-owner",
-    "chapter": "copy-move",
-    "expected": "5 9",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "noexcept-moves",
-    "chapter": "copy-move",
-    "expected": "1\n0",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "return-elision",
-    "chapter": "copy-move",
-    "expected": "ready",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "deduction",
-    "chapter": "templates",
-    "expected": "7\n7.5",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "requires-expressions",
-    "chapter": "templates",
-    "expected": "3",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "if-constexpr",
-    "chapter": "templates",
-    "expected": "integral\nother",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "constexpr-evaluation",
-    "chapter": "templates",
-    "expected": "15",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "forwarding",
-    "chapter": "templates",
-    "expected": "9\n4",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "virtual-interface",
-    "chapter": "polymorphism",
-    "expected": "3",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "virtual-destruction",
-    "chapter": "polymorphism",
-    "expected": "derived\nbase",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "object-slicing",
-    "chapter": "polymorphism",
-    "expected": "1 2",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "variant-visitation",
-    "chapter": "polymorphism",
-    "expected": "lookup 7",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "composition",
-    "chapter": "polymorphism",
-    "expected": "1 0",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "borrowing",
-    "chapter": "boundaries",
-    "expected": "Ada\n22\nAda",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "parsing",
-    "chapter": "boundaries",
-    "expected": "42: valid\n42x: invalid\n-1: invalid\n0: invalid\n99999999999999999999: invalid",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "failure",
-    "chapter": "boundaries",
-    "expected": "empty name\npreserved=Ada\ncommitted=Grace",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "sum-types",
-    "chapter": "boundaries",
-    "expected": "90\nscore outside 0..100",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "gap-forwarding",
-    "chapter": "generic-contracts",
-    "expected": "lvalue rvalue ",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "gap-concept-requires",
-    "chapter": "generic-contracts",
-    "expected": "5 1",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "gap-constexpr-validation",
-    "chapter": "generic-contracts",
-    "expected": "9",
-    "native": false,
-    "flags": "",
-    "input": ""
-  },
-  {
-    "id": "gap-virtual-destruction",
-    "chapter": "generic-contracts",
-    "expected": "7 1 1",
     "native": false,
     "flags": "",
     "input": ""

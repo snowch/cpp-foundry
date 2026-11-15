@@ -4,6 +4,10 @@ Separate deduction, forwarding, dispatch, and compile-time validation.
 
 ## Preserve an argument’s value category deliberately
 
+Before this chapter: [Forward a callable without inventing ownership](../templates/README.md)
+
+A value category describes how an expression refers to a value: roughly, a reusable named object or a value eligible to be consumed. Forwarding preserves a caller’s category. Compile-time checks run while translating the program; they are distinct from tests run by the finished program.
+
 A forwarding reference arises in a deduced T&& parameter under specific rules. std::forward<T> preserves the caller’s value category; std::move unconditionally casts to an expiring-value expression. Neither cast itself transfers resources: the selected operation determines what actually happens.
 
 ```cpp
@@ -43,6 +47,8 @@ Experiment: Replace forward with move and observe the changed dispatch. Add a co
 
 ## Express required operations without claiming semantic proof
 
+Before this chapter: [Forward a callable without inventing ownership](../templates/README.md)
+
 A requires expression can check that an operation exists and yields a constrained type. A concept improves overload selection and diagnostics, but syntactic validity does not establish associativity, complexity, thread safety, or freedom from overflow. Those are semantic contracts requiring reasoning and tests.
 
 ```cpp
@@ -79,6 +85,8 @@ Answer: 3. A requires expression checks declared syntactic requirements. The int
 Experiment: Try a type with no addition and inspect the diagnostic. Then construct a syntactically valid nonassociative operation and explain which law the concept fails to prove.
 
 ## Distinguish constant evaluation from optimization
+
+Before this chapter: [Forward a callable without inventing ownership](../templates/README.md)
 
 constexpr permits a function to participate in constant evaluation when its inputs and operations satisfy the rules. It does not require every call to run at compile time. static_assert requires its condition to be a constant expression, while consteval requires immediate evaluation at each applicable call.
 
@@ -121,6 +129,12 @@ Answer: 2. constexpr permits both suitable compile-time and runtime calls. The c
 Experiment: Call sum with runtime input and compare constexpr with consteval. Keep both a static_assert fixture and a runtime assertion for the public interface.
 
 ## Destroy polymorphic owners through a virtual interface
+
+Before this chapter: [Forward a callable without inventing ownership](../templates/README.md)
+
+New terms and notation:
+
+static has different meanings by context. A static data member belongs to the type rather than each object; a static local keeps its value between calls; static on a namespace-level helper limits its visibility to that translation unit.
 
 Deleting a derived object through a base pointer requires an appropriate virtual destructor for ordinary polymorphic deletion. Virtual member dispatch and virtual destruction are distinct parts of the interface. An owning base pointer also commits the API to a specific ownership and deletion model.
 

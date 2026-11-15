@@ -40,3 +40,10 @@ h1,h2,h3{line-height:1.2;letter-spacing:-.035em;text-wrap:balance}p{margin:0 0 1
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .external-icon{vertical-align:-1px;margin-left:3px}
+
+.lesson-foundations{border:1px solid #e4dff2;background:#f3f0fc;border-radius:11px;padding:19px 22px;margin:22px 0}
+.lesson-foundations h2{font-size:15px;margin:0 0 12px;letter-spacing:0}
+.lesson-foundations p{font-size:13px;line-height:1.9;color:#5d5572;margin:0 0 13px}
+.lesson-foundations p:last-child{margin-bottom:0}
+.lesson-article>.lesson-prerequisites{font-size:12px;line-height:1.8;color:var(--muted);padding:13px 16px;background:white;border:1px solid var(--line);border-radius:8px}
+.lesson-prerequisites a{color:var(--accent)}

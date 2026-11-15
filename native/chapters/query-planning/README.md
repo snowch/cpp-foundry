@@ -4,6 +4,10 @@ Choose access paths using explicit statistics and assumptions.
 
 ## Compare candidate access paths under a stated model
 
+Before this chapter: [A scan produces candidate rows](../query-execution/README.md)
+
+A query plan chooses how to produce a result. Selectivity is the fraction of rows a condition is expected to keep. A cost model estimates work under stated assumptions; statistics are measurements used by that estimate, not guarantees about the next input.
+
 A planner compares estimated costs for access paths that produce the same logical candidates. A simple model can count scan row visits versus index traversal plus fetched matches. The units and assumptions must be stated before comparing numbers.
 
 This fixture treats one counted operation as one model unit; it is not a hardware latency prediction.
@@ -41,6 +45,8 @@ Answer: 2. A cost model must define common units and relevant work.
 Experiment: Add per-page fetch and sequential-scan weights. State which observations would justify those weights.
 
 ## Selectivity changes the cost of an index lookup
+
+Before this chapter: [A scan produces candidate rows](../query-execution/README.md)
 
 An index is most useful when it eliminates substantial work. If nearly every row matches and each index result requires a separate fetch, a scan can become cheaper under the chosen model.
 
@@ -81,6 +87,8 @@ Experiment: Find the crossover point in this model and test values on either sid
 
 ## Stale statistics can select a poor plan
 
+Before this chapter: [A scan produces candidate rows](../query-execution/README.md)
+
 Statistics summarize a particular data distribution. After inserts, deletes, or skewed updates, an old estimate may no longer represent the current workload. Track estimate and observation separately so errors are visible.
 
 This lesson reports an estimation error directly instead of pretending one small sample proves a permanent distribution.
@@ -118,6 +126,8 @@ Experiment: Create a skewed key distribution and compare a uniform estimate with
 
 ## Projection can change whether row fetches are needed
 
+Before this chapter: [A scan produces candidate rows](../query-execution/README.md)
+
 An index can cover a query when it already contains every requested field. A covering path can avoid fetching base rows, changing its cost compared with an index that stores only keys.
 
 Coverage depends on the query projection and the index’s stored payload. It is not a universal property of all queries using that index.
@@ -154,6 +164,8 @@ Answer: 3. Every projected field must be available from the chosen path.
 Experiment: List columns for several projections and decide which are covered by an (id,score) index. Keep name fetches explicit.
 
 ## Explain estimates and validate result equivalence
+
+Before this chapter: [A scan produces candidate rows](../query-execution/README.md)
 
 An explain representation should name the chosen access path, predicate, ordering, and estimated work. It helps a reader understand why a planner made a choice and which assumptions to challenge.
 

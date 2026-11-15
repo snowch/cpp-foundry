@@ -1,12 +1,14 @@
-#include <array>
 #include <iostream>
+#include <vector>
 
 int main() {
-    const std::array<int, 3> values{3, 1, 4};
+    std::vector<int> values{3, 1, 4};
     int sum = 0;
-    for (std::size_t i = 0; i < values.size(); ++i) {
+    int i = 0;
+    while (i < 3) {
         std::cout << i << ":" << sum << "\n";
-        sum += values[i];
+        sum = sum + values[i];
+        i = i + 1;
     }
     std::cout << "total=" << sum << "\n";
 }

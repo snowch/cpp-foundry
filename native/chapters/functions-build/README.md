@@ -4,6 +4,20 @@ Design value-based interfaces and understand translation units.
 
 ## A value parameter gives independent state
 
+Before this chapter: [Name a calculation with a function](../values/README.md)
+
+New terms and notation:
+
+In C++, an object is a particular stored value with a type, such as one integer variable or one string. A type describes what kind of value it is; an object is one particular instance of that type.
+
+A reference is another name for an existing object. In a declaration, T& gives access to that object rather than creating a separate T value; the referenced object must still exist when used.
+
+const prevents changing a value through this particular name or access path. It does not say that every other part of the program is unable to change the same object.
+
+The expression x += y combines y with the current value of x and stores the result back in x. For the integers here it adds numbers; for a string it appends text. This operation changes x rather than merely producing a separate result.
+
+A declaration states what a function can be called with; a definition supplies its instructions. Compilation checks a source file, while linking connects compiled files. An interface is the part callers use; an implementation is how that interface’s work is done.
+
 Passing by value constructs a function-local value from the argument. Changes to that parameter do not change the caller’s object. This is often the simplest ownership contract for a small value or for an operation that needs its own mutable copy.
 
 A copy can have a real cost for a large collection. Choose the ownership behavior first, then consider whether moving or borrowing better fits the interface.
@@ -47,6 +61,20 @@ Answer: 1. The caller and parameter own distinct string objects.
 Experiment: Compare value, const-reference, and mutable-reference signatures. State which versions can implement this operation without changing the caller.
 
 ## Return related results together
+
+Before this chapter: [Name a calculation with a function](../values/README.md)
+
+New terms and notation:
+
+An exception is a way to report a failure that leaves the current calculation. throw starts that report; a matching catch in a try/catch statement handles it. Without a matching handler, the program can terminate instead of producing a normal result.
+
+auto asks the compiler to determine a variable’s type from the value used to initialize it. The variable still has one fixed type; it does not change type as the program runs.
+
+struct defines a new type with named pieces of data called members. An object of that type holds its own member values, and the dot notation object.member accesses one of them.
+
+A structured binding gives separate local names to pieces of one returned value: auto [a, b] = result; names its two components. Whether these are copies or references depends on the declaration.
+
+at(i) asks a container for the element at index i and reports an out-of-range index by throwing an exception. front() and back() instead access the first and last elements and require the container not to be empty.
 
 A function with several related outputs can return a small value type. This avoids output parameters whose initialization and failure behavior are unclear. Structured bindings give names to the returned components.
 
@@ -100,6 +128,12 @@ Experiment: Change the return type to optional<Bounds> and test empty, single-el
 
 ## Overloads select from the static argument types
 
+Before this chapter: [Name a calculation with a function](../values/README.md)
+
+New terms and notation:
+
+Overloads are functions with the same name but different parameter lists. The compiler chooses which one to call from the argument types and available conversions, not from the output you want.
+
 An overload set provides several functions with one name and different parameter lists. Resolution chooses a viable best match from the argument types and conversions at the call site.
 
 Do not use overloads whose meaning changes unexpectedly after an innocent numeric conversion. Small examples can make an interface’s selection rules observable.
@@ -143,6 +177,12 @@ Answer: 1. The literal’s static type is double.
 Experiment: Call show with a float and with a short. Explain the promotion that makes each overload a better match.
 
 ## A declaration states an interface before its definition
+
+Before this chapter: [Name a calculation with a function](../values/README.md)
+
+New terms and notation:
+
+A translation unit is one source file after its included headers have been processed. The compiler checks and translates these units separately; the linker later connects references to definitions in other units.
 
 A declaration lets a caller use a function before the implementation appears. In a multi-file program, declarations normally live in headers and definitions live in source files. Each source file is compiled into a translation unit before the linker resolves external symbols.
 
@@ -189,6 +229,12 @@ Answer: 3. The linker connects references to external definitions.
 Experiment: Move the declaration to a header and the definition to a second native source file. Build both files, then omit the implementation and inspect the link error.
 
 ## Headers must tolerate repeated inclusion
+
+Before this chapter: [Name a calculation with a function](../values/README.md)
+
+New terms and notation:
+
+A header guard uses preprocessor instructions to include a header’s contents at most once in a translation unit. #ifndef tests whether a marker is absent, #define records it, and #endif ends the conditional region.
 
 A header can be reached through several include paths in one translation unit. An include guard prevents its declarations from being processed repeatedly. Functions defined in headers also need appropriate linkage, commonly inline, to avoid duplicate definitions across translation units.
 

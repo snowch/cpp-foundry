@@ -11,13 +11,13 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(url);
     await page.locator('.hero').waitFor();
-    assert.equal(await page.locator('.chapter-card').count(),9);
+    assert.equal(await page.locator('.chapter-card').count(),10);
     await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
     await page.locator('nav [data-nav=course]').click();
     await page.locator('.outline-chapter').first().waitFor();
     const lessons=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../native/lessons.json'),'utf8'));
     assert.equal(await page.locator('.outline-chapter').count(),54);
-    assert.equal(await page.locator('.course-part').count(),9);
+    assert.equal(await page.locator('.course-part').count(),10);
     assert.equal(await page.locator('.lesson-links li').count(),lessons.length);
     assert.equal(await page.locator('.lesson-links .tag').count(),lessons.filter(l=>l.native).length);
     const chapter=page.locator('.outline-chapter').nth(1);
@@ -47,7 +47,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     await page.setViewportSize({width:390,height:844});
     await page.goto(url+'#/course');await page.locator('#course-part-select').waitFor();
     assert.equal(await page.locator('.part-links').isVisible(),false);
-    assert.equal(await page.locator('#course-part-select option').count(),10);
+    assert.equal(await page.locator('#course-part-select option').count(),11);
     await page.screenshot({path:'test-results/course-mobile.png',fullPage:false});
     await page.locator('#course-part-select').selectOption('advanced');
     await page.waitForFunction(()=>location.hash==='#/course/advanced'&&document.querySelectorAll('.course-part').length===1);
@@ -56,7 +56,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     await page.reload();await page.locator('#course-part-select').waitFor();
     assert.equal(await page.locator('#course-part-select').inputValue(),'advanced');
     await page.locator('#course-part-select').selectOption('');
-    await page.waitForFunction(()=>location.hash==='#/course'&&document.querySelectorAll('.course-part').length===9);
+    await page.waitForFunction(()=>location.hash==='#/course'&&document.querySelectorAll('.course-part').length===10);
     await page.goto(url+'#/lesson/first-program');await page.locator('.lesson-nav').waitFor();
     assert.equal(await page.locator('.contents-body').isVisible(),false);
     await page.locator('.contents-toggle').click();
@@ -66,7 +66,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     assert.equal(await page.locator('.contents-body').isVisible(),false);
     assert.equal(await page.locator('.lesson-nav a').last().isVisible(),true);
     await page.setViewportSize({width:1440,height:1050});
-    console.log('PASS mobile course selector includes all nine parts, restores filters, and retains next-lesson link');
+    console.log('PASS mobile course selector includes all ten parts, restores filters, and retains next-lesson link');
     await page.goto(url+'#/lesson/first-program');
     await page.locator('.source').waitFor();
     await page.locator('[data-choice="0"]').click();

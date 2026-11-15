@@ -4,6 +4,10 @@ Apply predicates, ordering, removal, folds, scans, and bounds correctly.
 
 ## Separate logical removal from physical erasure
 
+Before this chapter: [Treat stream iteration as single pass](../library-iterators/README.md)
+
+A comparator answers whether one value comes before another; a strict ordering must not put a value before itself. A fold combines inputs into one result, while a scan produces intermediate accumulated results. Each operation has requirements about its input order and destination storage.
+
 The remove algorithm compacts retained values into a prefix and returns its logical end. It cannot change a container’s size through iterators. Erasing the remaining suffix performs physical removal; C++20 std::erase combines these steps for supported containers.
 
 ![Logical removal precedes physical erasure](../../diagrams/lib-remove-erase.svg)
@@ -49,6 +53,8 @@ Experiment: Compare remove, remove_if, std::erase, and std::erase_if on duplicat
 
 ## Supply a strict weak ordering
 
+Before this chapter: [Treat stream iteration as single pass](../library-iterators/README.md)
+
 Sorting requires a strict weak ordering. In particular, comp(x,x) must be false; using <= violates the contract. Search algorithms require a compatible partitioning or ordering, and stable_sort additionally preserves relative order among equivalent elements.
 
 ```cpp
@@ -87,6 +93,8 @@ Experiment: Sort records by score and attach original positions to show stabilit
 
 ## Choose fold types and distinguish scans
 
+Before this chapter: [Treat stream iteration as single pass](../library-iterators/README.md)
+
 accumulate performs an ordered left fold whose accumulator type comes from the initial value. Scans produce intermediate prefixes rather than a single total. reduce may regroup operations, so it has different requirements when operations are not associative or floating-point rounding matters.
 
 ```cpp
@@ -124,6 +132,8 @@ Answer: 2. The initial value determines accumulate’s accumulator type. The lon
 Experiment: Compare exclusive_scan with an initial zero. Use subtraction to explain why arbitrary regrouping differs from an ordered left fold.
 
 ## Find a duplicate interval with equal_range
+
+Before this chapter: [Treat stream iteration as single pass](../library-iterators/README.md)
 
 lower_bound identifies the first element not less than a key, while upper_bound identifies the first element greater than it. equal_range returns their half-open interval. The range must satisfy the algorithm’s partitioning requirements under the same comparison relation.
 

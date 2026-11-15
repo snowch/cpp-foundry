@@ -4,6 +4,10 @@ Separate language versions, feature detection, and implementation choices.
 
 ## State the language baseline explicitly
 
+Before this chapter: [Explain estimates and validate result equivalence](../query-planning/README.md)
+
+A language standard specifies C++ rules, while a standard-library implementation supplies their library facilities. A feature-test macro is a predefined marker reporting support for a particular facility. Host assumptions describe the operating environment rather than the language itself.
+
 A language version controls available syntax and semantic rules. __cplusplus reports the selected language mode, not the completeness of every standard-library feature. This course requires C++20 or later.
 
 A project should document its compiler, language mode, library, and host separately so a successful build has an interpretable contract.
@@ -39,6 +43,8 @@ Answer: 2. The mode is distinct from compiler and library release numbers.
 Experiment: Compile the exported source with C++17 and C++20 flags and compare the baseline diagnostic. Record the toolchain versions separately.
 
 ## Detect a required facility with its feature macro
+
+Before this chapter: [Explain estimates and validate result equivalence](../query-planning/README.md)
 
 Feature-test macros describe availability of particular language or library facilities. Include the relevant header or version header, then test the documented macro value rather than guessing from a vendor name.
 
@@ -79,6 +85,8 @@ Experiment: Add a documented required macro for concepts or ranges. Distinguish 
 
 ## Include the header that declares each used facility
 
+Before this chapter: [Explain estimates and validate result equivalence](../query-planning/README.md)
+
 A standard header can include other headers as an implementation detail. Depending on that accidental inclusion can make code compile with one library and fail with another. Include the declarations you actually use.
 
 Small translation-unit checks are useful: compile a public header on its own with a minimal caller rather than only through a large precompiled environment.
@@ -118,6 +126,8 @@ Experiment: Create a tiny source that includes only one project header and main.
 
 ## Make effect ordering explicit
 
+Before this chapter: [Explain estimates and validate result equivalence](../query-planning/README.md)
+
 Expressions with side effects require a sequencing rule. Rather than relying on subtle evaluation-order details, split logically ordered operations into statements when the algorithm needs one result before another.
 
 This is especially useful around stream reads, state mutation, and function calls. Readability can make a correctness argument easier than a compact expression.
@@ -156,6 +166,14 @@ Answer: 1. Each completed statement precedes the next.
 Experiment: Audit an input-processing expression with several side effects and rewrite it as named steps with a stated precondition for each.
 
 ## Object representation is not an interchange format
+
+Before this chapter: [Explain estimates and validate result equivalence](../query-planning/README.md)
+
+New terms and notation:
+
+reinterpret_cast changes how a pointer or other supported representation is treated at the type level. It does not create an object of the target type or make an otherwise invalid access safe; lifetime, alignment, and access rules still apply.
+
+An application binary interface, or ABI, specifies implementation-level agreements such as how compiled functions pass arguments and how certain objects are laid out. It is distinct from the source-language rules and can differ across compiler or platform choices.
 
 C++ object layout can include padding and implementation-specific representations. Standard-layout properties help certain language operations, but do not turn an object containing a string into a portable file record.
 

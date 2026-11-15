@@ -4,6 +4,16 @@ Use initialization, enums, access control, and operators deliberately.
 
 ## Aggregate initialization names a simple value layout
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+Initialization supplies an object’s starting value when it is created. Assignment replaces a value in an object that already exists; the two steps can have different rules for user-defined types.
+
+A constructor is the initialization function for a user-defined type. It has the type’s name and establishes the object’s starting state; successful construction is what makes the object ready for its promised operations.
+
+A user-defined type groups data and operations under a name. A member is one piece belonging to that type; an object is a particular value of it. We will build these types before studying more detailed ownership rules.
+
 An aggregate can collect fields without a custom constructor. Brace initialization makes the initial state visible and catches many narrowing conversions. Default member initializers provide a deliberate value for omitted members.
 
 A public aggregate is suitable when callers may freely construct valid combinations. Use controlled construction when fields must satisfy a stronger invariant.
@@ -50,6 +60,8 @@ Experiment: Add an ID validation requirement and decide whether this aggregate s
 
 ## Return a named status instead of a magic integer
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
 A named enum makes result alternatives explicit: inserted, duplicate, and full have different meanings even if all are represented by small integers. enum class avoids accidental implicit conversion to an unrelated arithmetic value.
 
 Keep the externally visible behavior in the API contract rather than requiring callers to know the numeric representation of an enumerator.
@@ -87,6 +99,12 @@ Answer: 1. The name expresses the API alternative; storage encoding is a separat
 Experiment: Add missing and invalid statuses. Write a formatter that handles each named outcome without exposing its integer value.
 
 ## Prevent accidental domain conversions
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+A heap data structure orders each parent relative to its children so a highest- or lowest-priority element is quickly available. This is different from “heap memory,” an informal name for dynamically allocated storage.
 
 A one-argument constructor can become an implicit conversion unless it is explicit. A domain ID type often benefits from requiring the caller to state that conversion at the boundary.
 
@@ -138,6 +156,12 @@ Experiment: Write a function accepting RowId and attempt to pass 7 directly. Com
 
 ## Const member functions promise read-only access through this
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+A pointer stores a location through which a program may access an object. In declarations, T* is a pointer type; *p accesses the pointed-to value and &value obtains its address. A pointer is usable only while its target is alive and the access is allowed.
+
 A const-qualified member function can be called on a const object and cannot modify ordinary members through its this pointer. It is useful for observation without exposing mutable storage.
 
 Const is an access-path rule, not a complete concurrency or deep-immutability guarantee. A returned mutable pointer could undermine the intended public contract.
@@ -184,6 +208,14 @@ Answer: 2. The qualifier describes access through this during the call.
 Experiment: Add an increment member without const. Verify that it is rejected for a const Counter and accepted for a mutable one.
 
 ## Define equality from domain meaning
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+On a special member function, = default requests the compiler-provided implementation when one is available. = delete forbids using that operation. For example, deleting a copy constructor prevents callers from copying that type through it.
+
+A user-defined operator function gives an existing C++ symbol behavior for a user-defined type. For example, operator== defines an equality comparison for values of that type. The definition should preserve the expectations callers have for that operation.
 
 C++20 can generate memberwise equality with a defaulted operator==. This is useful for a small value type whose equality really is equality of all its members.
 

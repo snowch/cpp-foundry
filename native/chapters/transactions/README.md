@@ -4,6 +4,14 @@ Keep tentative writes separate from committed state.
 
 ## Begin with a private candidate state
 
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
+New terms and notation:
+
+A revision is a version number used to identify a particular state. Comparing the revision read earlier with the current one can detect that someone has changed the state in the meantime; the comparison and publication must obey the model’s synchronization rules.
+
+Committed state is the version currently published as accepted. Tentative state contains proposed changes not yet published. These lessons edit a private candidate, then either commit it after validation or discard it on rollback.
+
 A transaction separates tentative writes from committed state. This teaching store copies a bounded map at begin so transaction-local changes cannot leak through shared mutable rows.
 
 It is a serialized in-memory state model, not a concurrent implementation or a durable transaction engine. Later lessons add conflict and publication contracts.
@@ -72,6 +80,8 @@ Experiment: Mutate several private rows and verify a second reader of committed 
 
 ## A transaction needs a coherent read view
 
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
 A transaction usually reads its own writes even when other observers still see committed state. Its read interface must specify whether it consults a private candidate, an overlay, or a versioned snapshot.
 
 This copy-based model reads directly from the candidate map. The representation is simple but incurs whole-table copying at begin.
@@ -139,6 +149,12 @@ Answer: 1. The read view and tentative writes share one private state.
 Experiment: Model deletion and a repeated read of the same key. Document whether absence comes from the base state or a transaction-local deletion.
 
 ## Publish a complete candidate at commit
+
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
+New terms and notation:
+
+An atomic operation is an indivisible access to an atomic object. It prevents certain torn or conflicting accesses to that object, but does not automatically protect surrounding ordinary data or a multi-step invariant.
 
 Commit validates the transaction’s base revision, prepares the candidate copy, and publishes it with a nonthrowing map swap. All rows become visible through one serialized state transition.
 
@@ -214,6 +230,8 @@ Experiment: Update two related rows and verify the committed view changes only a
 
 ## Rollback discards tentative ownership
 
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
 Rollback ends a transaction without publishing its candidate. In this model, clearing the private map and marking it inactive releases tentative state while leaving the committed map alone.
 
 An already rolled-back transaction must not be committed later. Transaction lifecycle state is part of the API, not a comment remembered only by callers.
@@ -282,6 +300,12 @@ Answer: 2. The active-state check rejects ended transactions.
 Experiment: Specify behavior for repeated rollback and repeated commit. Test that every ended transaction remains unable to publish.
 
 ## Reject a commit based on an old revision
+
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
+New terms and notation:
+
+A mutex is a lock used to let only one participating thread enter a protected region at a time. Every access covered by that protection rule must follow it; locking one access does not protect unrelated uncoordinated accesses.
 
 Two candidates can begin from the same committed revision. Publishing one invalidates the other candidate’s base revision. A compare-before-publish check prevents the later stale candidate from silently overwriting the newer state.
 
@@ -353,6 +377,8 @@ Experiment: Implement the same schedule with a mutex-protected store. Keep the s
 
 ## Commit related fields as one logical unit
 
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
+
 A transaction can preserve a compound invariant across several tentative updates. A transfer between two balances should publish both changes or neither, provided validation and arithmetic checks have succeeded.
 
 The example uses small nonnegative values and a serialized commit. A real transfer API also needs insufficient-funds and overflow rejection before candidate mutation.
@@ -422,6 +448,8 @@ Answer: 2. The operation changes two fields while preserving their sum.
 Experiment: Reject an oversized transfer before changing either candidate balance. Test committed state after both rejection and success.
 
 ## Fallible preparation must precede publication
+
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
 
 A commit can fail while validating or allocating a candidate. Arrange those operations before the nonthrowing publication step so failure leaves committed state unchanged.
 
@@ -498,6 +526,8 @@ Answer: 3. The old committed state remains the fallback until preparation succee
 Experiment: Inject failures at several preparation boundaries and compare committed bytes and revision with an independently captured before-state.
 
 ## Make begin, commit, and abort states explicit
+
+Before this chapter: [Check mixed updates against independent membership and structure](../bplus-tree/README.md)
 
 A transaction lifecycle defines which operations are legal before and after completion. Reusing a completed candidate can otherwise replay old work against a new revision.
 

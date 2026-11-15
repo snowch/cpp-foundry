@@ -4,6 +4,10 @@ Implement bucket selection, probing, deletion, and resizing.
 
 ## A hash chooses a bucket, not a unique identity
 
+Before this chapter: [A queue preserves arrival order](../lists-queues/README.md)
+
+A collision occurs when different keys select the same hash bucket or starting slot. Probing visits candidate slots in a defined order. A tombstone records a deleted slot without incorrectly ending searches that must pass through it.
+
 Different keys can map to the same bucket. A correct hash table must resolve collisions and still compare the full key. This teaching table uses key modulo capacity so collision fixtures are explicit and portable.
 
 The remainder function is not presented as a production-quality general-purpose hash. Its role is to expose the collision protocol.
@@ -94,6 +98,8 @@ Experiment: Insert several keys separated by the capacity and inspect the probe 
 
 ## Bound a probe sequence by the table capacity
 
+Before this chapter: [A queue preserves arrival order](../lists-queues/README.md)
+
 Linear probing checks successive slots with wraparound. A bounded table must stop after at most capacity inspections even when every slot has been occupied.
 
 Insertion tracks a reusable slot but continues far enough to detect an existing duplicate key. A full-table rejection must leave the current mappings unchanged.
@@ -183,6 +189,8 @@ Answer: 3. The loop explicitly counts at most capacity probes.
 Experiment: Fill the table in several insertion orders and verify unsuccessful operations always terminate and preserve existing values.
 
 ## Deletion must preserve later probe paths
+
+Before this chapter: [A queue preserves arrival order](../lists-queues/README.md)
 
 A deleted slot cannot always be changed to never-used empty state. Other keys may have crossed it during insertion, so stopping there would hide live entries. A tombstone records reusable storage while allowing lookup to continue.
 
@@ -280,6 +288,8 @@ Experiment: Reuse the tombstone with a new colliding key. Test duplicate rejecti
 
 ## Rebuild an index without changing its logical mappings
 
+Before this chapter: [A queue preserves arrival order](../lists-queues/README.md)
+
 Changing capacity changes bucket selection, so entries must be reinserted into a new table rather than copied to the same slot numbers. Build a candidate index and publish it only after all required mappings have been transferred.
 
 This fixture uses two compile-time capacities to make the rebuild explicit. A dynamic implementation can own a resizable slot vector.
@@ -372,6 +382,8 @@ Answer: 3. Rehashing changes representation while preserving logical contents.
 Experiment: Inject a candidate-capacity failure and keep the old table intact. Check every transferred key against an independent map.
 
 ## Check a hash implementation against an independent model
+
+Before this chapter: [A queue preserves arrival order](../lists-queues/README.md)
 
 A reference ordered map can validate the observable behavior of a small custom hash table. Use mixed collisions, deletion, missing lookups, and reinsertion rather than only successful unique inserts.
 

@@ -4,6 +4,18 @@ Own, inspect, transform, and validate sequences.
 
 ## Text length and byte length are different contracts
 
+Before this chapter: [Keep several values in a vector](../values/README.md)
+
+New terms and notation:
+
+A graph represents vertices and connections called edges. An adjacency list records each vertex’s neighbors; directed edges have a direction, while an undirected connection can be followed both ways.
+
+A byte is a unit of stored data. The course’s file formats use octets, exactly eight bits each; a bit is a binary digit, zero or one. A format must specify how numbers and text turn into those byte values.
+
+Unicode assigns code points to characters. UTF-8 encodes a code point using one to four bytes. A byte count, a code-point count, and the number of symbols a person sees can therefore differ; indexing bytes is not a general way to select visible characters.
+
+A sequence is an ordered set of elements. Text is represented by character values; a displayed symbol can occupy more than one byte. We distinguish the elements that exist from storage reserved for possible future elements.
+
 std::string owns a sequence of char units. With UTF-8 input, a character can occupy more than one byte, so size is a storage count rather than a user-perceived character count.
 
 The record store limits UTF-8 bytes because the file format stores a byte length. Display width and Unicode segmentation require different algorithms.
@@ -42,6 +54,14 @@ Answer: 3. The string counts stored char units, not grapheme clusters.
 Experiment: Try a different multibyte name. Inspect its bytes and identify valid code-point boundaries before designing truncation.
 
 ## Size describes live elements; capacity describes storage
+
+Before this chapter: [Keep several values in a vector](../values/README.md)
+
+New terms and notation:
+
+A vector’s size counts actual elements. Its capacity counts how many elements its current storage could hold without growing. Reserving storage changes capacity, not the number of elements available to read.
+
+An amortized cost spreads total work across a sequence of operations, including occasional expensive ones. It differs from a worst-case bound for every individual operation and from a probability-based average over inputs.
 
 A vector may own more storage than it currently uses for live elements. reserve requests capacity without constructing new elements. resize changes size and constructs or destroys elements as needed.
 
@@ -85,6 +105,12 @@ Experiment: Reserve a smaller amount after the first call and inspect capacity. 
 
 ## Frame input as complete lines
 
+Before this chapter: [Keep several values in a vector](../values/README.md)
+
+New terms and notation:
+
+A constructor’s member-initializer list, after the colon, gives members their starting values before the constructor body runs. Members initialize in declaration order, not in the order written in that list.
+
 A line-oriented command language needs clear framing before token parsing. getline extracts one line without retaining the delimiter, which prevents a malformed command from borrowing the next command’s text accidentally.
 
 This example uses an in-memory stream for deterministic input. The same getline loop can read preloaded stdin in the browser or a native stream.
@@ -127,6 +153,18 @@ Experiment: Add a final line without a newline and verify it is still processed.
 
 ## Remove elements with an explicit predicate
 
+Before this chapter: [Keep several values in a vector](../values/README.md)
+
+New terms and notation:
+
+An iterator is a value used to visit positions in a sequence. begin identifies the first position and end marks the position just after the last; end is a stopping marker and must not be read as an element.
+
+A lambda is a function written directly where it is needed. Its [ ] capture list says which surrounding local values it uses, its parentheses describe inputs, and its braces contain the instructions. [x] stores a copy of x; [&x] borrows x and therefore needs x to remain alive.
+
+The % operator computes the remainder of whole-number division. A remainder of zero in value % 2 identifies an even number. Division or remainder with a zero divisor is not permitted.
+
+A predicate is a callable that answers a true/false question about its input. Algorithms use predicates to decide which elements to keep, find, or group; a comparator instead asks whether one value comes before another.
+
 C++20 provides erase_if for standard sequence containers. It removes elements satisfying a predicate and reports how many were removed. This avoids confusing a logical partition operation with a change in container size.
 
 References and iterators into a vector can be invalidated by erasure. Finish the mutation before establishing new observers.
@@ -168,6 +206,18 @@ Answer: 1. erase_if performs actual removal, not just a search.
 Experiment: Test no matches, all matches, and an empty vector. Save an index before deletion and decide whether it still names the same record.
 
 ## Build subranges from validated bounds
+
+Before this chapter: [Keep several values in a vector](../values/README.md)
+
+New terms and notation:
+
+std::optional<T> holds either one T value or no value. std::nullopt denotes the no-value state. Test engagement with if (result) before using *result to read its value; this * is access to the contained value, not multiplication.
+
+std::string_view describes a stretch of characters without owning or copying those characters. It records a starting position and a length; the original characters must outlive every use of the view.
+
+std::size_t is the unsigned whole-number type used for sizes and element counts. std::ptrdiff_t is a signed type used for differences between positions. A size count does not by itself prove that an index is valid.
+
+Allocation obtains storage in which objects can live. Constructing an object establishes its value in suitable storage; releasing storage and ending an object’s lifetime are related but distinct operations. Library owners usually arrange these steps for you.
 
 A slice needs both a start and a length that fit the source. Validate using subtraction after checking the start, rather than adding start+length where an unsigned sum could wrap.
 

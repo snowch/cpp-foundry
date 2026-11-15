@@ -4,6 +4,10 @@ Represent adjacency and maintain visited/path state.
 
 ## Own adjacency lists and validate vertex IDs
 
+Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
+
+A traversal visits connected vertices using a rule for pending work. A frontier is the set or queue of work discovered but not yet processed. A path follows edges; its cost may be a number of edges or a sum of edge weights.
+
 An adjacency list stores one neighbor sequence per vertex. The graph owns those sequences; traversal borrows them. Decide whether edges are directed and whether duplicate edges or self-loops are permitted.
 
 External vertex IDs must be validated before indexing. This fixture uses a small directed graph with vertices numbered from zero.
@@ -42,6 +46,8 @@ Answer: 3. Vertex existence is determined by the outer representation.
 Experiment: Add a validation pass checking every edge endpoint before traversal. Test a disconnected vertex and a self-loop.
 
 ## Breadth-first traversal discovers shortest hop counts
+
+Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
 
 In an unweighted graph, breadth-first search uses a FIFO queue to discover vertices by increasing hop distance. Marking a vertex when enqueued prevents duplicate work through multiple incoming paths.
 
@@ -107,6 +113,8 @@ Experiment: Add cycles and duplicate edges and verify the traversal still termin
 
 ## Depth-first traversal needs explicit visited state
 
+Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
+
 Depth-first search follows one path before exploring siblings. In a graph, visited state prevents cycles from causing unbounded recursion. A tree-only traversal without visited state is not a general graph traversal.
 
 This example uses a bounded recursive graph walk and prints a deterministic order defined by adjacency order.
@@ -155,6 +163,8 @@ Answer: 3. The mark prevents recursive re-entry through a back edge.
 Experiment: Rewrite the traversal with an explicit stack. State how pushing neighbors changes the observable visit order.
 
 ## Acyclic dependencies admit a topological order
+
+Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
 
 A topological order places every directed dependency before its dependent. Kahn’s algorithm starts with zero-indegree vertices, removes their outgoing edges logically, and enqueues newly available vertices.
 
@@ -211,6 +221,8 @@ Answer: 3. A remaining cycle prevents its vertices from reaching indegree zero.
 Experiment: Add an edge from the last vertex back to the first and verify incomplete processing is reported.
 
 ## Weighted shortest paths require a compatible algorithm
+
+Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
 
 Breadth-first hop counts do not minimize arbitrary edge weights. For nonnegative weights, Dijkstra’s algorithm repeatedly settles the smallest tentative distance using a priority queue. Stale queue entries must be skipped.
 

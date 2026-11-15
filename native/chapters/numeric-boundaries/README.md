@@ -4,6 +4,10 @@ Check narrowing, arithmetic, floating values, and comparisons.
 
 ## Compare signed and unsigned values deliberately
 
+Before this chapter: [State the language baseline explicitly](../cpp-standards/README.md)
+
+Representability means a numeric value fits in its destination type. Narrowing may lose range or precision. A domain rule can be stricter than representability: for example, zero fits an unsigned integer but may still be an invalid ID.
+
 Usual arithmetic conversions can turn a negative signed value into an unsigned value during comparison. C++20 comparison helpers express mathematical ordering across signedness without relying on that surprising conversion.
 
 The right type still depends on the domain. Do not use a negative sentinel in a size field when optional or a named status can represent absence.
@@ -42,6 +46,8 @@ Answer: 3. The helper handles the sign difference explicitly.
 Experiment: Test zero, negative one, and unsigned maximum. Compare results with a deliberately stated domain policy for missing values.
 
 ## Validate representability before narrowing
+
+Before this chapter: [State the language baseline explicitly](../cpp-standards/README.md)
 
 A narrower destination type may not represent the source value. std::in_range checks representability for supported integer types before an explicit cast commits the conversion.
 
@@ -91,6 +97,8 @@ Experiment: Add a signed source version and test negative values. Keep the appli
 
 ## Check multiplication without overflowing the check
 
+Before this chapter: [State the language baseline explicitly](../cpp-standards/README.md)
+
 For nonnegative unsigned values, multiplication fits when one factor is zero or the other does not exceed max divided by the first. This rearranges the precondition without computing the potentially overflowing product.
 
 Unsigned wrapping is defined, but that does not make a wrapped row count or allocation size acceptable to the application.
@@ -136,6 +144,8 @@ Experiment: Test zero, one, maximum, and factors immediately around a boundary. 
 
 ## Division has more than a zero-denominator boundary
 
+Before this chapter: [State the language baseline explicitly](../cpp-standards/README.md)
+
 Signed integer division must reject zero denominators and the minimum-value divided by minus one case when that quotient is not representable. Negating the minimum value has the same representability problem.
 
 Validate before performing the operation. A CPU trap or a Wasm trap is not an ordinary C++ error result that the caller can safely ignore.
@@ -179,6 +189,8 @@ Answer: 3. The positive quotient would exceed the signed maximum.
 Experiment: Add checked remainder and checked negation with the corresponding exceptional-value rules. Test them independently of division.
 
 ## Validate finite floating values and choose a tolerance policy
+
+Before this chapter: [State the language baseline explicitly](../cpp-standards/README.md)
 
 Floating-point arithmetic can produce rounding differences, infinities, and NaNs. A domain that accepts only finite measurements must enforce that rule separately from syntactic numeric parsing.
 

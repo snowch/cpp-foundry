@@ -4,6 +4,10 @@ Implement scans, binary search, bounds, and indexed access.
 
 ## Represent a missing search result explicitly
 
+Before this chapter: [Distinguish upper bounds from tight bounds](../complexity/README.md)
+
+Searching either finds an item or establishes its absence under stated assumptions. A partition point separates values satisfying a condition from those that do not. An interval written [first,last) excludes last, making an empty interval easy to represent.
+
 A search result must distinguish a found position from absence. optional<size_t> avoids assigning a negative sentinel to an unsigned index or confusing position zero with failure.
 
 The scan works on unsorted input and returns the first match. Those behaviors belong to its contract independently of how it counts or stores candidates.
@@ -53,6 +57,8 @@ Answer: 2. Presence and numeric index value are different concepts.
 Experiment: Test empty input, duplicates, and a last-position hit. State whether a future index implementation must preserve first-match behavior.
 
 ## Maintain a half-open candidate interval
+
+Before this chapter: [Distinguish upper bounds from tight bounds](../complexity/README.md)
 
 Binary search maintains a half-open interval of possible answers. lower_bound searches for the first position whose value is not less than the key, so its answer can equal size when every element is smaller.
 
@@ -111,6 +117,8 @@ Experiment: Trace first and last for empty input and for a key below every eleme
 
 ## Find the full range of equal keys
 
+Before this chapter: [Distinguish upper bounds from tight bounds](../complexity/README.md)
+
 lower_bound and upper_bound bracket equal keys in a sorted range. Their difference counts matches without scanning every equal element. A closed equality query can therefore be expressed using two half-open boundary searches.
 
 Both operations must use ordering compatible with the data. A search by a different projected field needs a separately appropriate index.
@@ -150,6 +158,8 @@ Answer: 2. The result is the half-open interval [first,last).
 Experiment: Test a missing key, all-equal input, and a key at the final position. Check the count against a linear reference.
 
 ## Search a monotone predicate
+
+Before this chapter: [Distinguish upper bounds from tight bounds](../complexity/README.md)
 
 Binary search generalizes to a range partitioned by a predicate: all true results precede all false results. partition_point locates that boundary without requiring the predicate to be equality with a key.
 
@@ -191,6 +201,8 @@ Answer: 2. The algorithm searches one monotone boundary.
 Experiment: Create an all-true and an all-false fixture. Handle boundary==end before dereferencing it.
 
 ## Account for building and maintaining an index
+
+Before this chapter: [Distinguish upper bounds from tight bounds](../complexity/README.md)
 
 An index accelerates some lookups by storing additional structure that must be built and maintained. A sorted vector permits binary search but insertion may shift a suffix. A hash index has different ordering and worst-case guarantees.
 

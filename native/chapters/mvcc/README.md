@@ -4,6 +4,14 @@ Choose visible versions and delay reclamation until readers finish.
 
 ## Visibility is a half-open version interval
 
+Before this chapter: [Expose a lost update with an explicit schedule](../isolation/README.md)
+
+New terms and notation:
+
+Multi-version concurrency control, or MVCC, keeps multiple versions so a reader can use the version selected by its snapshot. A snapshot identifies the reader’s view; old versions cannot be reclaimed while a reader still needs them.
+
+A version interval describes which snapshots can see a stored version. Registering a snapshot records that a reader still needs its view. Reclamation removes old storage only when no registered reader can need it; this chapter models one row.
+
 A committed version is visible when its begin stamp is at or before the reader snapshot and its end stamp is after it. Half-open intervals ensure a replacement boundary chooses exactly one version.
 
 This bounded single-row model stores owning optional values and rejects stamp exhaustion before incrementing. It is not a complete multi-row MVCC transaction engine.
@@ -87,6 +95,8 @@ Answer: 1. The visibility interval excludes its end.
 Experiment: Write three versions and test immediately before, exactly at, and after each begin/end boundary.
 
 ## A retained snapshot keeps its logical read stamp
+
+Before this chapter: [Expose a lost update with an explicit schedule](../isolation/README.md)
 
 A snapshot is a chosen logical observation time, not simply the latest version each time a reader asks. Retaining that stamp lets a long read observe the same committed version while later writes create newer versions.
 
@@ -176,6 +186,8 @@ Experiment: Read the same row twice around several writes. Then extend the model
 
 ## A tombstone preserves historical visibility
 
+Before this chapter: [Expose a lost update with an explicit schedule](../isolation/README.md)
+
 Deleting a row under MVCC can publish a tombstone version rather than immediately destroying all history. Old snapshots still select the earlier value, while newer snapshots observe absence.
 
 optional represents the row’s visible absence in this single-row model. A larger API may also need to distinguish never-existing keys from retained tombstones internally.
@@ -262,6 +274,8 @@ Answer: 1. The new interval represents absence without rewriting earlier history
 Experiment: Reinsert a value after the tombstone and test all three snapshot regions: present, absent, and present again.
 
 ## Several readers can hold the same snapshot stamp
+
+Before this chapter: [Expose a lost update with an explicit schedule](../isolation/README.md)
 
 A reader registry must account for every active reader, including several readers beginning at the same committed stamp. A set that records only unique stamps can release one reader and accidentally erase protection for another.
 
@@ -351,6 +365,8 @@ Answer: 1. Duplicate stamps still represent distinct active readers.
 Experiment: Register three readers at one stamp and release them in different orders. Check old-version retention after every release.
 
 ## Reclaim only versions older than every active reader needs
+
+Before this chapter: [Expose a lost update with an explicit schedule](../isolation/README.md)
 
 The oldest registered snapshot bounds which historical versions can still be visible. A version whose end is at or before that oldest stamp is no longer needed by those readers. The current open-ended version must remain.
 

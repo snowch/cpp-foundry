@@ -4,6 +4,10 @@ Compose lazy views while tracking ownership, repeated work, and projections.
 
 ## Observe a lazy pipeline before materializing
 
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
+A range gives a beginning and an end for traversal. A view is a lightweight range description; a lazy view performs work when visited rather than storing all results in advance. A projection selects the part of an element used by an operation.
+
 A view is a lightweight range abstraction, not necessarily a container of computed results. filter and transform usually perform work during iteration. This lvalue pipeline borrows the vector, so the source must outlive its use and iterator invalidation rules still apply.
 
 ![A view pipeline computes during traversal](../../diagrams/lib-lazy-views.svg)
@@ -49,6 +53,8 @@ Experiment: Materialize the pipeline into an explicit vector using a loop. Compa
 
 ## Sort records through a projection
 
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
 Ranges algorithms can apply a projection before comparison. A member pointer expresses which field participates while leaving the comparison itself reusable. Sorting by one field does not automatically choose a deterministic secondary order for equal keys.
 
 ```cpp
@@ -92,6 +98,8 @@ Experiment: Add tied scores and compare a lexicographic comparator with stable_s
 
 ## Bound a generated range before consuming it
 
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
 An unbounded iota view can generate successive values without storing them. A terminating consumer must impose a suitable bound. take limits how many values are requested, but does not make arbitrary source operations safe or remove numeric representability limits.
 
 ```cpp
@@ -127,6 +135,12 @@ Answer: 2. The consumer must establish termination. The take adaptor stops itera
 Experiment: Compare iota(1,5) with an unbounded iota followed by take. Explain why moving a filter before the count bound can alter termination.
 
 ## Keep algorithm results tied to a living range
+
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
+New terms and notation:
+
+decltype(expression) names the type determined by an expression without running that expression. Generic code uses it to describe or inspect types; it is not a runtime conversion of a value.
 
 Some ranges algorithms return dangling instead of an iterator when passed a temporary non-borrowed range. This catches one class of lifetime mistake at the type level. borrowed_range concerns whether iterators can outlive the range object, not whether the underlying elements live forever.
 

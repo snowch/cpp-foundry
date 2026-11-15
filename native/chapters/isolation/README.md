@@ -4,6 +4,10 @@ Model anomalies and distinguish isolation from durability.
 
 ## Expose a lost update with an explicit schedule
 
+Before this chapter: [Validate and update under the same mutex](../concurrent-storage/README.md)
+
+A schedule is an ordering of operations from different clients. Isolation describes what interference those clients may observe. A lost update overwrites another client’s change; write skew can break a rule spanning separate records even without overwriting the same record.
+
 Two clients can read the same committed value, compute independent increments, and overwrite each other with full-value writes. This is a logical isolation anomaly even when each individual storage operation is serialized and free of data races.
 
 Model the schedule as ordinary sequential steps first; that makes the failure reproducible without relying on thread timing.
@@ -42,6 +46,8 @@ Answer: 1. The stale second write replaces the newer first result.
 Experiment: Add a revision check to the write boundary and replay this exact schedule. Require the second stale write to fail explicitly.
 
 ## Keep uncommitted values out of committed reads
+
+Before this chapter: [Validate and update under the same mutex](../concurrent-storage/README.md)
 
 A dirty read observes a value another transaction has not committed and might later discard. Separate tentative ownership from committed state so a committed-reader interface cannot accidentally reach pending writes.
 
@@ -84,6 +90,8 @@ Experiment: Model two pending writers and one committed reader. Test that aborte
 
 ## Distinguish read-committed from snapshot reads
 
+Before this chapter: [Validate and update under the same mutex](../concurrent-storage/README.md)
+
 A read-committed client can observe a newer committed value on its second read. A snapshot reader instead holds a fixed logical view for its documented lifetime. These are different contracts, not merely different caching policies.
 
 The fixture records a snapshot value before another commit and compares it with a later committed-state read.
@@ -123,6 +131,8 @@ Answer: 1. A later read may observe a later committed state.
 Experiment: Write explicit schedules for repeatable row reads and range predicates. State which guarantees your API actually supplies.
 
 ## Disjoint writes can violate a shared predicate
+
+Before this chapter: [Validate and update under the same mutex](../concurrent-storage/README.md)
 
 Snapshot isolation can prevent write-write conflicts and still allow write skew. Two clients can read a shared invariant from one snapshot and update different rows, each assuming the other row remains unchanged.
 
@@ -164,6 +174,12 @@ Answer: 2. The invariant spans the state both transactions read.
 Experiment: Add predicate or read-set validation and replay both commit orders. Require one client to retry instead of violating the on-call rule.
 
 ## Validate the data a decision depended on
+
+Before this chapter: [Validate and update under the same mutex](../concurrent-storage/README.md)
+
+New terms and notation:
+
+In database isolation, serializable means the accepted transactions behave like some non-overlapping ordering of those transactions. In file formats, serialization instead means converting values to bytes. The surrounding lesson determines which meaning is intended.
 
 A serializable optimistic protocol must account for relevant read dependencies, not only written keys. A coarse store-wide revision can reject any candidate based on an older read view, preventing the demonstrated write-skew schedule at the cost of extra conflicts.
 

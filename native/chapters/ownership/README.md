@@ -4,6 +4,14 @@ Make resource cleanup a property of your types.
 
 ## References borrow; const restricts access
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+Single quotes denote one character, while double quotes denote a text literal. In either kind of quotes, the source spelling \n denotes a line-break character. The different types matter when selecting which operation a function or operator performs.
+
+Ownership means responsibility for keeping a resource available and releasing it when finished. A resource can be memory or an open file. Borrowing means using something without taking that cleanup responsibility; the owner must keep it alive while it is used.
+
 A reference is an alias for an existing object. It does not own that object and does not extend the lifetime of an arbitrary referred-to value. A reference parameter is useful when a function needs to update a caller-owned value.
 
 Make mutation explicit in the interface. A const reference provides read-only access through that reference, while returning a value gives the caller an independent result. Prefer those independent values when borrowing would make lifetimes difficult to reason about.
@@ -45,6 +53,8 @@ Answer: 1. The return type is std::string, so the returned result is an owning v
 Experiment: Change append_label to take its parameter by value. Predict whether main’s name changes, then run the program.
 
 ## Value types and invariants
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
 
 A struct groups related values. A class can additionally control how those values change. An invariant is a condition that every publicly observable valid object must satisfy.
 
@@ -91,6 +101,16 @@ Answer: 1. A constructor that throws does not produce a successfully constructed
 Experiment: Add a set operation that checks its candidate value before changing value_. Verify that rejection preserves the old score.
 
 ## RAII ties cleanup to scope
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+A destructor is a type’s cleanup function, spelled with ~ before the type name. For a successfully constructed ordinary local object, it runs when that object’s lifetime ends, including when a handled failure leaves its block.
+
+std::unique_ptr<T> is an owner that arranges to destroy a managed T when that ownership ends. It cannot be copied into a second independent owner; moving it can transfer the ownership. make_unique<T>(...) constructs the managed object and its owner together.
+
+RAII abbreviates Resource Acquisition Is Initialization: an owner obtains a resource while being created and releases it when its lifetime ends. This ties cleanup to object lifetime rather than requiring a separate manual cleanup instruction on every exit path.
 
 RAII means acquiring a resource as part of an object’s initialization and releasing it in its destructor. The resource might be memory, a file, or a lock. Normal returns and exception unwinding both destroy fully constructed automatic objects.
 
@@ -144,6 +164,12 @@ Answer: 1. The local guard’s scope is left while the exception travels to the 
 Experiment: Add a second guard with a label and observe reverse construction order. Replace the throw with return and compare.
 
 ## Unique ownership and moving
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+std::move(value) makes the expression eligible for operations that may transfer resources from value. The cast itself transfers nothing. The original object still exists afterward, with usable operations determined by its type’s moved-from contract.
 
 Prefer ordinary values first. When an object needs a separate lifetime or stable address, std::unique_ptr expresses one owner. Copying it is disabled, so two independent owners cannot accidentally delete the same object.
 

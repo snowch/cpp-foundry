@@ -11,6 +11,11 @@
       "description": "Lifetimes, move semantics, templates, polymorphism, and failures."
     },
     {
+      "id": "library",
+      "title": "Use the standard library",
+      "description": "Containers, iterators, algorithms, ranges, text, time, and typed results."
+    },
+    {
       "id": "algorithms",
       "title": "Reason about algorithms",
       "description": "Complexity, invariants, searching, sorting, and recursion."
@@ -83,62 +88,6 @@
       "project": "Design an ID type that cannot represent a missing record."
     },
     {
-      "part": "language",
-      "id": "standard-library",
-      "title": "Use the standard library",
-      "description": "Choose algorithms, containers, and result types by their contracts.",
-      "project": "Replace hand-written collection plumbing while preserving independent checks."
-    },
-    {
-      "part": "language",
-      "id": "library-containers",
-      "title": "Container contracts in practice",
-      "description": "Choose sequence, ordered, and unordered containers by stability and complexity.",
-      "project": "Build a frequency index and document invalidation for each update."
-    },
-    {
-      "part": "language",
-      "id": "library-iterators",
-      "title": "Iterator categories and invalidation",
-      "description": "Use iterator capabilities, sentinels, adapters, and erase results safely.",
-      "project": "Write a generic range copier without assuming random access."
-    },
-    {
-      "part": "language",
-      "id": "library-algorithms",
-      "title": "Algorithm contracts and numeric operations",
-      "description": "Apply predicates, ordering, removal, folds, scans, and bounds correctly.",
-      "project": "Build a checked batch report with explicit empty and duplicate behavior."
-    },
-    {
-      "part": "language",
-      "id": "library-ranges",
-      "title": "Ranges, views, and borrowed lifetimes",
-      "description": "Compose lazy views while tracking ownership, repeated work, and projections.",
-      "project": "Create an owned report from a borrowed filtering pipeline."
-    },
-    {
-      "part": "language",
-      "id": "library-values",
-      "title": "Vocabulary types and callable utilities",
-      "description": "Model absence, alternatives, grouped values, and callable ownership explicitly.",
-      "project": "Design a typed command result that cannot confuse absence with failure."
-    },
-    {
-      "part": "language",
-      "id": "library-text-io",
-      "title": "Text conversion, formatting, and stream state",
-      "description": "Check complete parses, preserve stream state, and choose formatting facilities deliberately.",
-      "project": "Build a strict text import with separate syntax and range errors."
-    },
-    {
-      "part": "language",
-      "id": "library-time-random",
-      "title": "Durations, deterministic randomness, and bits",
-      "description": "Separate clock contracts, distribution guarantees, and finite bit representations.",
-      "project": "Build a deterministic workload generator with an explicit time and seed policy."
-    },
-    {
       "id": "ownership",
       "title": "Ownership and lifetimes",
       "description": "Make resource cleanup a property of your types.",
@@ -186,6 +135,62 @@
       "title": "Generic code and object-model contracts",
       "description": "Separate deduction, forwarding, dispatch, and compile-time validation.",
       "project": "Build a constrained generic wrapper with explicit lifetime and exception contracts."
+    },
+    {
+      "part": "library",
+      "id": "standard-library",
+      "title": "Use the standard library",
+      "description": "Choose algorithms, containers, and result types by their contracts.",
+      "project": "Replace hand-written collection plumbing while preserving independent checks."
+    },
+    {
+      "part": "library",
+      "id": "library-containers",
+      "title": "Container contracts in practice",
+      "description": "Choose sequence, ordered, and unordered containers by stability and complexity.",
+      "project": "Build a frequency index and document invalidation for each update."
+    },
+    {
+      "part": "library",
+      "id": "library-iterators",
+      "title": "Iterator categories and invalidation",
+      "description": "Use iterator capabilities, sentinels, adapters, and erase results safely.",
+      "project": "Write a generic range copier without assuming random access."
+    },
+    {
+      "part": "library",
+      "id": "library-algorithms",
+      "title": "Algorithm contracts and numeric operations",
+      "description": "Apply predicates, ordering, removal, folds, scans, and bounds correctly.",
+      "project": "Build a checked batch report with explicit empty and duplicate behavior."
+    },
+    {
+      "part": "library",
+      "id": "library-ranges",
+      "title": "Ranges, views, and borrowed lifetimes",
+      "description": "Compose lazy views while tracking ownership, repeated work, and projections.",
+      "project": "Create an owned report from a borrowed filtering pipeline."
+    },
+    {
+      "part": "library",
+      "id": "library-values",
+      "title": "Vocabulary types and callable utilities",
+      "description": "Model absence, alternatives, grouped values, and callable ownership explicitly.",
+      "project": "Design a typed command result that cannot confuse absence with failure."
+    },
+    {
+      "part": "library",
+      "id": "library-text-io",
+      "title": "Text conversion, formatting, and stream state",
+      "description": "Check complete parses, preserve stream state, and choose formatting facilities deliberately.",
+      "project": "Build a strict text import with separate syntax and range errors."
+    },
+    {
+      "part": "library",
+      "id": "library-time-random",
+      "title": "Durations, deterministic randomness, and bits",
+      "description": "Separate clock contracts, distribution guarantees, and finite bit representations.",
+      "project": "Build a deterministic workload generator with an explicit time and seed policy."
     },
     {
       "id": "algorithms",

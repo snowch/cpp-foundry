@@ -4,6 +4,10 @@ Separate tokens, syntax, and validation before execution.
 
 ## Tokenize before assigning syntax
 
+Before this chapter: [Represent rows as owning values](../records/README.md)
+
+SQL is a language for describing operations on tables. A token is a recognized piece such as a keyword or quoted name. A lexer identifies tokens; a parser checks how they fit together and builds a structured query before execution.
+
 A lexer groups characters into tokens before the parser interprets their relationships. Whitespace separates tokens but is not itself a command. Punctuation such as an equals sign must remain visible even when no spaces surround it.
 
 This chapter implements a deliberately case-sensitive teaching subset. It does not pretend to accept arbitrary SQL or silently split several statements into one.
@@ -97,6 +101,8 @@ Answer: 1. The parser consumes the structured token sequence produced by lexing.
 Experiment: Vary whitespace around punctuation and confirm the token sequence is unchanged. Add an invalid character and check explicit rejection.
 
 ## Quoted text has its own lexical rules
+
+Before this chapter: [Represent rows as owning values](../records/README.md)
 
 A quoted string can contain spaces that would otherwise separate tokens. SQL-style doubled quotes can represent a quote within that string. The lexer must reject an unterminated token instead of consuming unrelated later input as if it were valid syntax.
 
@@ -193,6 +199,8 @@ Answer: 2. The token representation stores independent strings.
 Experiment: Test an empty quoted string, a doubled quote, and a missing closing quote. Decide which empty values the later schema permits.
 
 ## Parse into a typed query value
+
+Before this chapter: [Represent rows as owning values](../records/README.md)
 
 A parser should produce a query representation rather than modify table state while syntax is still being checked. This subset accepts SELECT * FROM people with an optional WHERE id = positive-unsigned field and a required semicolon.
 
@@ -331,6 +339,8 @@ Experiment: Try quoted IDs, zero, overflow, and missing punctuation. Confirm eve
 
 ## Reject a valid prefix followed by extra input
 
+Before this chapter: [Represent rows as owning values](../records/README.md)
+
 Recognizing a valid statement prefix is insufficient when the command contract allows exactly one complete statement. The parser must ensure every token was consumed.
 
 This avoids treating an appended command or misspelled suffix as harmless whitespace. A multi-statement interface would need a different explicit framing and transaction contract.
@@ -467,6 +477,8 @@ Answer: 1. The documented grammar accepts one complete statement.
 Experiment: Append comments, a second SELECT, and arbitrary words. Decide which syntax belongs in the grammar before accepting it.
 
 ## Keep syntax failure separate from table mutation
+
+Before this chapter: [Represent rows as owning values](../records/README.md)
 
 Parsing and execution have different failure domains. A malformed command should never partially update an otherwise valid table. Build a typed query first, then pass that query to execution.
 

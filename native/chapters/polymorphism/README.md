@@ -4,6 +4,14 @@ Compare virtual dispatch, variants, and composition.
 
 ## Dispatch through a borrowing base reference
 
+Before this chapter: [A requires expression can check an operation](../templates/README.md)
+
+New terms and notation:
+
+A virtual member function allows a call through a base-type reference or pointer to select a derived object’s implementation. Base and derived are types in an inheritance relationship; override marks a derived implementation that must match a virtual function.
+
+Polymorphism means using one interface with more than one implementation. A base type describes a shared interface; a derived type extends it. Virtual dispatch selects the implementation belonging to the actual object rather than merely the variable’s declared type.
+
 A virtual member selects behavior using an object’s dynamic type when called through a base pointer or reference. An interface can express a storage operation without requiring callers to know the implementation type.
 
 The reference in this example borrows an already owned object. Dynamic dispatch and dynamic allocation are independent choices.
@@ -50,6 +58,8 @@ Answer: 2. The dynamic type can belong to an ordinary local object.
 Experiment: Add a second implementation and call both through a const Store reference. Keep construction and lifetime ownership explicit.
 
 ## Delete polymorphic objects through a valid owner
+
+Before this chapter: [A requires expression can check an operation](../templates/README.md)
 
 When a unique_ptr<Base> owns a Derived object, deletion occurs through the base interface. A virtual base destructor ensures the most-derived destructor runs before base cleanup.
 
@@ -99,6 +109,8 @@ Answer: 3. Virtual destruction begins with the most-derived object.
 Experiment: Add an owning member to Derived and verify it is released. Explain why resource safety depends on the base deletion contract.
 
 ## Copying a base value can discard derived state
+
+Before this chapter: [A requires expression can check an operation](../templates/README.md)
 
 A base object has space only for its base subobject. Initializing a Base value from a Derived therefore copies the base portion and slices away the derived portion.
 
@@ -150,6 +162,12 @@ Experiment: Compare vector<Base>, vector<unique_ptr<Base>>, and vector<variant<A
 
 ## Visit a closed set of complete value types
 
+Before this chapter: [A requires expression can check an operation](../templates/README.md)
+
+New terms and notation:
+
+std::variant<A, B> stores one active alternative from its listed types, together with information about which one is active. std::visit calls a handler for that active value; the handler must be valid for every listed alternative.
+
 variant owns one active alternative from a fixed set. A visitor handles the active type without a manually synchronized integer tag and pointer. This fits domains where the alternatives are known and value semantics are useful.
 
 A variant can become valueless in some exceptional assignments, so do not generalize one simple fixture into an unconditional no-failure claim.
@@ -198,6 +216,8 @@ Answer: 2. The complete Lookup object is stored as the active alternative.
 Experiment: Add a RangeLookup alternative and extend the explanation contract. Compare compiler diagnostics from an incomplete visitor.
 
 ## Compose behavior before adding inheritance
+
+Before this chapter: [A requires expression can check an operation](../templates/README.md)
 
 Composition makes a component an owned member or an explicitly borrowed collaborator. It is often sufficient when the relationship is “uses a policy” rather than “is a substitutable implementation.”
 

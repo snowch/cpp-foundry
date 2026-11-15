@@ -4,6 +4,10 @@ Test contracts, draw platform boundaries, and coordinate shared state.
 
 ## Test properties as well as examples
 
+Before this chapter: [Keep implementation, tests, and guarantees separate](../storage-audit/README.md)
+
+A contract states requirements and promised behavior. Portability asks which parts still work in a different environment. Concurrency allows overlapping activities, so we must distinguish ownership of an object’s lifetime from coordination of access to its contents.
+
 A worked example establishes one concrete behavior. A test suite should also target empty input, boundaries, rejection preservation, and relationships that hold across a family of cases. Use an independent expected result where possible.
 
 Here a sorting check compares against a known sequence and also verifies idempotence: sorting an already sorted range does not change it. Idempotence alone would not catch a sort that always returned its input unchanged.
@@ -52,6 +56,8 @@ Experiment: Add reversed, all-equal, single-element, and negative-value cases. F
 
 ## Separate language guarantees from host contracts
 
+Before this chapter: [Keep implementation, tests, and guarantees separate](../storage-audit/README.md)
+
 C++20 standardizes many facilities, but does not make every platform interchangeable. Numeric widths, path encodings, filesystem replacement behavior, and external byte formats each need a documented contract.
 
 Use static assertions for compile-time assumptions and runtime checks for data. The capstone explicitly requires octets and uint32_t. It avoids serializing std::string or map internals, so those library representations do not leak into its file format.
@@ -93,6 +99,14 @@ Answer: 1. It checks implementation assumptions; file validation and host-specif
 Experiment: Build the exported source with another compiler. Exchange a saved file between hosts and document any filesystem adapter differences.
 
 ## Protect a shared invariant with a lock
+
+Before this chapter: [Keep implementation, tests, and guarantees separate](../storage-audit/README.md)
+
+New terms and notation:
+
+A data race occurs when threads perform conflicting accesses to the same memory without the required coordination, with at least one access being a write and without the appropriate atomic protection. In C++, a data race makes the program’s behavior undefined.
+
+A relational join combines matching rows from two inputs according to a key or condition. This is different from joining a thread, which waits for that thread to finish. Duplicate key matches can produce multiple result rows.
 
 Two threads that access the same non-atomic object concurrently, with at least one write and without synchronization, can cause a data race. A data race is undefined behavior, not simply an occasional wrong answer.
 
@@ -138,6 +152,12 @@ Answer: 1. A conflicting read and write can form a data race even when only the 
 Experiment: Run the native example, then design a locked two-field update. Use ThreadSanitizer where your host supports it; do not infer race freedom from one successful run.
 
 ## Publish initialized data with acquire/release
+
+Before this chapter: [Keep implementation, tests, and guarantees separate](../storage-audit/README.md)
+
+New terms and notation:
+
+A release operation can publish effects that occurred before it. An acquire operation that observes the corresponding publication establishes the required visibility for those effects. A flag with unrelated or relaxed accesses does not automatically provide that synchronization.
 
 An atomic flag can publish a fully initialized object when the writer uses a release operation and the reader observes it with an acquire operation. The synchronization makes preceding writes visible; it does not grant permission to keep modifying the published object concurrently.
 

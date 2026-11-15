@@ -12,6 +12,7 @@ import {advanced} from './parts/advanced.js';
 export const parts=[
   {id:'language',title:'Learn modern C++',description:'Values, control flow, interfaces, text, and the standard library.'},
   {id:'ownership',title:'Own resources and design types',description:'Lifetimes, move semantics, templates, polymorphism, and failures.'},
+  {id:'library',title:'Use the standard library',description:'Containers, iterators, algorithms, ranges, text, time, and typed results.'},
   {id:'algorithms',title:'Reason about algorithms',description:'Complexity, invariants, searching, sorting, and recursion.'},
   {id:'structures',title:'Build data structures',description:'Ownership-aware lists, hash tables, trees, heaps, and graphs.'},
   {id:'database',title:'Build the database',description:'Parsing, execution, byte formats, and page ownership.'},
@@ -25,7 +26,7 @@ const syllabus=[
  ['language','functions-build','Functions and program boundaries','Design value-based interfaces and understand translation units.','Split a checked calculator into declarations, implementation, and a test caller.'],
  ['language','text-sequences','Text and sequences','Own, inspect, transform, and validate sequences.','Build a line-oriented report without borrowing from destroyed input.'],
  ['language','user-types','Design small domain types','Use initialization, enums, access control, and operators deliberately.','Design an ID type that cannot represent a missing record.'],
- ['language','standard-library','Use the standard library','Choose algorithms, containers, and result types by their contracts.','Replace hand-written collection plumbing while preserving independent checks.'],
+ ['library','standard-library','Use the standard library','Choose algorithms, containers, and result types by their contracts.','Replace hand-written collection plumbing while preserving independent checks.'],
  ['ownership','ownership'],['ownership','lifetimes-views','Lifetimes and borrowed views','Track owners, observers, invalidation, and temporary lifetimes.','Audit every borrowed reference in a record-search API.'],
  ['ownership','copy-move','Copying, moving, and value semantics','Understand generated operations and design exception-safe owners.','Implement an independently copied value type and test moving it.'],
  ['ownership','templates','Templates and generic interfaces','Deduce types, constrain operations, and distinguish compile-time choices.','Write a constrained, checked aggregation interface.'],
@@ -61,6 +62,7 @@ const syllabus=[
  ['advanced','release','Reliability and release work','Test contracts, inject failures, benchmark honestly, and ship reproducibly.','Publish a reproducible release with a written failure model.'],
 ];
 
+for(const row of coverageChapters)if(row[0]==='language')row[0]='library';
 const orderedSyllabus=parts.flatMap(part=>[...syllabus.filter(row=>row[0]===part.id),...coverageChapters.filter(row=>row[0]===part.id)]);
 
 export function cpp(headers,main,support='') {

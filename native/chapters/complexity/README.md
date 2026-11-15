@@ -4,6 +4,10 @@ Count operations, state assumptions, and prove loop invariants.
 
 ## Choose an input size and a unit of work
 
+Before this chapter: [Algorithms separate intent from iteration](../algorithms/README.md)
+
+Complexity describes how counted work grows with input size. An amortized bound averages work across an operation sequence, including occasional expensive steps; it is not a claim that each individual step costs the same amount.
+
 A complexity statement begins with a problem size and a measured operation. For a linear scan, let n be the number of live candidate elements and count comparisons with the key. Compiler startup and printing are separate costs.
 
 An absent key forces this implementation to inspect the whole range. A first-position hit answers a different case and should not be substituted into a worst-case claim.
@@ -53,6 +57,8 @@ Experiment: Double the range with an absent key and predict the inspection count
 
 ## Distinguish upper bounds from tight bounds
 
+Before this chapter: [Algorithms separate intent from iteration](../algorithms/README.md)
+
 Big O gives an asymptotic upper bound; Big Omega gives a lower bound; Big Theta gives both up to constant factors. Name the counted function before giving its growth class.
 
 For f(n)=3n+2 and n at least one, 3n <= f(n) <= 5n. The algebra proves a tight linear bound; a printed table only illustrates it.
@@ -90,6 +96,8 @@ Answer: 2. Both linear upper and lower bounds hold beyond a fixed threshold.
 Experiment: Write a proof of the two inequalities for every n>=1. Explain why O(n squared) is also true but less informative.
 
 ## Compare doubling behavior
+
+Before this chapter: [Algorithms separate intent from iteration](../algorithms/README.md)
 
 Repeated halving yields logarithmic growth. A pairwise nested traversal yields quadratic work. Combining linear work across logarithmically many levels gives a common n log n model.
 
@@ -133,6 +141,8 @@ Experiment: Extend the table to 16 and 32. Explain why n log n combines the numb
 
 ## Amortized cost describes an operation sequence
 
+Before this chapter: [Algorithms separate intent from iteration](../algorithms/README.md)
+
 An abstract growing buffer that doubles capacity copies 1+2+4+... elements at growth points. Across N appends that total is linear even though a particular append can copy every existing element.
 
 This is amortized analysis over a sequence, not an average over randomly distributed inputs. The example models a chosen doubling policy; std::vector need not use exactly that factor.
@@ -173,6 +183,8 @@ Answer: 3. The sequence bound permits occasional expensive operations.
 Experiment: Calculate the total after eight appends and compare it with nine. Prove an upper bound in terms of the final length.
 
 ## Make a prediction before collecting observations
+
+Before this chapter: [Algorithms separate intent from iteration](../algorithms/README.md)
 
 A benchmark should answer a specified workload question after correctness checks pass. For absent-key linear scans, doubling the candidate range predicts twice as many key comparisons.
 

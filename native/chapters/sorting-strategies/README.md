@@ -4,6 +4,10 @@ Compare stable sorting, partitioning, merging, and selection.
 
 ## Insertion sort maintains a sorted prefix
 
+Before this chapter: [Maintain a half-open candidate interval](../searching/README.md)
+
+Sorting arranges elements according to a comparison rule. Stability means preserving the original order of elements that compare equivalent. Partitioning separates groups without necessarily sorting within either group.
+
 Insertion sort takes the next element and moves it into an already sorted prefix. Its invariant is that elements before the current index are ordered and contain exactly the earlier input values.
 
 The worst-case number of shifts is quadratic, but nearly sorted small inputs can require little movement. A correct implementation keeps the temporarily removed key in an owning local value.
@@ -54,6 +58,8 @@ Experiment: Count shifts for sorted and reversed inputs of the same size. Verify
 
 ## Merge two sorted ranges
 
+Before this chapter: [Maintain a half-open candidate interval](../searching/README.md)
+
 Merging repeatedly selects the smaller next element from two sorted inputs. The result remains ordered because each remaining input suffix is ordered. This operation is the linear-work step used by merge sort.
 
 The destination owns the output values. Its capacity or insertion interface must support the complete combined length.
@@ -96,6 +102,8 @@ Answer: 2. The correctness argument relies on ordered remaining suffixes.
 Experiment: Test an empty side and equal values on both sides. Label equal records to investigate merge’s stability rule.
 
 ## Preserve equivalent-record order when the contract needs it
+
+Before this chapter: [Maintain a half-open candidate interval](../searching/README.md)
 
 A stable sort preserves the input order among elements equivalent under its comparator. This matters when a previous ordering or arrival sequence is part of the observable result.
 
@@ -145,6 +153,8 @@ Experiment: Reverse the two key-2 records before sorting and compare. Then repla
 
 ## Select a rank without fully sorting
 
+Before this chapter: [Maintain a half-open candidate interval](../searching/README.md)
+
 nth_element partitions a range so that the chosen position contains an element of its sorted rank. Elements before it are not greater than elements after it under the ordering, but each side is not necessarily sorted.
 
 This supports median and top-k operations when a complete order would do unnecessary work. Sort only the selected prefix if its displayed order is part of the output contract.
@@ -184,6 +194,8 @@ Answer: 3. The operation establishes a rank partition, not complete sorting.
 Experiment: Select the three smallest values, sort that prefix for display, and compare it with an independently sorted copy.
 
 ## Check ordering and permutation preservation independently
+
+Before this chapter: [Maintain a half-open candidate interval](../searching/README.md)
 
 A sort must produce an ordered sequence and preserve the input multiset. Checking only orderedness would accept a result that discarded every element. An independent reference result can expose both kinds of failure.
 

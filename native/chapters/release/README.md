@@ -4,6 +4,10 @@ Test contracts, inject failures, benchmark honestly, and ship reproducibly.
 
 ## Broaden a deterministic workload with permutations
 
+Before this chapter: [Publish a replacement without invalidating old readers](../maintenance/README.md)
+
+A test oracle is an independent way to determine the expected answer. Failure injection deliberately makes an operation fail at a selected point. A reproducible release records inputs and tool versions so another person can repeat its build and checks.
+
 An independent reference can validate every small input permutation without depending on random seeds. Small exhaustive workloads are especially useful for structural algorithms whose failures depend on operation order.
 
 Exhaustive testing over a finite domain is not a proof for arbitrary sizes. State the enumerated domain and preserve its failing fixtures.
@@ -50,6 +54,8 @@ Answer: 3. The coverage is complete only within the stated finite domain.
 Experiment: Apply permutation workloads to the custom AVL and B+ examples, checking contents and invariants after every operation.
 
 ## Inject failures at named preparation boundaries
+
+Before this chapter: [Publish a replacement without invalidating old readers](../maintenance/README.md)
 
 Reliable code needs tests for controlled failures, not just successful runs. A named injection point can simulate a failed preparation step deterministically while checks verify cleanup and preservation of committed state.
 
@@ -107,6 +113,8 @@ Experiment: Add failure points before allocation, after candidate construction, 
 
 ## Enumerate logical commit orders without timing sleeps
 
+Before this chapter: [Publish a replacement without invalidating old readers](../maintenance/README.md)
+
 Concurrency-related contracts are easier to diagnose with an explicit serialized schedule model before adding threads. Enumerate relevant orderings and compare outcomes with the declared validation rule.
 
 A schedule model does not establish data-race freedom in the real implementation; synchronization tests and analysis remain necessary.
@@ -156,6 +164,8 @@ Experiment: Implement the same schedule with barriers or condition variables and
 
 ## Separate work accounting from setup and presentation
 
+Before this chapter: [Publish a replacement without invalidating old readers](../maintenance/README.md)
+
 A benchmark should name the operation under study and avoid attributing setup or output to it accidentally. Counting predicate evaluations gives an interpretable workload metric before introducing wall-clock noise.
 
 Use multiple input sizes and distributions, retain observations, and avoid claiming a hardware-independent speedup from a single run.
@@ -199,6 +209,8 @@ Answer: 2. The counter targets a specifically defined unit of work.
 Experiment: Time a larger repeated workload only after validating results. Keep initialization and output outside the measured region.
 
 ## Canonicalize release metadata before comparing builds
+
+Before this chapter: [Publish a replacement without invalidating old readers](../maintenance/README.md)
 
 A release manifest should record toolchain versions, flags, inputs, and artifact identities in a stable representation. Sorting entries removes accidental dependence on file discovery order.
 

@@ -4,6 +4,10 @@ Coordinate ownership transfer and deterministic shutdown.
 
 ## Join before borrowed worker state is destroyed
 
+Before this chapter: [Protect a shared invariant with a lock](../engineering/README.md)
+
+Joining a thread waits for it to finish before execution proceeds. Shutdown describes how work stops: it may drain already accepted work or abandon it according to an explicit rule. A stop request is a request the worker checks, not forced interruption.
+
 A worker capturing local references borrows objects owned by its caller. The caller must keep those objects alive until the worker finishes. jthread supplies RAII joining, and an explicit join can establish completion before a result is observed.
 
 Destruction order matters: declare borrowed state before the thread owner so reverse destruction releases the thread first.
@@ -42,6 +46,8 @@ Answer: 2. Thread completion synchronizes with the completed join.
 Experiment: Move the worker into an inner scope and rely on jthread destruction. Explain the required declaration and destruction order.
 
 ## Acquire several mutexes with a consistent protocol
+
+Before this chapter: [Protect a shared invariant with a lock](../engineering/README.md)
 
 A compound operation can need locks for two resources. Opposite manual acquisition orders can deadlock. scoped_lock can acquire several mutexes with deadlock-avoidance behavior and release them with RAII.
 
@@ -89,6 +95,14 @@ Answer: 3. The invariant spans both shared values.
 Experiment: Add a concurrent observer using the same lock set. Check the conserved total without reading either balance outside the protocol.
 
 ## Wait for a predicate, not just a notification
+
+Before this chapter: [Protect a shared invariant with a lock](../engineering/README.md)
+
+New terms and notation:
+
+A condition variable lets a thread wait until shared state may satisfy a condition. The waiting code checks that condition while following its mutex rule; a notification is a prompt to check again, not a stored guarantee that the condition is true.
+
+A spurious wakeup is a wait returning even though no notification establishing the desired condition occurred. Check the protected condition again after waking; the predicate form of wait performs that repeated check.
 
 Condition-variable notifications are not stored permits and waits can wake spuriously. A waiter must check a shared predicate while holding the mutex. The predicate also needs a shutdown alternative so an empty closed queue can stop waiting.
 
@@ -175,6 +189,8 @@ Experiment: Add two consumers and aggregate results without racing. Check every 
 
 ## Define whether close drains or discards pending work
 
+Before this chapter: [Protect a shared invariant with a lock](../engineering/README.md)
+
 Queue shutdown is part of the observable API. This queue rejects pushes after close but lets consumers drain already accepted values. Only closed-and-empty returns no next item.
 
 A different cancellation policy might discard pending work, but it needs a different explicit contract and ownership rule for abandoned items.
@@ -256,6 +272,8 @@ Answer: 2. The draining policy retains accepted work until consumed.
 Experiment: Test close on an empty queue and close while a producer is waiting for space. Ensure all participants can finish.
 
 ## A stop request is a cooperative signal
+
+Before this chapter: [Protect a shared invariant with a lock](../engineering/README.md)
 
 A stop token communicates a request; it does not forcibly terminate a thread or release its resources. A worker must observe the token and return through its normal ownership and cleanup paths.
 

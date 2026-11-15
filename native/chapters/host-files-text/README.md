@@ -4,6 +4,10 @@ Distinguish byte formats, text conventions, names, and host behavior.
 
 ## Normalize line endings at a text boundary
 
+Before this chapter: [An independent byte fixture defines the encoding](../binary-codecs/README.md)
+
+A file is a sequence of bytes offered by a host environment. A path is a name used to locate an object, not an unchanging identity. Text conventions such as line endings may differ even when programs use the same C++ language rules.
+
 Text files may use LF or CRLF line endings. getline removes LF from the stream but can leave a preceding carriage return in the returned string when reading literal bytes. A text protocol must decide how to normalize that boundary.
 
 Do not apply text normalization to a binary database format, where every byte has a defined role.
@@ -47,6 +51,8 @@ Answer: 2. The protocol defines which delimiters are framing rather than payload
 Experiment: Test empty lines and a final line without a terminator. Document whether embedded carriage returns are valid payload or rejected controls.
 
 ## Binary payloads can contain zero bytes
+
+Before this chapter: [An independent byte fixture defines the encoding](../binary-codecs/README.md)
 
 A binary stream carries explicit byte counts, including zero-valued bytes. C string functions that stop at a zero terminator cannot represent arbitrary binary payload lengths.
 
@@ -94,6 +100,8 @@ Experiment: Write and reopen the same three bytes in binary mode. Compare exact 
 
 ## A Unicode boundary is not an arbitrary byte position
 
+Before this chapter: [An independent byte fixture defines the encoding](../binary-codecs/README.md)
+
 UTF-8 uses continuation bytes for multibyte code points. A byte-oriented storage format can count bytes while still requiring valid text at field boundaries. Never assume a maximum byte count can be enforced by cutting at that position blindly.
 
 This fixture exposes the two bytes of one code point; full validation also checks overlong encodings, surrogates, and maximum scalar values.
@@ -135,6 +143,8 @@ Experiment: Inspect a three-byte and a four-byte code point. Compare valid bound
 
 ## Keep logical names separate from host path rules
 
+Before this chapter: [An independent byte fixture defines the encoding](../binary-codecs/README.md)
+
 Paths are host interfaces with rules about separators, case, encoding, and replacement behavior. A portable storage design can restrict logical names and implement host adaptation separately. Lexical normalization is not a security proof that a path stays inside a filesystem root.
 
 This native lesson normalizes a path without asserting identical filesystem case behavior across hosts.
@@ -171,6 +181,8 @@ Answer: 3. It transforms path syntax without querying the filesystem.
 Experiment: Define allowed database basenames and reject traversal components before passing names to a host adapter.
 
 ## EOF is a stream state, not a stored byte
+
+Before this chapter: [An independent byte fixture defines the encoding](../binary-codecs/README.md)
 
 A stream read can fail because it reached the end or because an I/O error occurred. A parser should distinguish successful extraction of the final value from the subsequent failed read that establishes EOF.
 

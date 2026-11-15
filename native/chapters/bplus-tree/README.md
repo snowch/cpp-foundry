@@ -4,6 +4,10 @@ Implement leaf routing, splitting, borrowing, merging, and invariant checks.
 
 ## Route a key through leaf separator values
 
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
+
+An index is an extra structure used to locate keys without scanning every record. A B+ tree stores keys in leaves and uses separator values to choose a leaf. Occupancy is how many entries a node contains; this chapter’s model has only a bounded root and leaves.
+
 A B+ index keeps payload keys in leaves and uses separator values to choose a leaf. This bounded model has one routing root and at most eight four-key leaves; separators are derived from each right leaf’s first key.
 
 It is not an arbitrary-height serialized B+ tree. Value-owned leaf vectors make structural ownership explicit while the lessons focus on routing and occupancy.
@@ -136,6 +140,8 @@ Experiment: Check keys below all entries, exactly at separators, between keys, a
 
 ## Split an overflowing leaf before publishing structure
 
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
+
 A leaf split redistributes an overflowing sorted key sequence into two leaves and adds a routing boundary. Here five keys split into two on the left and three on the right.
 
 Insertion prepares a complete candidate leaf collection before swapping it into the live index. Allocation failure during preparation therefore does not partially publish the new routing structure.
@@ -261,6 +267,8 @@ Answer: 3. Fallible structural preparation is separate from publication.
 Experiment: Insert at the beginning, middle, and end of a full leaf. Verify the complete key sequence and occupancy after each split.
 
 ## A range query crosses leaf boundaries
+
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
 
 A B+ range query starts at the appropriate lower boundary and continues through ordered leaves until the exclusive upper boundary. This model stores leaf order in the owning vector rather than a serialized sibling chain.
 
@@ -388,6 +396,8 @@ Answer: 2. The result contract is a half-open key interval.
 Experiment: Test an empty range, a missing lower key, and boundaries exactly on separators. Compare with a std::set range.
 
 ## Reject duplicates and bounded-root exhaustion without mutation
+
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
 
 An index needs explicit failure behavior for duplicate keys and for its supported structural capacity. This model rejects an insertion that would require a ninth root child. Its maximum usable key count depends on leaf occupancy, not just four times the number of leaves.
 
@@ -517,6 +527,8 @@ Experiment: Try different insertion orders and record where the root limit is re
 
 ## Borrow from a sibling with spare occupancy
 
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
+
 Deletion can leave a non-root leaf below its minimum occupancy. If an adjacent sibling has more than the minimum, a boundary key can move across while retaining global ordering. The routing separator must reflect the new boundary.
 
 Derived separators in this model update automatically from the current leaf contents.
@@ -644,6 +656,8 @@ Answer: 3. Donation must leave both leaves valid.
 Experiment: Construct the mirrored left-sibling donation case and validate separator-equality searches after the borrow.
 
 ## Merge when neither sibling can donate
+
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
 
 If an underfull leaf and its sibling fit together but the sibling cannot donate, merging removes a child from the routing root. Ownership of all surviving keys must transfer before the removed leaf representation disappears.
 
@@ -775,6 +789,8 @@ Experiment: Compare the full pre/post key sets against an independent set after 
 
 ## Give the root an explicit empty-tree representation
 
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
+
 Root occupancy rules differ from non-root leaf rules. A tree with no keys still needs a valid representation that supports future insertion and missing lookup. This model keeps one empty leaf under the bounded routing representation.
 
 Deletion of a missing key reports failure without changing the existing structure.
@@ -900,6 +916,8 @@ Answer: 2. The root has an explicitly different occupancy rule.
 Experiment: Alternate deleting the final key and reinserting a new key. Check empty lookup and range-query behavior each time.
 
 ## Check mixed updates against independent membership and structure
+
+Before this chapter: [A scoped guard prevents eviction while a page is borrowed](../pager-cache/README.md)
 
 A reference ordered set supplies expected key membership and sorted traversal. Independent index checks supply occupancy, routing order, and root limits. Compare after every mutation so a short failing prefix identifies the first broken transition.
 

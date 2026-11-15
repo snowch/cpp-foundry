@@ -4,6 +4,10 @@ Own page buffers and define pin/dirty/eviction contracts.
 
 ## A page is a bounded byte buffer with an identity
 
+Before this chapter: [Validate a complete candidate before replacing live state](../binary-codecs/README.md)
+
+A page is a fixed-size unit of storage. A cache temporarily keeps pages for reuse; eviction removes one to make room. A pin marks a page as in use, and dirty means its cached contents have changed and need the model’s write-back handling.
+
 A page manager separates logical page IDs from the buffers currently holding their bytes. A page buffer has an explicit fixed capacity and an ownership contract. The teaching cache uses sixteen-byte pages and two frames to make eviction easy to observe.
 
 The disk member is an in-memory backing model, not an actual durable device.
@@ -111,6 +115,8 @@ Answer: 2. Frames are reusable storage; page IDs identify logical contents.
 Experiment: Add two page IDs and inspect which frame contains each. Keep logical IDs separate from vector or array positions.
 
 ## A scoped guard prevents eviction while a page is borrowed
+
+Before this chapter: [Validate a complete candidate before replacing live state](../binary-codecs/README.md)
 
 A pin count records active users of a frame. An RAII guard releases one pin at destruction, including exception unwinding. Eviction must choose only unpinned frames.
 
@@ -235,6 +241,8 @@ Experiment: Throw while holding a guard and confirm the pin is released. Documen
 
 ## Flush a dirty victim before reusing its frame
 
+Before this chapter: [Validate a complete candidate before replacing live state](../binary-codecs/README.md)
+
 A dirty frame differs from its backing representation. Before reusing that frame, the cache must publish its changed bytes to the backing store or explicitly reject eviction. Otherwise reloading the page loses writes.
 
 This model uses a map assignment as publication. Actual storage needs checked writes and a separate durability protocol.
@@ -351,6 +359,12 @@ Experiment: Inject a backing-write failure before frame reuse and require the ol
 
 ## Separate cache hits from backing loads
 
+Before this chapter: [Validate a complete candidate before replacing live state](../binary-codecs/README.md)
+
+New terms and notation:
+
+Flushing passes pending changes from one buffered layer to the next, such as writing dirty cached bytes through a file interface. It does not by itself prove that those bytes reached durable physical storage; each host interface must specify what completion guarantees.
+
 A cache hit reuses a frame already holding the requested logical page. A miss requires selecting a frame and loading backing bytes. These counts help explain a workload without conflating them with elapsed time.
 
 Replacement state should update on successful access, and pinned frames remain excluded regardless of recency.
@@ -464,6 +478,8 @@ Answer: 2. The page is already resident under the requested identity.
 Experiment: Trace a cyclic three-page workload through the two-frame cache. Predict hits and misses before measuring them.
 
 ## Moving a guard transfers its release responsibility
+
+Before this chapter: [Validate a complete candidate before replacing live state](../binary-codecs/README.md)
 
 A page guard is move-only because copying it without incrementing the pin count would cause two destructors to release one pin. A move transfers the release responsibility and leaves the source inactive.
 

@@ -4,6 +4,10 @@ Transfer results, propagate exceptions, and distinguish scheduling from synchron
 
 ## Transfer one result through a shared state
 
+Before this chapter: [Join before borrowed worker state is destroyed](../thread-coordination/README.md)
+
+An asynchronous result separates producing an answer from asking for it. A promise supplies a value or exception to shared result state; a future observes that state. Deferred execution waits until the result is demanded rather than starting a worker immediately.
+
 promise and future separate result production from consumption through a shared state. A promise normally makes that state ready once, while an ordinary future permits one retrieval through get. Readiness synchronization publishes the produced result; it does not automatically protect unrelated shared objects.
 
 ![A shared state carries a value or exception](../../diagrams/lib-future-promise.svg)
@@ -48,6 +52,8 @@ Experiment: Replace set_value with set_exception and verify propagation at get. 
 
 ## Capture task exceptions in the result state
 
+Before this chapter: [Join before borrowed worker state is destroyed](../thread-coordination/README.md)
+
 packaged_task adapts a callable to a future-based result. It stores either the returned value or the thrown exception in a shared state. It is not itself a thread pool or scheduling policy: the caller still decides where and when the task runs.
 
 ```cpp
@@ -91,6 +97,8 @@ Experiment: Run the same task on a jthread and verify identical error observatio
 
 ## Select deferred execution explicitly
 
+Before this chapter: [Join before borrowed worker state is destroyed](../thread-coordination/README.md)
+
 async can use asynchronous or deferred execution depending on the selected launch policy. The default permits implementation choice; an explicit deferred task runs when a qualifying waiting operation requests its result. Captures must remain valid through that eventual execution.
 
 ```cpp
@@ -131,6 +139,8 @@ Answer: 1. Deferred execution occurs when the result is demanded. The counter is
 Experiment: Contrast explicit async and deferred launch without asserting nondeterministic interleavings. State who owns each captured object until the task finishes.
 
 ## Share a ready result with multiple readers
+
+Before this chapter: [Join before borrowed worker state is destroyed](../thread-coordination/README.md)
 
 shared_future permits multiple consumers to observe one shared result state. Unlike future, repeated get is supported, and a value result is exposed by const reference. Sharing readiness does not make mutation of an object reachable through the result inherently thread-safe.
 

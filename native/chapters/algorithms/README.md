@@ -4,6 +4,14 @@ Use the standard library, then understand the costs.
 
 ## Algorithms separate intent from iteration
 
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
+New terms and notation:
+
+O(n) describes how an operation count grows as an input size n grows, rather than a number of milliseconds. O(log n) describes logarithmic growth; the counted work and input assumptions must be stated.
+
+An algorithm is a specified procedure for a task. Here we use sorting, key lookup, and sequence transformations, keeping input requirements separate from the result an operation promises. A concept names requirements for generic code; it does not prove every semantic property.
+
 An algorithm names an operation over a range. std::ranges::sort makes the ordering step explicit and can use a projection to choose a record field. It rearranges the existing elements; it does not create an independent sorted collection.
 
 Sorting N elements takes O(N log N) comparisons. Binary search then takes O(log N) comparisons on a random-access sorted range, but maintaining that order has a cost. Measure the actual workload before assuming that a sorted vector is the right index.
@@ -48,6 +56,8 @@ Answer: 1. A search can discard half the range only when its ordering assumption
 Experiment: Search for an absent ID. Then insert a new smallest ID at the end and restore the sorted invariant before searching again.
 
 ## Choose an index for its contract
+
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
 
 std::map keeps keys ordered and provides logarithmic lookup, insertion, and removal. std::unordered_map uses hashing and offers average constant-time lookup, with linear worst cases. Neither choice removes the need to specify uniqueness and failure behavior.
 
@@ -95,6 +105,8 @@ Experiment: Replace find(9) with names[9], then explain the new size and empty s
 
 ## Views describe a lazy computation
 
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
+
 A range view often borrows its input and produces elements on demand. Composing filter and transform describes a pipeline without immediately allocating another collection. The source must remain alive while a borrowing view is used.
 
 Laziness is useful, but does not imply that every operation is cheap or evaluated once. A predicate or projection can be called again as you traverse. Keep those functions free of surprising side effects.
@@ -136,6 +148,8 @@ Answer: 1. This pipeline computes transformed values as it is traversed.
 Experiment: Traverse the view twice with a counter in the transform. Explain why side effects can make a lazy pipeline harder to understand.
 
 ## Constrain templates to express intent
+
+Before this chapter: [Find a duplicate interval with equal_range](../library-algorithms/README.md)
 
 A function template describes a family of functions. A concept constrains which types belong to that family. A readable constraint can move an error to the call site instead of leaving it deep inside a template implementation.
 

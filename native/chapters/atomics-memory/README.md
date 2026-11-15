@@ -4,6 +4,10 @@ Reason about atomic operations and happens-before relations.
 
 ## An atomic read-modify-write prevents lost counter increments
 
+Before this chapter: [Acquire several mutexes with a consistent protocol](../thread-coordination/README.md)
+
+A read-modify-write operation reads and changes an atomic value as one indivisible operation. A memory order specifies ordering and synchronization constraints for atomic accesses. The lessons must establish the particular ordering relation needed for ordinary shared data.
+
 An atomic fetch_add combines observation and update into one indivisible operation on that atomic object. Two separate load/store calls are not equivalent to a read-modify-write and can lose concurrent increments.
 
 This counter needs atomicity but does not publish other data, so relaxed ordering is sufficient for the increments themselves. Joins establish completion before the final observation.
@@ -49,6 +53,8 @@ Experiment: Implement a deliberately separate load/store model under a controlle
 
 ## A failed compare-exchange updates the expected value
 
+Before this chapter: [Acquire several mutexes with a consistent protocol](../thread-coordination/README.md)
+
 compare_exchange compares an atomic object with an expected value and conditionally publishes a desired value. On failure, it writes the observed value back into expected. This supports retry loops without an extra uncoordinated assumption.
 
 Weak compare-exchange can also fail spuriously and is normally used in a loop. This fixture uses the strong operation for one deterministic mismatch.
@@ -88,6 +94,8 @@ Answer: 1. Failure reports the currently observed atomic value through expected.
 Experiment: Retry with a decision based on the observed value. Specify whether the desired update should be recomputed after each failure.
 
 ## Publish a prepared batch before readers inspect it
+
+Before this chapter: [Acquire several mutexes with a consistent protocol](../thread-coordination/README.md)
 
 A release store can publish preceding initialization to a reader that observes it through an acquire load. The ordering relation applies to the protected prior writes; it does not permit future unsynchronized mutation of that same data.
 
@@ -144,6 +152,8 @@ Experiment: Draw the happens-before chain explicitly. Explain why publishing a p
 
 ## Sequential consistency constrains the global atomic order
 
+Before this chapter: [Acquire several mutexes with a consistent protocol](../thread-coordination/README.md)
+
 Sequentially consistent atomic operations participate in a single total order compatible with each thread’s sequencing requirements. In the classic two-store/two-load fixture, both reads cannot observe zero under that model.
 
 The exact observed pair is schedule-dependent, so the program checks an allowed-outcome property rather than asserting one arbitrary interleaving.
@@ -194,6 +204,14 @@ Answer: 3. The contract constrains outcomes without fixing the scheduler.
 Experiment: Model the ordering constraints on paper. Compare with relaxed operations conceptually without claiming a finite run proves a memory-model theorem.
 
 ## Publish an owning immutable snapshot handle
+
+Before this chapter: [Acquire several mutexes with a consistent protocol](../thread-coordination/README.md)
+
+New terms and notation:
+
+A braced list such as {1, 2, 3} can supply starting values or a short sequence to visit. Its meaning depends on the destination or operation; it does not always construct a vector.
+
+std::shared_ptr<T> lets multiple owners keep one managed object alive. Releasing the last owner destroys that object. Shared lifetime does not make reads and writes to the object automatically safe across threads.
 
 C++20 supports atomic shared_ptr operations that combine publication with owning handle transfer. A reader holding an old shared owner can continue reading that immutable version after a newer one is published.
 

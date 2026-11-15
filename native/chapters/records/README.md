@@ -4,6 +4,10 @@ Connect value types, validation, byte formats, and file ownership.
 
 ## Represent rows as owning values
 
+Before this chapter: [Weighted shortest paths require a compatible algorithm](../graphs/README.md)
+
+A record groups fields describing one item; an ID is the field used to identify it. CRUD abbreviates create, read, update, and delete. Persistence means retaining state beyond the current run; this project writes a whole-file snapshot rather than a production database.
+
 A database row is a domain value, not a pointer into an editor or input buffer. Give it owning fields, then define the rules for a valid row. The capstone uses a positive uint32 ID, a name of 1–63 UTF-8 bytes, and a score from 0 to 100.
 
 Representability and domain validity are different checks. Zero fits in uint32_t, but the application rejects it as an ID. A useful validation function can be reused at the parser, insertion, and file-import boundaries.
@@ -46,6 +50,12 @@ Answer: 1. std::string is a sequence of char units; the capstone explicitly trea
 Experiment: Try an empty name and a 64-byte name. Add a printable-name rule and apply it at every ingestion boundary.
 
 ## Uniqueness and updates are contracts
+
+Before this chapter: [Weighted shortest paths require a compatible algorithm](../graphs/README.md)
+
+New terms and notation:
+
+A transaction groups tentative operations into one change with an explicit commit or rollback. Commit attempts to publish the change; rollback abandons it. Exactly what isolation and durability are promised depends on the model being taught.
 
 An insert should distinguish a new row from a duplicate ID. An update should distinguish an existing row from a missing one. Those are observable API decisions, not incidental details of the underlying container.
 
@@ -95,6 +105,8 @@ Experiment: Add an update for ID 9 that reports missing without changing size. T
 
 ## Define bytes independently of object layout
 
+Before this chapter: [Weighted shortest paths require a compatible algorithm](../graphs/README.md)
+
 Never persist a C++ object by writing sizeof(object) bytes. Padding, endianness, pointer fields, and library object layout do not form a portable file format. Define the field widths, byte order, and validation rules explicitly.
 
 The capstone uses a CPF1 magic header, a little-endian uint32 row count, and rows containing ID, score, a one-byte name length, and UTF-8 bytes. Imports reject duplicates, invalid fields, truncation, excess rows, and trailing bytes before replacing live state.
@@ -142,6 +154,8 @@ Answer: 1. Independent format expectations catch a pair of functions that agree 
 Experiment: Write expected bytes for 0, 255, 256, and UINT32_MAX before running. In the Workbench, export a CPF1 file and inspect its header.
 
 ## Close, reopen, and validate
+
+Before this chapter: [Weighted shortest paths require a compatible algorithm](../graphs/README.md)
 
 A file stream owns a file handle. Check opening and writing, then check close explicitly when publishing output: destructors cannot conveniently report a late close failure. Read into a candidate collection so a rejected import does not partially overwrite current state.
 

@@ -4,6 +4,10 @@ Separate clock contracts, distribution guarantees, and finite bit representation
 
 ## Convert duration units explicitly
 
+Before this chapter: [Use C++20 format with an explicit support boundary](../library-text-io/README.md)
+
+A duration is an amount of time with a unit; a time point is a position on a particular clock. A random engine generates a numeric sequence and a distribution maps that sequence to a desired range of outcomes. Neither ordinary facility promises secrecy for security uses.
+
 chrono attaches a period and representation to duration values. Adding compatible durations produces a suitable common unit. Converting to a coarser integral unit can lose information, so duration_cast makes that decision visible rather than silently treating all counts as seconds.
 
 ![Duration conversion can discard a remainder](../../diagrams/lib-chrono-units.svg)
@@ -46,6 +50,8 @@ Experiment: Try negative durations and distinguish duration_cast truncation from
 
 ## Separate elapsed time from civil time
 
+Before this chapter: [Use C++20 format with an explicit support boundary](../library-text-io/README.md)
+
 steady_clock is intended for monotonic elapsed-time measurement, while system_clock represents wall time and may be adjusted. Time points belong to a particular clock; subtraction is meaningful within the same clock domain. A steady clock’s epoch is not a portable timestamp format.
 
 ```cpp
@@ -85,6 +91,8 @@ Answer: 1. Use a steady clock for elapsed-time intervals. Synthetic steady-clock
 Experiment: Write a native benchmark that measures many operations and reports its clock. Keep its nondeterministic timing out of exact-output correctness tests.
 
 ## Separate the engine sequence from distribution mapping
+
+Before this chapter: [Use C++20 format with an explicit support boundary](../library-text-io/README.md)
 
 A random engine generates a reproducible stateful sequence when its algorithm and seed are fixed. A distribution maps engine outputs into a target domain; its exact mapping need not be identical across standard library implementations. A seed policy is part of a reproducibility contract.
 
@@ -130,6 +138,14 @@ Answer: 2. Distribution output sequences may vary between library implementation
 Experiment: Save and restore engine state, then verify continuation. Compare a fixed test seed with an externally supplied workload seed and record which library performed distribution mapping.
 
 ## Check representation before shifting and bit casting
+
+Before this chapter: [Use C++20 format with an explicit support boundary](../library-text-io/README.md)
+
+New terms and notation:
+
+Endianness describes which byte of a multi-byte number comes first. A portable format chooses an order explicitly rather than copying the host machine’s in-memory representation and assuming all machines agree.
+
+The <cstdint> names describe fixed-width integer types when the implementation provides them. For example, std::uint32_t is an unsigned integer with exactly 32 bits, and std::int32_t is signed with that width. The width describes representation, not whether a value is valid for a particular ID or score.
 
 C++20 bit utilities expose operations on unsigned integer representations without handwritten shifting loops. popcount counts set bits; bit_width reports the minimum width needed for a value; has_single_bit checks a nonzero power of two. These are representation tools, not validation of an arbitrary wire format.
 

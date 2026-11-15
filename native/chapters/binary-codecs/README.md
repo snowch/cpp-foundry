@@ -4,6 +4,14 @@ Define byte contracts and preserve state on rejected imports.
 
 ## An independent byte fixture defines the encoding
 
+Before this chapter: [Define bytes independently of object layout](../records/README.md)
+
+New terms and notation:
+
+A codec defines how values become a sequence of bytes and how those bytes are checked and converted back into values. Encoding writes a specified representation; decoding must reject representations that do not meet that specification.
+
+A binary format gives precise meanings to byte positions. A length prefix records how much following data belongs to a field. A decoder must check that the input contains the promised bytes before reading them.
+
 A codec should be tested against externally specified bytes, not just by decoding its own output. Two functions can share the same endianness mistake and still roundtrip successfully.
 
 The field here is exactly four little-endian octets. The test fixture is written literally before the encoder is called.
@@ -59,6 +67,12 @@ Answer: 2. It checks the bytes independently of the decoder.
 Experiment: Add fixtures for zero, 255, 256, and UINT32_MAX. Compare every byte rather than only the decoded value.
 
 ## Check remaining bytes before consuming a field
+
+Before this chapter: [Define bytes independently of object layout](../records/README.md)
+
+New terms and notation:
+
+Happens-before is the C++ ordering relation that lets one operation’s effects be relied on by another. The concurrency lessons construct specific synchronization edges; wall-clock timing or a convenient observed output is not a substitute for those edges.
 
 A decoder needs a cursor and a proof that the next field fits. Check cursor <= size before subtracting, then compare the remaining bytes with the required field width.
 
@@ -118,6 +132,8 @@ Experiment: Test every prefix length from zero through four and cursors at, befo
 
 ## A length prefix needs its own domain bound
 
+Before this chapter: [Define bytes independently of object layout](../records/README.md)
+
 A declared length is untrusted data. Even when the bytes fit the input, the application may impose a smaller maximum to prevent unreasonable resource use or invalid domain values.
 
 Check both the format’s remaining-byte condition and the schema’s maximum before constructing an owning result.
@@ -166,6 +182,8 @@ Answer: 1. Format bounds and application bounds address different failures.
 Experiment: Try zero, 64, and a truncated declared payload. Add UTF-8 validation before accepting the name as a record field.
 
 ## Validate a complete candidate before replacing live state
+
+Before this chapter: [Define bytes independently of object layout](../records/README.md)
 
 An import should decode into temporary owned state and publish only after every required field succeeds. This provides failure preservation without reverse-writing partially imported rows.
 
@@ -235,6 +253,8 @@ Answer: 3. The final swap is separated from fallible preparation.
 Experiment: Add a trailing-byte check before swap. Verify every truncated prefix leaves the independently captured live state unchanged.
 
 ## Recognize a format version before interpreting its fields
+
+Before this chapter: [Define bytes independently of object layout](../records/README.md)
 
 A magic/version header distinguishes a documented format from unrelated bytes and future incompatible layouts. Validate it before interpreting counts and offsets under the current schema.
 

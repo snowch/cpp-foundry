@@ -4,6 +4,10 @@ Choose sequence, ordered, and unordered containers by stability and complexity.
 
 ## Reserve capacity without creating elements
 
+Before this chapter: [Choose ordering and lookup contracts deliberately](../standard-library/README.md)
+
+Contiguous storage places elements next to one another. Stable access means a saved way of reaching an element remains valid after a specified change. We compare these promises separately from operation cost.
+
 A vector owns a contiguous sequence. reserve changes capacity, while resize changes the number of live elements. Reallocation invalidates pointers, references, and iterators into its old storage; an index can be retained only when intervening edits preserve positions.
 
 ![Reallocation changes where elements live](../../diagrams/lib-vector-invalidation.svg)
@@ -49,6 +53,8 @@ Experiment: Save capacity before each push, identify which pushes reallocate, an
 
 ## Compare end growth and stable list nodes
 
+Before this chapter: [Choose ordering and lookup contracts deliberately](../standard-library/README.md)
+
 deque supports constant-time end insertion without promising contiguous storage. list owns separate nodes and supports splicing existing nodes between compatible lists without copying their values. Iterator validity and the container to which an iterator belongs are separate questions.
 
 ```cpp
@@ -90,6 +96,12 @@ Experiment: Record the full contents of both lists after splicing. Compare a vec
 
 ## Distinguish lookup, insertion, and replacement
 
+Before this chapter: [Choose ordering and lookup contracts deliberately](../standard-library/README.md)
+
+New terms and notation:
+
+std::map<Key, Value> associates each unique key with a stored value and keeps keys in comparison order. Lookup searches by key rather than numeric position. The two types in angle brackets specify the key type and mapped-value type.
+
 Ordered maps keep unique keys in comparator order. find and contains observe the map; operator[] inserts a default mapped value when the key is missing. try_emplace expresses insert-if-absent, while insert_or_assign explicitly permits replacement.
 
 ```cpp
@@ -128,6 +140,12 @@ Answer: 3. try_emplace preserves an existing mapped value. The second insertion 
 Experiment: Add insert_or_assign and inspect its insertion flag. Then compare find with operator[] for a missing name and check the map size.
 
 ## Hash equality and rehash contracts
+
+Before this chapter: [Choose ordering and lookup contracts deliberately](../standard-library/README.md)
+
+New terms and notation:
+
+A hash function maps a key to a numeric code used to choose a search bucket or starting slot. Different keys may share a hash; checking actual key equality distinguishes them. Equivalent keys must have equal hashes.
 
 Unordered containers provide average constant-time lookup, with linear worst cases. Equivalent keys must produce equal hashes; different keys may collide. reserve plans for a number of elements under the current maximum load factor, while rehash requests bucket capacity.
 

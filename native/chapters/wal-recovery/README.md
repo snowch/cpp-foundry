@@ -4,6 +4,10 @@ Validate complete records and recover only committed work.
 
 ## Define a log record independently of memory layout
 
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
+
+Recovery reconstructs an accepted state after an interruption. A redo record describes a change to re-apply; a commit marker distinguishes finished work from an incomplete transaction. A torn record is one only partly present in the available bytes.
+
 A redo record needs a documented encoding before recovery can interpret it. This bounded single-value model uses seven bytes: tag, transaction ID, four little-endian value bytes, and a one-byte XOR check.
 
 The XOR check is a teaching integrity mechanism with collisions, not a production checksum or authentication primitive. The model does not implement a multi-row database log.
@@ -88,6 +92,8 @@ Answer: 2. The record layout is independent of the process object layout.
 Experiment: Write an independent seven-byte fixture for a known value. Document the check’s collision limits before choosing a production integrity algorithm.
 
 ## Recover only values with a complete commit marker
+
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
 
 A complete update record is not evidence that its transaction committed. Recovery should retain tentative redo until a valid commit marker authorizes publication. Uncommitted tail work is ignored.
 
@@ -175,6 +181,8 @@ Answer: 2. Tentative redo is distinct from committed redo.
 Experiment: Append an uncommitted second transaction after the committed one. Check that recovery preserves only the committed value.
 
 ## A truncated final record is not a complete record
+
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
 
 A crash can leave a log ending inside a record. Recovery scans only complete validated records and reports that bytes remain after the accepted prefix. It must not synthesize missing bytes from zero-filled memory.
 
@@ -271,6 +279,8 @@ Experiment: Enumerate every truncation point of the update and commit pair. Spec
 
 ## Stop at an invalid integrity boundary
 
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
+
 Recovery should validate a record before applying its meaning. A changed byte can invalidate the record’s integrity check, forcing a stop at the earlier accepted prefix.
 
 A one-byte XOR check detects this fixture’s single-bit change but not every possible corruption. Distinguish a demonstration of validation ordering from a claim about production error-detection strength.
@@ -360,6 +370,8 @@ Experiment: Create a two-byte change that preserves XOR to demonstrate the limit
 
 ## Associate redo with the correct transaction
 
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
+
 Interleaved update records need transaction identity so one transaction’s commit does not publish another’s pending state. Recovery groups tentative values by transaction ID before processing commit markers.
 
 The fixture is serialized log interpretation, not concurrent file writing. The writer side still needs an ordering and synchronization contract.
@@ -446,6 +458,12 @@ Answer: 2. Recovery retains pending state by transaction identity.
 Experiment: Commit transaction two afterward and check the new visible value. Define and reject unsupported transaction-ID reuse.
 
 ## Redo should tolerate repeating already applied work
+
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
+
+New terms and notation:
+
+An operation is idempotent when applying it again has the same relevant effect as applying it once. Recovery protocols may need this property when replay can repeat an already applied record.
 
 Recovery may run more than once. Redo records that assign a known value are naturally idempotent: applying the same assignment again does not increment it twice. Other operation forms need explicit sequence or applied-position checks.
 
@@ -534,6 +552,8 @@ Answer: 2. Repeating the assignment has the same state effect.
 Experiment: Model an increment redo and show its repeated-recovery failure. Add an applied log-position rule before claiming general idempotence.
 
 ## Enumerate crash prefixes against a committed-state oracle
+
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
 
 A finite crash-prefix workload can test every byte truncation of a small log fixture. The expected state comes from the documented commit boundary rather than the recovery parser’s own logic.
 
@@ -626,6 +646,14 @@ Answer: 2. The oracle does not duplicate the parser’s transitions.
 Experiment: Extend to two transactions and compute expected states at every complete commit boundary. Preserve raw failing prefixes for debugging.
 
 ## Separate checked writes from a host durability request
+
+Before this chapter: [Publish a complete candidate at commit](../transactions/README.md)
+
+New terms and notation:
+
+A write-ahead log, abbreviated WAL, records recovery information before the associated change is treated as durably published. These lessons use a small redo-log model: replay re-applies validated committed changes after an interruption.
+
+A checkpoint records a selected committed state so recovery may start from that state instead of replaying all older work. Which writes are durable and which log records can be discarded depend on the checkpoint protocol.
 
 A successful write or stream close does not by itself promise power-loss durability. A native host adapter can request synchronization and must check that request’s result before reporting the corresponding durability boundary.
 

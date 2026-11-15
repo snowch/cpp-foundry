@@ -4,6 +4,10 @@ Protect compound invariants and reject stale updates.
 
 ## Return a value copy from a locked read
 
+Before this chapter: [Publish a prepared batch before readers inspect it](../atomics-memory/README.md)
+
+A compound invariant relates more than one stored value or step. Protecting each individual access is not enough if another thread can observe an intermediate combination that breaks that relationship. Validation and publication must be coordinated together.
+
 A lock protects shared map access only while held. Returning a reference to a mutable row and releasing the lock can expose later unsynchronized access. An owning value copy lets the caller inspect a stable result after the lock is released.
 
 This store copies a revision and one scalar value under the same mutex so the pair describes one observation.
@@ -63,6 +67,8 @@ Answer: 2. The copied observation has no borrowed mutable storage.
 Experiment: Extend the row to own a string and return a complete Row copy. Compare the lifetime contract with a scoped locked-view API.
 
 ## Validate and update under the same mutex
+
+Before this chapter: [Publish a prepared batch before readers inspect it](../atomics-memory/README.md)
 
 Optimistic updates carry the revision associated with a prior observation. Validation and publication must occur under one synchronization boundary so another writer cannot slip between the check and the write.
 
@@ -127,6 +133,8 @@ Experiment: Coordinate two worker threads so both capture one revision before ei
 
 ## Shared reading needs a consistent writer protocol
 
+Before this chapter: [Publish a prepared batch before readers inspect it](../atomics-memory/README.md)
+
 shared_mutex permits several shared holders while excluding an exclusive writer. Every access to the protected state must still use the same protocol; a shared lock is not permission to mutate ordinary members.
 
 The fixture checks reader observations and performs the write after joining readers to keep the expected result deterministic.
@@ -181,6 +189,8 @@ Experiment: Add a coordinated overlapping writer and define allowed reader outco
 
 ## Protect multi-field consistency as one observation
 
+Before this chapter: [Publish a prepared batch before readers inspect it](../atomics-memory/README.md)
+
 A storage invariant can span a row count, an index entry, and a page state. Protecting each field independently does not automatically make a reader’s combined observation consistent.
 
 This bounded fixture uses one lock around a two-field transfer and one lock around the total observation. The point is the invariant boundary, not a claim that one global lock scales indefinitely.
@@ -231,6 +241,8 @@ Answer: 1. Related fields must be updated and observed coherently.
 Experiment: Replace the counters with a row map and index map. Define and test which lock scope preserves cross-structure consistency.
 
 ## Reclaim old data only after readers release ownership
+
+Before this chapter: [Publish a prepared batch before readers inspect it](../atomics-memory/README.md)
 
 Publishing a replacement does not imply that old readers have finished. Snapshot ownership can retain an old immutable value until the last reader releases it. A weak observer can expose when reclamation becomes possible without owning the old version itself.
 

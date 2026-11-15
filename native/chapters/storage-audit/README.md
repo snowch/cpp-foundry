@@ -4,6 +4,10 @@ Turn portability assumptions and rejection rules into executable checks.
 
 ## Make byte-width assumptions executable
 
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
+
+An audit turns an assumed storage rule into an explicit question and an executable check. A fixture is a deliberately chosen test input with an independently specified expected result. Rejection preservation means an invalid import cannot replace valid stored state.
+
 A byte format defined in octets requires eight-bit char units and the stated fixed-width integer types. Reject unsupported implementations at compile time rather than silently writing a different format.
 
 These checks establish scalar representation assumptions only. Filesystem atomicity, durability, encoding, and concurrency remain separate contracts.
@@ -42,6 +46,8 @@ Answer: 3. It checks a compile-time implementation precondition.
 Experiment: List every additional assumption the capstone makes beyond these scalar widths and assign each an appropriate check.
 
 ## Compare against independently specified file bytes
+
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
 
 A portability audit should include an external byte fixture that every producer emits and every consumer accepts. A cross-host exchange matrix adds evidence that independent environments agree on the same contract.
 
@@ -86,6 +92,8 @@ Experiment: Export a CPF1 file on two hosts and run both consumers against both 
 
 ## Reject unsupported headers before allocating row storage
 
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
+
 Header and count checks should occur before allocating resources based on untrusted fields. An unsupported magic or format version has no valid interpretation under the current decoder.
 
 Failure preservation includes leaving the existing live table unchanged while reporting a rejected import.
@@ -127,6 +135,8 @@ Experiment: Test short headers and unrelated magic values. Verify no table-alloc
 
 ## Audit bounds checks for overflow in the checks themselves
 
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
+
 A check such as offset+length <= size can overflow before it compares. Establish offset <= size first, then require length <= size-offset. The reordered guard is meaningful only with that first precondition.
 
 Use hostile boundary values in tests, including a maximum size_t length, instead of exercising only plausible small records.
@@ -167,6 +177,8 @@ Answer: 3. It proves the subtraction is representable in the intended range.
 Experiment: Enumerate small size/offset/length combinations and compare with an arbitrary-precision mathematical oracle.
 
 ## Uniqueness must be checked during import too
+
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
 
 An insertion API can enforce unique keys while a separate importer accidentally bypasses that rule. Every ingestion boundary must establish the same logical invariants before publishing state.
 
@@ -216,6 +228,8 @@ Experiment: Test duplicates at the beginning and end, and pair them with truncat
 
 ## Complete consumption is part of format validation
 
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
+
 A binary decoder must decide whether extra bytes after the documented record sequence are permitted. CPF1 rejects them, preventing an otherwise valid prefix from hiding unknown extensions or accidental concatenation.
 
 Keep the cursor and input size as separate evidence at the final publication boundary.
@@ -254,6 +268,8 @@ Answer: 1. Complete-file validation is a prerequisite for publication.
 Experiment: Append every one-byte suffix to a valid capstone fixture and verify each is rejected without changing the saved snapshot.
 
 ## Check host replacement behavior rather than assuming it
+
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
 
 Snapshot publication often writes a candidate and renames it over an existing destination. Whether that replacement succeeds is a host-interface contract, not a universal consequence of using C++ streams.
 
@@ -296,6 +312,8 @@ Answer: 1. The evidence is scoped to the actual host operation exercised.
 Experiment: Add checked candidate close and injected rename failure. Record Windows and POSIX adapter behavior separately.
 
 ## Keep implementation, tests, and guarantees separate
+
+Before this chapter: [Keep logical names separate from host path rules](../host-files-text/README.md)
 
 A useful audit lists each promised behavior and the evidence supporting it. “Implemented,” “tested on one host,” and “qualified across hosts” describe different levels of evidence. A finite happy-path suite cannot establish a power-loss guarantee.
 

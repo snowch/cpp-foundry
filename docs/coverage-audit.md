@@ -1,5 +1,7 @@
 # Curriculum coverage audit
 
+Sequence update: the later [learning-order audit](learning-order-audit.md) records the beginner rewrites and corrected ordering. The dated counts below describe the earlier coverage expansion, not the current course totals.
+
 Reviewed 2026-11-12 against the authored lesson programs and readings, not just header inclusion counts. This revision adds 10 chapters and 40 worked lessons: 32 standard-library lessons and eight lessons on generic/object-model contracts and asynchronous result transport. Total: 9 parts, 54 chapters, 266 lessons; 240 browser programs and 26 native investigations.
 
 “Dedicated” means the topic has its own explanation, complete example, exact expected result, walkthrough, pitfall, question, and experiment. It does not imply exhaustive API reference coverage. A feature used inside a database model is not automatically counted as comprehensive instruction in that feature.

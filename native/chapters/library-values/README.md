@@ -4,6 +4,10 @@ Model absence, alternatives, grouped values, and callable ownership explicitly.
 
 ## Represent absence without a magic value
 
+Before this chapter: [Keep algorithm results tied to a living range](../library-ranges/README.md)
+
+A vocabulary type represents a common kind of result: optional represents absence, variant represents an alternative, and tuple groups values by position. A callable is anything that can be invoked like a function, including a lambda.
+
 optional stores either a value or disengagement. It is useful when absence is a normal outcome rather than an exceptional failure. Dereference requires engagement; value reports disengagement with bad_optional_access, while value_or produces an alternative value.
 
 ```cpp
@@ -41,6 +45,8 @@ Answer: 2. Check engagement before dereferencing. The empty optional yields a fa
 Experiment: Count calls to an expensive fallback and replace value_or with an explicit branch. Distinguish an absent name from an invalid name in your API.
 
 ## Handle each tagged alternative
+
+Before this chapter: [Keep algorithm results tied to a living range](../library-ranges/README.md)
 
 variant owns one alternative from a closed set and tracks which is active. visit dispatches a callable to that active value, while get_if allows a nonthrowing type check. Some throwing transitions can leave a variant valueless_by_exception; it is not a universal never-empty sum type.
 
@@ -94,6 +100,12 @@ Experiment: Add a monostate alternative for an explicit empty command. Write a v
 
 ## Expand grouped arguments into a callable
 
+Before this chapter: [Keep algorithm results tied to a living range](../library-ranges/README.md)
+
+New terms and notation:
+
+std::tuple<A, B, ...> groups values with possibly different types by position. std::get<I> selects position I, counting from zero. A tuple of references borrows its referenced objects rather than extending their lifetimes.
+
 tuple groups heterogeneous values by position. apply expands a tuple-like argument list into a call, while tie creates a tuple of references. Positional structure works well for local composition, but named record types often communicate a public domain interface better.
 
 ```cpp
@@ -134,6 +146,12 @@ Answer: 3. tie stores references to existing objects. apply calls add with two i
 Experiment: Compare make_tuple, tie, and a named struct. Add a third callable argument and examine the compile error when the tuple shape no longer matches.
 
 ## Choose callable storage and captured state
+
+Before this chapter: [Keep algorithm results tied to a living range](../library-ranges/README.md)
+
+New terms and notation:
+
+Type erasure lets an interface store or use values of different concrete types behind one shared interface. The concrete type still exists; some of its details are hidden from the caller. The chosen wrapper determines copying, allocation and call requirements.
 
 A lambda capture is an ownership decision: value capture stores independent state, while reference capture borrows. std::function provides owning type erasure for copy-constructible targets in C++20, which excludes a lambda owning a unique_ptr. Keeping the concrete callable type avoids that restriction.
 

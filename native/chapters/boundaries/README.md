@@ -4,6 +4,10 @@ Parse input, borrow safely, and preserve invariants when things fail.
 
 ## Borrowed views need a lifetime plan
 
+Before this chapter: [Visit a closed set of complete value types](../polymorphism/README.md)
+
+An interface boundary is where data or control passes between components. Validation checks that incoming values meet a rule; failure preservation means rejected work leaves the previous valid state unchanged.
+
 std::span and std::string_view package borrowed access to a sequence. They are useful for accepting arrays, vector elements, or text without owning a copy. Neither keeps the underlying storage alive.
 
 A string_view is not necessarily null-terminated. Use operations that understand its length, and create a std::string if an interface needs an owning or terminated string. A span also requires valid indices: it is not an automatic bounds-checking wrapper.
@@ -50,6 +54,12 @@ Answer: 1. copy is a separate string. first still carries its old pointer and le
 Experiment: Write a prefix function returning string_view. Document that its caller must keep the input’s storage alive and unchanged while using the result.
 
 ## Parse the entire field
+
+Before this chapter: [Visit a closed set of complete value types](../polymorphism/README.md)
+
+New terms and notation:
+
+An error code reports a failure as a value rather than by throwing. std::errc names standard error conditions; callers must check both success and any additional result, such as where a parse stopped.
 
 Parsing converts untrusted text into a domain value. std::from_chars reports an error code and the point where parsing stopped. Success is not enough if the grammar requires the whole field to contain a number.
 
@@ -102,6 +112,8 @@ Experiment: Try empty input, a leading space, +42, and the largest unsigned valu
 
 ## Exceptions and failure preservation
 
+Before this chapter: [Visit a closed set of complete value types](../polymorphism/README.md)
+
 An exception can propagate a failure across intermediate calls to a handler. Catch standard exceptions by const reference so their dynamic type and message are preserved. RAII releases owned resources as control unwinds.
 
 The strong exception guarantee means a failed operation has no observable effect on the promised state. A simple way to achieve it is to construct and validate a candidate before committing it with an operation known not to throw.
@@ -148,6 +160,14 @@ Answer: 1. Preparation leaves current alone, and the final swap commits the vali
 Experiment: Add a maximum-name-length rule before swap. Verify that both invalid cases preserve current.
 
 ## Model alternatives explicitly
+
+Before this chapter: [Visit a closed set of complete value types](../polymorphism/README.md)
+
+New terms and notation:
+
+static_cast<T>(value) explicitly requests conversion to type T. It does not automatically check that the original value fits; the surrounding code must establish that the conversion preserves the information it needs.
+
+A declaration such as using Count = int; gives an existing type another name. It does not create a distinct type with different checking rules; use a separate user-defined type when that distinction matters.
 
 Use optional when the outcome is a value or absence. Use variant when a value can take one of several different forms. A named error value can carry useful context without using an exception for an expected validation result.
 

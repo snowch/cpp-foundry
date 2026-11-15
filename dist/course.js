@@ -1,3 +1,4 @@
+import {prepareLearningPath} from './learning-path.js';
 import {extend,parts} from './curriculum.js';
 export {parts};
 export const chapters = [
@@ -14,85 +15,61 @@ function lesson(chapter,id,title,body,program,expected,walkthrough,pitfall,quest
   lessons.push({chapter,id,title,body,code:program,expected,walkthrough,pitfall,question,choices,answer,feedback,experiment,...extra});
 }
 
-lesson('values','first-program','A first C++20 program',
-  ['A program starts in main. Include the header that declares the library facilities you use; iostream provides the standard output stream. C++20 is the language version for this course, not a requirement to use every new feature at once.',
-   'Start by representing data as values. A std::string owns its characters and cleans them up at the end of its scope. You can concentrate on the result before studying the machinery that stores those characters.'],
-code`#include <iostream>
-#include <string>
-int main() {
-    std::string name = "Ada";
-    std::cout << "Hello, " << name << "!\n";
-    return 0;
-}`,'Hello, Ada!',
-  'The string is constructed, the stream writes three pieces of text, and returning zero reports success to the caller. The newline ends a line; it does not request an immediate flush as std::endl does.',
-  'A successful compilation does not establish that the program produces the intended result. Read diagnostics and compare actual output with the contract.',
-  'Who owns the characters in name?', ['The std::string value','The output stream','A caller that must call delete'],0,
-  'The string owns its storage. Its destructor releases that storage automatically.',
-  'Change the name and greeting, then remove a semicolon. Compare a compiler diagnostic with an incorrect but compilable greeting.');
+lesson("values",
+  "first-program",
+  "A first C++20 program",
+  ["A program is a list of instructions for the computer. C++20 names the language version used in this course. This first program displays a greeting. Click Run code below and look for Hello, Ada! in the output box. You do not need to install anything to run this example.", "Read the program from top to bottom. #include <iostream> asks the compiler to use the iostream header: a supplied file that makes text-output tools available. main names the starting group of instructions. int says this group reports a whole-number status when it finishes, and () means this example supplies no inputs to that group. The braces { and } enclose its instructions. A semicolon ; ends each instruction inside the braces.", "The prefix std:: identifies a name from the standard library, C++’s supplied collection of reusable tools. std::cout names the destination for normal text output. Think of << here as “send the text on the right to the output.” The double quotes mark literal text: characters to display rather than instructions to execute. Inside that text, \\n means start a new line. It is two characters in the source spelling but requests one line break in the output.", "Run code first compiles the C++ source: it checks the language rules and translates the instructions into a runnable program. It then runs that program. A compiler diagnostic is a message about a problem in the source; the output box can show these messages as well as the program’s text. The final instruction return 0; ends main and reports successful completion to the environment running the program."],
+  "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, Ada!\\n\";\n    return 0;\n}\n",
+  "Hello, Ada!",
+  "main contains two instructions. The first sends the greeting and a line break to the output. return 0 ends main and reports success to the environment that started the program. The text you see is Hello, Ada!; the surrounding quotation marks are source notation and are not printed.",
+  "Changing the greeting inside its quotes is allowed. Removing a closing quote or a semicolon breaks the source notation and produces a compiler diagnostic. A program can also compile yet print the wrong greeting; always compare the actual output with what you intended.",
+  "Which part is the literal text sent to the output?",
+  ["\"Hello, Ada!\\n\"", "int main()", "return 0;"],
+  0,
+  "The quoted characters are the greeting. \\n requests the line break. main identifies the starting instructions and return 0 reports successful completion.",
+  "Change only Ada to your own name and run again. Next, remove the semicolon after the output instruction and run. Read the diagnostic, restore the semicolon, and confirm that the greeting runs again.");
 
-lesson('values','numbers','Types and numeric boundaries',
-  ['A type specifies a set of values and operations. Use a type that expresses the domain: counts are nonnegative, temperatures may be negative, and fractional measurements need a floating representation. auto deduces a concrete type from an initializer; it does not make the variable dynamically typed.',
-   'Signed integer overflow is undefined behavior. Check the precondition before performing an addition. For floating point, a decimal value such as 0.1 need not have an exact binary representation.'],
-code`#include <iostream>
-#include <limits>
-#include <optional>
-std::optional<int> add(int a, int b) {
-    if (b > 0 && a > std::numeric_limits<int>::max() - b) return std::nullopt;
-    if (b < 0 && a < std::numeric_limits<int>::min() - b) return std::nullopt;
-    return a + b;
-}
-int main() {
-    auto total = add(20, 22);
-    if (total) std::cout << *total << '\n';
-    std::cout << "overflow rejected="
-              << !add(std::numeric_limits<int>::max(), 1) << '\n';
-}`,'42\noverflow rejected=1',
-  'The two guards rearrange the mathematical boundary so that the check itself stays representable. An optional distinguishes a valid result, including zero, from a rejected operation.',
-  'Checking whether the result became negative after an overflowing signed addition is too late: the addition has already violated the language rules.',
-  'When must the overflow check happen?',['Before a + b','After computing a + b','Only in debug builds'],0,
-  'The operation is valid only after its precondition has been established.',
-  'Try the minimum integer plus -1, minimum plus 1, and two negative operands. Explain why each guard remains representable.');
+lesson("values",
+  "numbers",
+  "Store numbers and calculate a result",
+  ["A variable gives a name to a stored value. In int apples = 20;, int is the type: it says this variable holds a whole number. apples is the name, and = 20 supplies its starting value. This starting step is called initialization. A later assignment can replace the stored value.", "The + operator adds two numbers. The program below stores two counts, adds them, and stores the answer as total. When std::cout receives a variable name without quotation marks, it prints that variable’s value. Quoted text such as \"total=\" is printed as text instead. Repeating << in one instruction sends successive pieces from left to right; the final quoted line-break sequence starts a new output line.", "A type has limits. int can store only a finite range of whole numbers; it is not an unlimited mathematical integer. These small counts are safely within that range. We will learn explicit limit checks later, after functions and decisions are familiar."],
+  "#include <iostream>\n\nint main() {\n    int apples = 20;\n    int pears = 22;\n    int total = apples + pears;\n    std::cout << total << \"\\n\";\n    return 0;\n}\n",
+  "42",
+  "The first two variables hold 20 and 22. The third instruction adds their values and initializes total to 42. The output instruction prints that number followed by a line break.",
+  "\"total\" and total mean different things: the quoted version is literal text, while the unquoted name refers to the stored number. Do not assume int can hold arbitrarily large counts.",
+  "What does std::cout << total print in this example?",
+  ["42", "The word total", "20"],
+  0,
+  "Using the variable’s name reads its current value, which is 20 + 22, or 42.",
+  "Change apples to 5 and pears to 8, predict the total, then run. Add the instruction total = total + 1; before printing and explain why the output increases by one.");
 
-lesson('values','collections','Strings and vectors own their elements',
-  ['std::vector stores a sequence of elements and grows its storage as necessary. Its size is the number of live elements; capacity is the space currently available without reallocating. A std::string offers a similar owning model for text.',
-   'Use range-for when you need each value. operator[] requires a valid index; at() checks the index and throws std::out_of_range on failure. Never rely on capacity as though those extra elements already existed.'],
-code`#include <iostream>
-#include <string>
-#include <vector>
-int main() {
-    std::vector<std::string> names{"Ada", "Linus"};
-    names.push_back("Grace");
-    for (const auto& name : names) std::cout << name << '\n';
-    std::cout << "count=" << names.size() << '\n';
-}`,'Ada\nLinus\nGrace\ncount=3',
-  'The vector owns three string objects. Each string owns its text. The const reference in the loop borrows each element without copying it or allowing the loop body to modify it.',
-  'push_back can reallocate the vector. References, pointers, and iterators to its old elements can then dangle.',
-  'Does reserve(10) create ten elements?', ['No, it reserves storage','Yes, initialized to zero','Only for strings'],0,
-  'reserve changes capacity; resize changes the number of live elements.',
-  'Print size before and after reserve(20), then after resize(5). Inspect the newly constructed strings.');
+lesson("values",
+  "collections",
+  "Keep several values in a vector",
+  ["A collection groups several values so a program can work with them together. std::vector<int> is a standard-library type for a sequence of whole numbers. The <int> part says what kind of element each position contains. #include <vector> makes this type available.", "The braces in std::vector<int> scores{70, 80, 90}; give the starting elements. scores.push_back(100) calls an operation on that vector to append one element. The dot connects the variable to an operation it provides. scores.size() asks how many elements are currently present.", "A range-based for loop visits each element. In for (int score : scores), score receives the next element’s value each time through the loop. This differs from the earlier while loop: the vector determines which values to visit, so we do not maintain a counter ourselves."],
+  "#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> scores{70, 80, 90};\n    scores.push_back(100);\n    for (int score : scores) {\n        std::cout << score << \"\\n\";\n    }\n    std::cout << \"count=\" << scores.size() << \"\\n\";\n    return 0;\n}\n",
+  "70\n80\n90\n100\ncount=4",
+  "The vector starts with three elements and append adds a fourth. The loop prints each value in order. size reports four; it counts elements, not the number of characters used to print them.",
+  "The loop’s score is a separate value. Assigning a different number to score does not change the corresponding element in scores. Accessing and changing stored elements is a later lesson.",
+  "How many elements are present after push_back(100)?",
+  ["Four", "Three", "One hundred"],
+  0,
+  "push_back adds one element to the three starting elements, so the size becomes four.",
+  "Append another score and predict both the printed sequence and the final count. Then start with std::vector<int> scores{}; and explain why the loop prints no scores before an append.");
 
-lesson('values','functions','Small functions and explicit contracts',
-  ['A function lets you name one operation and define its inputs and result. Pass small values by value. Borrow a read-only collection by const reference when copying it would add cost without helping the operation.',
-   'Define behavior for empty input. A score-summary function can return no result for an empty vector rather than dividing by zero or inventing an average. Const expresses what this function may do through its parameter; it does not guarantee that no other alias can change the object.'],
-code`#include <iostream>
-#include <optional>
-#include <vector>
-std::optional<double> mean(const std::vector<int>& scores) {
-    if (scores.empty()) return std::nullopt;
-    double total = 0;
-    for (int score : scores) total += score;
-    return total / static_cast<double>(scores.size());
-}
-int main() {
-    const std::vector<int> scores{70, 80, 90};
-    std::cout << "mean=" << *mean(scores) << '\n';
-    std::cout << "empty=" << !mean({}) << '\n';
-}`,'mean=80\nempty=1',
-  'The early return handles the empty case. Accumulating into double avoids an overflowing int accumulator for this teaching example. Dereferencing the result is safe in main because that specific input is known to be nonempty.',
-  'Do not dereference an arbitrary optional without checking it. Optional makes the possibility visible; the caller still has to honor it.',
-  'What does nullopt represent here?', ['No average exists for empty input','The average is zero','An exception was caught'],0,
-  'The absence of a result is distinct from a present numeric result of zero.',
-  'Add negative scores and a single score. Change main to inspect the optional before printing it.');
+lesson("values",
+  "functions",
+  "Name a calculation with a function",
+  ["A function is a named group of instructions. A function call asks the computer to run those instructions. We have already used main as the program’s starting function; now we will write another function and call it from main.", "In int twice(int value), the first int says the function produces a whole-number result. twice is its name. The name value inside the parentheses is a parameter: a variable that receives the input for this call. return sends the calculated result back to the place that called the function.", "The expression twice(6) calls the function with 6 as its input. The function returns 12, which initializes answer. Multiplication uses * here. Describe a function’s contract in plain terms: this one accepts a small whole number and returns twice that number; very large inputs need range checks that this introductory version does not provide."],
+  "#include <iostream>\n\nint twice(int value) {\n    return value * 2;\n}\n\nint main() {\n    int answer = twice(6);\n    std::cout << answer << \"\\n\";\n    return 0;\n}\n",
+  "12",
+  "Execution starts in main, not at the first function definition in the file. The call twice(6) runs twice with value equal to 6. Its return instruction supplies 12 to main, which then prints answer.",
+  "Defining a function does not run it. Its instructions run when it is called. The parameter is a local input value for that call, not a variable that main can name directly.",
+  "Which expression calls the new function?",
+  ["twice(6)", "int answer", "return 0;"],
+  0,
+  "Parentheses after the function name supply the call’s input. twice(6) runs the calculation and produces its result.",
+  "Call twice with 0, 3, and -2, printing each result. Then write an int plus_one(int value) function using return value + 1; and call it from main.");
 
 lesson('ownership','references','References borrow; const restricts access',
   ['A reference is an alias for an existing object. It does not own that object and does not extend the lifetime of an arbitrary referred-to value. A reference parameter is useful when a function needs to update a caller-owned value.',
@@ -570,4 +547,5 @@ int main() {
   'Draw the happens-before chain from vector initialization to the reader. Extend to immutable snapshots using shared ownership and a documented replacement protocol.',{native:true,flags:'-pthread'});
 
 extend(chapters,lessons);
+prepareLearningPath(chapters,lessons);
 export const byId = new Map(lessons.map(item => [item.id,item]));

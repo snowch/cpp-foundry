@@ -4,6 +4,14 @@ Make branch conditions, loop invariants, and termination visible.
 
 ## Branch on a domain condition
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+An invariant is a statement that must remain true at a specified point, such as “this stored ID is positive” or “these keys are sorted.” State the exact condition and where it must hold before using it to justify an operation.
+
+Control flow means the order in which instructions run. A guard is a check made before a potentially invalid operation. A loop invariant is a fact you check at the same point on every repetition; a termination measure is a quantity that moves toward a stopping point.
+
 A Boolean condition should answer a domain question: is this score passing, is this command recognized, or is this collection empty? Put the rule in one place so boundary cases can be named and tested.
 
 An if/else chain selects the first matching branch. Overlapping conditions therefore make order part of the contract.
@@ -46,6 +54,16 @@ Experiment: Add 0 and 101. Decide whether invalid scores need a separate rejecti
 
 ## Use short-circuiting to establish a precondition
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+For true/false conditions, ! means not, && means both conditions must be true, and || means at least one must be true. Built-in && and || evaluate left to right and can skip the right-hand check when the answer is already determined. When std::cout prints an ordinary bool without special formatting, false appears as 0 and true as 1.
+
+empty() asks whether a collection currently has no elements. It produces true for no elements and false otherwise; checking this before accessing a first element prevents an invalid access.
+
+A precondition is something that must already be true before an operation is used, such as “the sequence is not empty.” A postcondition describes what the operation promises afterward if its requirements were met.
+
 Built-in && evaluates its left operand first and evaluates the right operand only when the left is true. This lets a guard establish a precondition for a later expression.
 
 The order is a language guarantee for built-in logical operators. Keep the expression readable; complicated side effects make a compact guard harder to audit.
@@ -87,20 +105,30 @@ Experiment: Reverse the operands on paper and explain the failed precondition. A
 
 ## State what a loop has already processed
 
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+An index is a whole-number position in a sequence. C++ sequences count their first element as position zero; a sequence of size n has valid positions from 0 through n - 1.
+
+The expression sequence[i] selects the element at index i. For the ordinary arrays and vectors here, the program must check that i is within the existing elements; the square brackets do not perform that check for you.
+
 A loop invariant describes the state at a chosen point in each iteration. For a prefix sum, the accumulator contains exactly the elements before the current index. Initialization, preservation, and termination connect that statement to the final result.
 
 Keep the arithmetic domain bounded while studying the proof; a mathematically correct recurrence does not excuse overflowing the accumulator.
 
 ```cpp
-#include <array>
 #include <iostream>
+#include <vector>
 
 int main() {
-    const std::array<int, 3> values{3, 1, 4};
+    std::vector<int> values{3, 1, 4};
     int sum = 0;
-    for (std::size_t i = 0; i < values.size(); ++i) {
+    int i = 0;
+    while (i < 3) {
         std::cout << i << ":" << sum << "\n";
-        sum += values[i];
+        sum = sum + values[i];
+        i = i + 1;
     }
     std::cout << "total=" << sum << "\n";
 }
@@ -128,9 +156,19 @@ Question: Before iteration i, which elements are included?
 
 Answer: 3. The current element is added after the trace.
 
-Experiment: Change the array to include a negative value. Write the invariant independently of the actual numbers, then check the trace.
+Experiment: Change the vector to include a negative value. Write the invariant independently of the actual numbers, then check the trace.
 
 ## Dispatch a closed set of commands
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+class defines a user-written type containing data members and member functions. A member function acts on a particular object. public marks the interface callers may use; private hides implementation members from ordinary callers.
+
+enum class defines a type whose alternatives have names, such as Command::save. The double colon selects a name belonging to that type; an external number or text still needs validation before being treated as an alternative.
+
+switch chooses a case from one controlling value. A case label names a matching value; break exits the switch so execution does not continue into the next case. default handles values without another matching case.
 
 An enum class names a closed set of alternatives without implicitly converting every enumerator to an integer. A switch can expose the behavior for each recognized command.
 
@@ -178,6 +216,12 @@ Answer: 2. break exits the switch.
 Experiment: Add a count command and handle it in the switch. Compile with warnings enabled and inspect what happens when its case is missing.
 
 ## Make a decreasing measure visible
+
+Before this chapter: [Keep local names inside their braces](../values/README.md)
+
+New terms and notation:
+
+An unsigned integer type represents nonnegative whole numbers. Its arithmetic wraps modulo the number of representable values; that defined wrapping can still be the wrong behavior for a count or size calculation.
 
 A progress measure should move toward a bound on every repetition. Repeatedly halving a positive integer is a simple example: the value decreases until it reaches zero.
 

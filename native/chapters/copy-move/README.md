@@ -4,6 +4,10 @@ Understand generated operations and design exception-safe owners.
 
 ## Let owning members implement resource management
 
+Before this chapter: [Unique ownership and moving](../ownership/README.md)
+
+Copying creates an independent value. Moving allows an operation to transfer resources instead; it does not erase the source object. The generated operations are the ones the compiler supplies when the type’s declarations permit it.
+
 The rule of zero recommends delegating resource management to member types so your class needs no custom destructor, copy constructor, or move constructor. Standard containers already know how to release and copy their owned elements.
 
 This keeps the public value semantics easier to inspect and reduces the number of operations that must maintain the class invariant.
@@ -47,6 +51,14 @@ Answer: 1. The standard owning members define the desired copy behavior.
 Experiment: Add a second vector member and verify the default operations still satisfy your value contract without custom special members.
 
 ## A move-only member makes ownership transfer explicit
+
+Before this chapter: [Unique ownership and moving](../ownership/README.md)
+
+New terms and notation:
+
+static_assert checks a true/false condition during compilation and rejects the program if it is false. This differs from an ordinary runtime check performed when the finished program executes.
+
+A type trait describes a property of a type at compile time. Names ending in _v commonly expose a true/false result; names ending in _t commonly name a resulting type. For example, is_same_v<A, B> asks whether A and B are the same type.
 
 A type containing unique_ptr cannot use an automatically generated copy operation that would duplicate that owner. It can often use the generated move operations to transfer its members.
 
@@ -93,6 +105,8 @@ Answer: 3. unique_ptr deliberately deletes copying.
 Experiment: Add a string label and move the Page again. Check only moved-from properties guaranteed by the relevant member contracts.
 
 ## Define an independent copy when the domain needs one
+
+Before this chapter: [Unique ownership and moving](../ownership/README.md)
 
 Sometimes an owning representation is move-only but the domain value should be copyable. A custom copy constructor can clone the resource, while copy assignment can prepare a candidate and then commit without throwing.
 
@@ -155,6 +169,12 @@ Experiment: Test copy assignment and self-assignment. Add explicitly chosen move
 
 ## Nonthrowing movement affects container choices
 
+Before this chapter: [Unique ownership and moving](../ownership/README.md)
+
+New terms and notation:
+
+noexcept declares that an operation must not let an exception escape. If one escapes anyway, the program terminates. This is a promise to callers and containers, not an instruction to ignore failures.
+
 A container may choose copying rather than a potentially throwing move when preserving its exception guarantee during reallocation. Declaring a move noexcept is a promise that the operation cannot propagate an exception.
 
 Check the properties of member operations instead of adding noexcept to silence a diagnostic. A false promise can turn an ordinary exception into program termination.
@@ -193,6 +213,8 @@ Answer: 3. noexcept is an enforceable exception-propagation promise.
 Experiment: Inspect is_nothrow_move_constructible for an aggregate of standard owning members. Explain which member determines the result.
 
 ## Return values without forcing a move
+
+Before this chapter: [Unique ownership and moving](../ownership/README.md)
 
 Returning a value often permits construction directly in the caller’s result object. C++17 and later guarantee elision for certain prvalue return expressions. Named return optimization has different rules and is not universally guaranteed.
 

@@ -4,6 +4,10 @@ Check complete parses, preserve stream state, and choose formatting facilities d
 
 ## Require complete numeric consumption
 
+Before this chapter: [Choose callable storage and captured state](../library-values/README.md)
+
+Parsing turns characters into a value after checking their spelling. Formatting turns a value into characters for presentation. A stream has state flags that remember success or failure; clearing a flag and removing invalid input are different steps.
+
 from_chars reports both an error code and a stopping pointer. A successful prefix parse is not necessarily a valid complete field. It avoids locale-dependent stream extraction, but its accepted syntax differs from convenience conversion functions, including whitespace handling.
 
 ![A successful prefix is not a complete field](../../diagrams/lib-charconv-complete.svg)
@@ -50,6 +54,12 @@ Experiment: Test leading whitespace, a plus sign, negative values, and empty inp
 
 ## Recover deliberately after failed extraction
 
+Before this chapter: [Choose callable storage and captured state](../library-values/README.md)
+
+New terms and notation:
+
+std::numeric_limits<T> describes limits of a numeric type T. For whole-number types, min() and max() give the smallest and largest representable values; use those limits before arithmetic or conversion can exceed them.
+
 Formatted extraction records failures in stream state. Once failbit is set, later extraction normally does no work until state is cleared. Clearing flags does not remove the offending characters; recovery must also establish a new input boundary.
 
 ```cpp
@@ -93,6 +103,8 @@ Experiment: Try a line containing a numeric prefix followed by junk. Compare who
 
 ## Control numeric presentation without changing values
 
+Before this chapter: [Choose callable storage and captured state](../library-values/README.md)
+
 Stream manipulators affect presentation state. fixed and setprecision persist for later floating-point insertions, while setw normally applies to the next formatted field. Formatting is not a binary serialization format, and locale can change the textual conventions.
 
 ```cpp
@@ -129,6 +141,12 @@ Answer: 3. fixed makes precision count fractional digits. The same persistent pr
 Experiment: Compare defaultfloat, fixed, and scientific. Format through a local string stream to avoid leaking presentation state into a caller-owned stream.
 
 ## Use C++20 format with an explicit support boundary
+
+Before this chapter: [Choose callable storage and captured state](../library-values/README.md)
+
+New terms and notation:
+
+Alignment is a restriction on the storage positions where a type’s objects may be placed. A block with enough bytes can still be unsuitable if its starting position does not meet that restriction.
 
 std::format provides typed replacement fields and returns an owning string. Format specifications belong to the selected argument’s formatter, so syntax valid for integers may not be valid for arbitrary user types. C++20 language mode alone does not establish library feature availability.
 

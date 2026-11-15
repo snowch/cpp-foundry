@@ -4,6 +4,10 @@ Use iterator capabilities, sentinels, adapters, and erase results safely.
 
 ## Match operations to iterator capabilities
 
+Before this chapter: [Hash equality and rehash contracts](../library-containers/README.md)
+
+An iterator category specifies the navigation an iterator supports. Input iteration can be single-pass; forward iteration supports repeated traversal; bidirectional iteration can step backward; random access can jump by an offset. A sentinel is an end marker used to stop traversal.
+
 Random-access iterators support constant-time differences and jumps. A list iterator is bidirectional: reaching a distant element requires repeated increments. Generic interfaces should constrain the operations they need rather than assuming every iterator behaves like a pointer.
 
 ```cpp
@@ -43,6 +47,8 @@ Answer: 1. Advancing a list iterator takes linear steps. The vector difference c
 Experiment: Use a forward_list and identify which operations disappear. Count increments in a wrapper iterator instead of timing a three-element fixture.
 
 ## Continue traversal using erase’s result
+
+Before this chapter: [Hash equality and rehash contracts](../library-containers/README.md)
 
 Erasing from a vector invalidates iterators and references at or after the erased position. erase returns a valid iterator to the next surviving element, possibly end. A loop must decide whether to advance based on whether it erased an element.
 
@@ -92,6 +98,8 @@ Experiment: Test empty input, all-even input, and alternating values. Rewrite wi
 
 ## Insert through an output iterator
 
+Before this chapter: [Hash equality and rehash contracts](../library-containers/README.md)
+
 An output iterator describes where produced values go. back_inserter adapts push_back into assignment through an iterator, growing the destination as needed. In contrast, copying into begin on an empty vector does not create destination elements.
 
 ```cpp
@@ -131,6 +139,8 @@ Answer: 2. back_inserter grows the destination. transform emits one square per i
 Experiment: Pre-size b and use b.begin instead. Compare sizes and capacities, then adapt the example to insert into a set.
 
 ## Treat stream iteration as single pass
+
+Before this chapter: [Hash equality and rehash contracts](../library-containers/README.md)
 
 Input iterators can represent a single-pass source. Reading advances shared stream state, so copying an input iterator does not provide an independently rewindable sequence. A default stream iterator acts as the end sentinel once extraction fails or input ends.
 

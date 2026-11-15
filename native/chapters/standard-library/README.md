@@ -4,6 +4,14 @@ Choose algorithms, containers, and result types by their contracts.
 
 ## Use half-open iterator ranges
 
+Before this chapter: [Express required operations without claiming semantic proof](../generic-contracts/README.md)
+
+New terms and notation:
+
+A half-open interval [a, b) includes a and excludes b. It describes an empty interval when a equals b and lets the end position be a stopping marker without referring to an element there.
+
+The standard library supplies reusable types and functions in the std namespace. A container stores elements; an algorithm performs an operation over elements; a predicate is a function that answers true or false about an element.
+
 Standard algorithms commonly use a half-open range [first,last): first names an element and last marks the position just past the range. An empty range has first==last and requires no special element sentinel.
 
 The past-the-end iterator is a boundary marker and must not be dereferenced. It remains useful as the not-found result of search algorithms.
@@ -46,6 +54,8 @@ Answer: 3. The algorithm excludes that boundary from its inspected elements.
 Experiment: Search an empty vector and a one-element vector. Check the iterator against end before reading through it.
 
 ## Make the destination of a transformation explicit
+
+Before this chapter: [Express required operations without claiming semantic proof](../generic-contracts/README.md)
 
 A transformation applies a mapping to each input element. The output range must have valid writable positions or use an insertion iterator that grows the destination.
 
@@ -90,6 +100,8 @@ Experiment: Implement a pre-sized output version and compare its size contract w
 
 ## Distinguish absence from a present zero
 
+Before this chapter: [Express required operations without claiming semantic proof](../generic-contracts/README.md)
+
 optional represents either a live value or no value. A present numeric zero is still present, so the optional’s Boolean test describes engagement rather than the truth of the contained number.
 
 Choose defaults deliberately: value_or can simplify presentation, but using a default internally can erase an important distinction between missing and present data.
@@ -128,6 +140,12 @@ Answer: 3. Engagement is independent of the integer’s value.
 Experiment: Model a missing score and a real score of zero. Decide where presentation defaults may be introduced without changing the stored meaning.
 
 ## Choose ordering and lookup contracts deliberately
+
+Before this chapter: [Express required operations without claiming semantic proof](../generic-contracts/README.md)
+
+New terms and notation:
+
+std::set<T> stores unique T values in comparison order. Inserting an already present equivalent value does not add another element. Equality for uniqueness is determined by the ordering relation, not necessarily by operator==.
 
 A set maintains unique ordered keys. A vector preserves a sequence and allows duplicates. The correct representation depends on observable behavior, not just the name of a convenient method.
 
@@ -169,6 +187,12 @@ Answer: 1. A set exposes unique sorted keys rather than the original sequence.
 Experiment: Compare set, multiset, and vector on the same input. Specify whether your database operator must preserve duplicate rows.
 
 ## Predicates need coherent semantic rules
+
+Before this chapter: [Express required operations without claiming semantic proof](../generic-contracts/README.md)
+
+New terms and notation:
+
+A strict weak ordering is a comparison relation suitable for sorting: no value comes before itself, ordering is transitive, and the induced equivalence groups are consistent. A comparator using <= breaks the first requirement.
 
 An algorithm’s predicate determines which values match or how values are ordered. For sorting, a comparator must satisfy strict weak ordering; inconsistent answers invalidate the algorithm’s assumptions.
 

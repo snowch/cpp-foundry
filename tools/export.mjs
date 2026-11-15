@@ -17,7 +17,7 @@ for(const chapter of chapters){
   fs.mkdirSync(`native/chapters/${chapter.id}`,{recursive:true});
   fs.writeFileSync(`native/chapters/${chapter.id}/README.md`,[
     `# ${chapter.title}`,chapter.description,
-    ...content.map(l=>`## ${l.title}\n\n${l.body.join('\n\n')}${diagramMarkdown(l.id)}\n\n\`\`\`cpp\n${l.code}\n\`\`\`\n\nExpected output:\n\n\`\`\`text\n${l.expected}\n\`\`\`\n\n${l.walkthrough}\n\nPitfall: ${l.pitfall}\n\nQuestion: ${l.question}\n\n${l.choices.map((c,i)=>`${i+1}. ${c}`).join('\n')}\n\nAnswer: ${l.answer+1}. ${l.feedback}\n\nExperiment: ${l.experiment}`),
+    ...content.map(l=>`## ${l.title}\n\n${l.prerequisites?.length?'Before this chapter: '+l.prerequisites.map(id=>`[${lessons.find(item=>item.id===id).title}](../${lessons.find(item=>item.id===id).chapter}/README.md)`).join(', ')+'\n\n':''}${l.introductions?.length?'New terms and notation:\n\n'+l.introductions.map(item=>item.text).join('\n\n')+'\n\n':''}${l.body.join('\n\n')}${diagramMarkdown(l.id)}\n\n\`\`\`cpp\n${l.code}\n\`\`\`\n\nExpected output:\n\n\`\`\`text\n${l.expected}\n\`\`\`\n\n${l.walkthrough}\n\nPitfall: ${l.pitfall}\n\nQuestion: ${l.question}\n\n${l.choices.map((c,i)=>`${i+1}. ${c}`).join('\n')}\n\nAnswer: ${l.answer+1}. ${l.feedback}\n\nExperiment: ${l.experiment}`),
     `## Chapter project\n\n${chapter.project}`,
   ].join('\n\n')+'\n');
 }

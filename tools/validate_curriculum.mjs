@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parts,chapters,lessons,byId} from '../dist/course.js';
-assert.equal(parts.length,9);assert.equal(chapters.length,54);assert.equal(lessons.length,266);
+assert.equal(parts.length,10);assert.equal(chapters.length,54);assert.equal(lessons.length,270);
 assert.equal(new Set(chapters.map(c=>c.id)).size,chapters.length);
 assert.equal(byId.size,lessons.length);
 for(const part of parts)assert.ok(chapters.some(c=>c.part===part.id),part.id);

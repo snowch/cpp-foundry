@@ -4,6 +4,10 @@ Preserve ordering, ownership, and height through updates.
 
 ## Preserve the search-tree ordering invariant
 
+Before this chapter: [Check a hash implementation against an independent model](../hashing/README.md)
+
+A search tree organizes keys around a root and child subtrees. A subtree contains a node and its descendants. Height measures path length down the tree; a rotation changes links while preserving sorted key order.
+
 A binary search tree partitions keys around each node: smaller keys go left and larger keys go right. Ownership follows child links while searches borrow nodes. In-order traversal should therefore produce unique sorted keys.
 
 The shared implementation is an AVL tree; the following lessons examine how rotations preserve this ordering while controlling height.
@@ -156,6 +160,8 @@ Experiment: Insert duplicates and absent-search keys. Compare traversal with an 
 
 ## Keep stored heights consistent with structure
 
+Before this chapter: [Check a hash implementation against an independent model](../hashing/README.md)
+
 AVL balancing requires each node’s child heights to differ by at most one. Stored heights must also equal one plus the maximum child height. A stale height can make a later balancing decision wrong even when current output appears sorted.
 
 The empty subtree has height zero in this implementation, so a leaf has height one.
@@ -298,6 +304,8 @@ Answer: 3. The height convention makes leaf height one.
 Experiment: Validate heights after every insertion, not only at the end. Try reversed and zigzag insertion orders.
 
 ## A rotation transfers ownership while preserving order
+
+Before this chapter: [Check a hash implementation against an independent model](../hashing/README.md)
 
 A single rotation raises a child and moves the child’s inner subtree to the old root. The sorted in-order sequence stays unchanged while the height imbalance is reduced.
 
@@ -443,6 +451,8 @@ Experiment: Add a nonempty inner subtree and verify every key remains reachable 
 
 ## Resolve a zigzag imbalance in two steps
 
+Before this chapter: [Check a hash implementation against an independent model](../hashing/README.md)
+
 A left-right or right-left insertion creates an inner-heavy child. First rotate that child into an outer-heavy shape, then rotate the parent. Both updates must recompute affected heights in dependency order.
 
 Treat the two rotations as structural operations with the same ordering invariant rather than as a special-case key swap.
@@ -586,6 +596,8 @@ Answer: 3. The first rotation changes the structural orientation of the heavy pa
 Experiment: Test the mirrored right-left case. Verify ordering and heights independently after both patterns.
 
 ## Deletion can require rebalancing toward the root
+
+Before this chapter: [Check a hash implementation against an independent model](../hashing/README.md)
 
 Deleting a key can reduce a subtree’s height and create imbalances above the removed node. A two-child deletion replaces the key with an in-order successor and then removes that successor from its old location.
 

@@ -1,7 +1,6 @@
 #include <iostream>
-#include <string>
+
 int main() {
-    std::string name = "Ada";
-    std::cout << "Hello, " << name << "!\n";
+    std::cout << "Hello, Ada!\n";
     return 0;
 }
