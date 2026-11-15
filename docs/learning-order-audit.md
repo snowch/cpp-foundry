@@ -103,7 +103,7 @@ The vocabulary catalogue is a review aid, not an automatic measure of teaching q
 
 - **Size describes live elements; capacity describes storage** (vector-capacity): capacity, complexity-amortized.
 
-- **Frame input as complete lines** (line-input): member-initialization.
+- **Read text one line at a time** (line-input): member-initialization.
 
 - **Remove elements with an explicit predicate** (erase-remove): iterator, lambda, modulo, algorithm-predicate.
 
