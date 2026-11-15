@@ -6,6 +6,12 @@ Transfer results, propagate exceptions, and distinguish scheduling from synchron
 
 promise and future separate result production from consumption through a shared state. A promise normally makes that state ready once, while an ordinary future permits one retrieval through get. Readiness synchronization publishes the produced result; it does not automatically protect unrelated shared objects.
 
+![A shared state carries a value or exception](../../diagrams/lib-future-promise.svg)
+
+An ordinary future permits one get. An exception is transported through the same shared state. Result readiness does not provide a general lock for later mutations of unrelated shared objects.
+
+Text description: Producer: promise sets result. Shared state: becomes ready. Consumer future: get waits and observes. Producer → Shared state (then); Shared state → Consumer future (then).
+
 ```cpp
 #include <future>
 #include <iostream>

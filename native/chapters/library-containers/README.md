@@ -6,6 +6,12 @@ Choose sequence, ordered, and unordered containers by stability and complexity.
 
 A vector owns a contiguous sequence. reserve changes capacity, while resize changes the number of live elements. Reallocation invalidates pointers, references, and iterators into its old storage; an index can be retained only when intervening edits preserve positions.
 
+![Reallocation changes where elements live](../../diagrams/lib-vector-invalidation.svg)
+
+Pointers, references, and iterators into the old vector storage are invalidated. An index is useful only if other edits have not changed positions; reserve changes capacity, not size.
+
+Text description: Before reserve: elements in old storage. Capacity grows: new storage allocated. After reallocation: reacquire element access. Before reserve → Capacity grows (then); Capacity grows → After reallocation (then).
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -124,6 +130,12 @@ Experiment: Add insert_or_assign and inspect its insertion flag. Then compare fi
 ## Hash equality and rehash contracts
 
 Unordered containers provide average constant-time lookup, with linear worst cases. Equivalent keys must produce equal hashes; different keys may collide. reserve plans for a number of elements under the current maximum load factor, while rehash requests bucket capacity.
+
+![Rehash changes buckets, not the key/value contract](../../diagrams/lib-unordered-contracts.svg)
+
+Equivalent keys must have equal hashes; collisions are permitted. Rehash reorganizes buckets and invalidates iterators, but references and pointers to surviving elements remain valid. No iteration order is promised.
+
+Text description: Key and hash: select a bucket. Bucket candidates: compare keys for equality. After rehash: reacquire iterators. Key and hash → Bucket candidates (then); Bucket candidates → After rehash (then).
 
 ```cpp
 #include <iostream>

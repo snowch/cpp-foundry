@@ -8,6 +8,12 @@ A raw pointer can express observation while another object owns the resource. Th
 
 Keep ownership visible in the surrounding interface. This example stops using the observer before resetting its unique owner.
 
+![Ownership and observation are different edges](../../diagrams/observer-owner.svg)
+
+Solid arrow: ownership. Dashed arrow: observation. Destroying the owner can invalidate the observer; the observer does not prolong the resource lifetime.
+
+Text description: Owner: controls lifetime. Observer: borrows access. Resource: must still be alive. Owner → Resource (owns); Observer → Resource (borrows, dashed arrow).
+
 ```cpp
 #include <iostream>
 #include <memory>

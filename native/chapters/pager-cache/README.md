@@ -116,6 +116,12 @@ A pin count records active users of a frame. An RAII guard releases one pin at d
 
 The cache must outlive every guard. This single-threaded model does not make a raw reference safe after the guard releases its pin.
 
+![A pin guard holds an eviction constraint](../../diagrams/pin-guards.svg)
+
+An unpinned page becomes eligible for eviction; it is not necessarily evicted immediately. Dirty-page handling and host I/O errors are separate responsibilities.
+
+Text description: Acquire page guard: pin count increases. Use page contents: pinned: do not evict. Destroy page guard: pin count decreases. Acquire page guard → Use page contents (then); Use page contents → Destroy page guard (then).
+
 ```cpp
 #include <array>
 #include <iostream>

@@ -152,6 +152,12 @@ Compaction or checkpointing can produce a new immutable generation while readers
 
 This ownership model does not by itself synchronize a real concurrent publication; the atomic-handle and locking lessons supply that separate boundary.
 
+![Publish a new generation without breaking old readers](../../diagrams/generation-publication.svg)
+
+The picture separates publication from reclamation. Existing readers keep their old generation alive; a handle swap alone does not justify freeing old storage or prove durable file replacement.
+
+Text description: Build new generation: old generation still live. Publish new handle: new readers use it. Retire old generation: after its readers finish. Build new generation → Publish new handle (then); Publish new handle → Retire old generation (then).
+
 ```cpp
 #include <iostream>
 #include <memory>

@@ -8,6 +8,12 @@ A B+ index keeps payload keys in leaves and uses separator values to choose a le
 
 It is not an arbitrary-height serialized B+ tree. Value-owned leaf vectors make structural ownership explicit while the lessons focus on routing and occupancy.
 
+![A separator routes a search to a leaf](../../diagrams/bplus-routing.svg)
+
+The separator is a routing fence for this bounded teaching index. This is not an arbitrary-height production B+ tree. A range scan can continue across leaves after routing to its starting leaf.
+
+Text description: Root separator: routing boundary. Left leaf: keys below boundary. Right leaf: keys at/above it. Root separator → Left leaf (lower keys); Root separator → Right leaf (other keys).
+
 ```cpp
 #include <algorithm>
 #include <cstddef>

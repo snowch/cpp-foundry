@@ -58,6 +58,12 @@ Binary search maintains a half-open interval of possible answers. lower_bound se
 
 Compute the midpoint as first+(last-first)/2 to avoid adding two potentially large indices. The proof depends on the input’s ordering.
 
+![Binary search keeps a half-open candidate interval](../../diagrams/binary-search-invariant.svg)
+
+The sorted/partitioned input contract justifies discarding a half. This is an interval model rather than a claim that every iterator category supports constant-time midpoint movement.
+
+Text description: Candidate interval: [first, last). Inspect midpoint: discard an excluded half. Stop condition: first equals last. Candidate interval → Inspect midpoint (then); Inspect midpoint → Stop condition (then).
+
 ```cpp
 #include <array>
 #include <iostream>

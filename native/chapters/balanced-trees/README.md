@@ -8,6 +8,12 @@ A binary search tree partitions keys around each node: smaller keys go left and 
 
 The shared implementation is an AVL tree; the following lessons examine how rotations preserve this ordering while controlling height.
 
+![Search-tree ordering divides the key domain](../../diagrams/tree-ordering.svg)
+
+This schematic assumes unique keys. Every descendant, not just each immediate child, must satisfy its ancestor bounds. Balance and ownership are additional invariants, not consequences of ordering.
+
+Text description: Root key: 20. Left subtree: keys below 20. Right subtree: keys above 20. Root key → Left subtree (less); Root key → Right subtree (greater).
+
 ```cpp
 #include <algorithm>
 #include <cmath>

@@ -18,6 +18,8 @@ A modern C++20 course with **nine parts, 54 chapters, and 266 authored lessons**
 
 **240 examples compile and run in the browser.** Twenty-six native investigations use threads, synchronization facilities, or host filesystem contracts in Codespaces or locally. Native execution commands, platform reasons, and source links appear directly in those lessons. The coverage audit and remaining limits are recorded in [docs/coverage-audit.md](docs/coverage-audit.md).
 
+**34 original concept diagrams** explain selected ownership, library, algorithm, storage, and concurrency lessons. Each includes a model-specific caption, accessible text, and a standalone SVG in the native readings. They were created from scratch for this course, without copied third-party artwork. See [diagram sources and provenance](docs/diagrams.md).
+
 The home page groups the course into nine parts. The outline supports filtering by part; lesson contents show the active part with a part selector. Counts, chapter-end projects, and navigation are derived from the curriculum. The original 24 lesson URLs and per-lesson draft/completion keys remain valid.
 
 ## Database components and model limits

@@ -1,6 +1,7 @@
 import {parts,chapters,lessons,byId} from './course.js';
 import {read,write,onStorage,loadDatabase,storeDatabase,validateDatabase} from './storage.js';
 import {mountEditor,download} from './editor.js';
+import {renderDiagram} from './diagram-view.js';
 
 const main=document.querySelector('main');
 const escape=text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -47,7 +48,7 @@ function renderLesson(lesson){
   const chapter=chapters.find(c=>c.id===lesson.chapter),index=lessons.indexOf(lesson),chapterIndex=chapters.indexOf(chapter),chapterLessons=lessons.filter(l=>l.chapter===chapter.id),part=parts.find(p=>p.id===chapter.part);
   document.title=lesson.title+' · C++ Foundry';
   main.innerHTML=`<div class="reading-layout">${contents(lesson)}<article class="lesson-article"><p class="breadcrumbs"><a href="#/course/${part.id}">${part.title}</a> / ${chapter.title}</p><div class="eyebrow">Chapter ${number(chapterIndex)} · Lesson ${chapterLessons.indexOf(lesson)+1} of ${chapterLessons.length}</div><h1>${lesson.title}</h1><div class="lesson-meta">${lesson.native?'Native investigation · C++20':'Runnable in your browser · C++20'} · about 10–15 minutes with the experiment</div>${lesson.body.map(p=>`<p>${escape(p)}</p>`).join('')}
-    <h2>A complete worked program</h2><div id="lesson-editor"></div>
+    ${renderDiagram(lesson.id)}<h2>A complete worked program</h2><div id="lesson-editor"></div>
     <details class="disclosure"><summary>Expected output</summary><pre class="expected">${escape(lesson.expected)}</pre></details><p>${escape(lesson.walkthrough)}</p>
     <aside class="callout"><strong>A pitfall to watch for</strong>${escape(lesson.pitfall)}</aside>
     <section class="question"><h2>Check your understanding</h2><p>${escape(lesson.question)}</p><div class="choices">${lesson.choices.map((choice,i)=>`<button class="choice" data-choice="${i}" aria-pressed="false">${escape(choice)}</button>`).join('')}</div><div class="feedback" role="status"></div></section>

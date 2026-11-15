@@ -157,6 +157,12 @@ A bounded ring queue reuses an array by wrapping physical positions. The logical
 
 Reject a full insertion before changing any queue state. This makes the failure behavior easy to test.
 
+![Queue positions wrap within fixed storage](../../diagrams/ring-buffer.svg)
+
+Head and tail positions alone may not distinguish empty from full. The lesson maintains an explicit size; wrapping positions does not overwrite a live element when the full check rejects insertion.
+
+Text description: Push at tail: if capacity permits. Advance tail: wrap modulo capacity. Pop at head: advance head similarly. Push at tail → Advance tail (then); Advance tail → Pop at head (then).
+
 ```cpp
 #include <array>
 #include <iostream>

@@ -6,6 +6,12 @@ Check complete parses, preserve stream state, and choose formatting facilities d
 
 from_chars reports both an error code and a stopping pointer. A successful prefix parse is not necessarily a valid complete field. It avoids locale-dependent stream extraction, but its accepted syntax differs from convenience conversion functions, including whitespace handling.
 
+![A successful prefix is not a complete field](../../diagrams/lib-charconv-complete.svg)
+
+Accept a complete integer field only when the error code is clear and the stopping pointer reaches the end. Range errors and an invalid first character are distinct failure cases.
+
+Text description: Text: 42x: parse starts at 4. from_chars: value 42; stops at x. Full-field check: reject trailing text. Text: 42x → from_chars (then); from_chars → Full-field check (then).
+
 ```cpp
 #include <charconv>
 #include <iostream>

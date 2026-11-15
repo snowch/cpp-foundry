@@ -52,6 +52,12 @@ A hash join groups build-side rows by key, then probes with the other input. Eac
 
 This small model uses an ordered map of vectors for deterministic display; the bucket contract is the same even when a hash container supplies lookup.
 
+![A join separates build and probe work](../../diagrams/hash-join-buckets.svg)
+
+Bucket membership produces candidates; the join still relies on equality semantics. Duplicate matches produce multiple pairs. An inner join drops unmatched rows; outer joins need an explicit unmatched-row policy.
+
+Text description: Build side: group rows by join key. Probe side: look up matching bucket. Emit matching pairs: duplicates multiply rows. Build side → Probe side (then); Probe side → Emit matching pairs (then).
+
 ```cpp
 #include <iostream>
 #include <map>

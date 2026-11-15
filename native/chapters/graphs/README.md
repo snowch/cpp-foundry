@@ -47,6 +47,12 @@ In an unweighted graph, breadth-first search uses a FIFO queue to discover verti
 
 The distance vector doubles as visited state: minus one means undiscovered, while zero is the source distance.
 
+![Breadth-first traversal expands a frontier](../../diagrams/breadth-first.svg)
+
+The FIFO queue explores unweighted distance layers. Marking a vertex on discovery prevents repeated enqueues; weighted shortest paths require a different contract. Repeat the expansion until the queue is empty.
+
+Text description: Start vertex: mark and enqueue. FIFO frontier: pop earliest discovery. Undiscovered neighbors: mark and enqueue. Start vertex → FIFO frontier (then); FIFO frontier → Undiscovered neighbors (then).
+
 ```cpp
 #include <iostream>
 #include <queue>

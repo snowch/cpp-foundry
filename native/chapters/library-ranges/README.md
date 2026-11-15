@@ -6,6 +6,12 @@ Compose lazy views while tracking ownership, repeated work, and projections.
 
 A view is a lightweight range abstraction, not necessarily a container of computed results. filter and transform usually perform work during iteration. This lvalue pipeline borrows the vector, so the source must outlive its use and iterator invalidation rules still apply.
 
+![A view pipeline computes during traversal](../../diagrams/lib-lazy-views.svg)
+
+These are conceptual stages, not three stored containers. This pipeline borrows the source vector; each traversal performs work and must respect source lifetime and invalidation.
+
+Text description: Source vector: 1 2 3 4. Filter even values: 2 and 4 pass. Transform square: 4 and 16 are yielded. Source vector → Filter even values (then); Filter even values → Transform square (then).
+
 ```cpp
 #include <iostream>
 #include <ranges>

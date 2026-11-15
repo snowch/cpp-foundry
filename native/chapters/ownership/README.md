@@ -96,6 +96,12 @@ RAII means acquiring a resource as part of an object’s initialization and rele
 
 Destructors should release resources without throwing. Cleanup is often best delegated to existing owners such as std::vector, std::unique_ptr, std::fstream, and std::lock_guard. You do not need a custom destructor when members already do the right thing.
 
+![A resource follows its owner’s lifetime](../../diagrams/raii.svg)
+
+The sequence includes normal return and exception unwinding after successful construction. It does not describe abrupt process termination; a partially constructed owner is not destroyed as a complete object.
+
+Text description: Enter scope: construct the owner. Use the resource: owner remains alive. Leave scope: destructor releases. Enter scope → Use the resource (then); Use the resource → Leave scope (then).
+
 ```cpp
 #include <iostream>
 #include <stdexcept>
@@ -142,6 +148,12 @@ Experiment: Add a second guard with a label and observe reverse construction ord
 Prefer ordinary values first. When an object needs a separate lifetime or stable address, std::unique_ptr expresses one owner. Copying it is disabled, so two independent owners cannot accidentally delete the same object.
 
 std::move is a cast that permits moving; the selected move operation performs the transfer. A moved-from unique_ptr is empty. Other moved-from library objects are generally valid but have an unspecified value unless their contract says more.
+
+![Move a resource, not the object’s identity](../../diagrams/moves.svg)
+
+This sketches transfer by a move-capable owner. The moved-from object still needs a valid destruction path; its other usable operations depend on its type’s contract. A move is not guaranteed to transfer an allocation for every type.
+
+Text description: Before move: source owns resource. Move construction: destination takes it. After move: source still exists. Before move → Move construction (then); Move construction → After move (then).
 
 ```cpp
 #include <iostream>

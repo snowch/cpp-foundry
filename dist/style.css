@@ -15,3 +15,13 @@
   .part-heading{padding:20px}
   .part-heading h2{font-size:28px}
 }
+
+.concept-diagram{margin:28px 0;padding:22px;border:1px solid var(--line);border-radius:7px;background:#edf1e9;max-width:720px}
+.concept-diagram figcaption strong{display:block;font:normal 24px/1.25 var(--serif);margin-top:10px}
+.concept-svg{display:block;width:100%;max-width:400px;height:auto;margin:20px auto 12px}
+.concept-diagram .diagram-caption,.diagram-description{font-size:13px;line-height:1.7;color:var(--muted)}
+.concept-diagram .diagram-caption{margin:12px 0}
+.diagram-description{border-top:1px solid #ccd7cb;padding-top:10px}
+.diagram-description summary{cursor:pointer;color:var(--ink);font-weight:600}
+.diagram-description p{margin-bottom:0}
+@media(max-width:480px){.concept-diagram{padding:15px;margin-inline:0}.concept-diagram figcaption strong{font-size:22px}.concept-svg{width:calc(100% + 10px);max-width:none;margin-inline:-5px}}

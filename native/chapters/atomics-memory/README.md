@@ -93,6 +93,12 @@ A release store can publish preceding initialization to a reader that observes i
 
 Keep the published object alive through reader completion and make the single-publication limitation explicit.
 
+![Publication requires a matching synchronization edge](../../diagrams/release-acquire-data.svg)
+
+The acquire must observe the matching release (or the applicable release sequence) to establish the depicted happens-before relation. Merely using an atomic flag or unrelated relaxed operations does not publish ordinary data safely.
+
+Text description: Producer: write ordinary data. Release store: publish ready flag. Acquire observes ready: consumer may read data. Producer → Release store (then); Release store → Acquire observes ready (then).
+
 ```cpp
 #include <array>
 #include <atomic>

@@ -148,6 +148,12 @@ A declaration lets a caller use a function before the implementation appears. In
 
 The browser editor uses one source file, but declaration and definition rules still apply.
 
+![Declarations, compilation, and linking](../../diagrams/declarations-linking.svg)
+
+A header makes declarations visible during compilation. The linker connects separately compiled definitions; a declaration alone does not supply an implementation.
+
+Text description: Header: declares the interface. Source files: compile separately. Linker: resolves definitions. Header → Source files (then); Source files → Linker (then).
+
 ```cpp
 #include <iostream>
 

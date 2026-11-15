@@ -6,6 +6,12 @@ Apply predicates, ordering, removal, folds, scans, and bounds correctly.
 
 The remove algorithm compacts retained values into a prefix and returns its logical end. It cannot change a container’s size through iterators. Erasing the remaining suffix performs physical removal; C++20 std::erase combines these steps for supported containers.
 
+![Logical removal precedes physical erasure](../../diagrams/lib-remove-erase.svg)
+
+remove returns the logical end without shrinking the vector. The trailing values after remove are unspecified; the diagram deliberately does not depict them as the removed elements.
+
+Text description: Initial sequence: 1 2 2 3 : size 4. After remove(2): retained prefix: 1 3. After erase: size 2; suffix removed. Initial sequence → After remove(2) (then); After remove(2) → After erase (then).
+
 ```cpp
 #include <algorithm>
 #include <iostream>

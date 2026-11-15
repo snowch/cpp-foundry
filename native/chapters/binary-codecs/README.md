@@ -171,6 +171,12 @@ An import should decode into temporary owned state and publish only after every 
 
 The example’s two-field fixture is deliberately small. A full table additionally validates uniqueness, row count, text, and trailing-byte rejection.
 
+![Publish decoded state only after validation](../../diagrams/codec-candidate-import.svg)
+
+Any rejected field, duplicate, or trailing byte leaves the previous state intact. This is failure preservation within the model, not an operating-system crash-durability guarantee.
+
+Text description: Untrusted bytes: check lengths and fields. Candidate state: validate full structure. Publish candidate: replace committed state. Untrusted bytes → Candidate state (then); Candidate state → Publish candidate (then).
+
 ```cpp
 #include <cstdint>
 #include <iostream>

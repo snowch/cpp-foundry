@@ -81,6 +81,12 @@ Experiment: Compare lexically_normal with canonical on an isolated temporary fix
 
 shared_ptr shares ownership through a control block. weak_ptr observes that ownership without extending the managed object’s lifetime. lock obtains a temporary shared owner atomically with respect to the control block’s lifetime, avoiding a separate check-then-access protocol.
 
+![Lock a weak observer before using the value](../../diagrams/lib-weak-ownership.svg)
+
+A successful lock holds ownership while the value is used. Once strong ownership ends, later lock attempts fail. The arrows describe lifetime relationships, not synchronization of mutable object state.
+
+Text description: Shared owner: keeps value alive. Weak observer: does not own value. lock succeeds: temporary shared owner. Shared owner → lock succeeds (shared lifetime); Weak observer → lock succeeds (lock if alive, dashed arrow).
+
 ```cpp
 #include <iostream>
 #include <memory>
@@ -121,6 +127,12 @@ Experiment: Create a parent owning a child and a child observing the parent thro
 ## Bound an allocation resource lifetime
 
 Polymorphic allocators select a runtime memory_resource while retaining the container’s value interface. A monotonic resource reclaims allocation storage as a group rather than on each individual deallocation. Its storage and the resource object must outlive every allocation still in use.
+
+![Release the arena only after its users finish](../../diagrams/lib-pmr-lifetimes.svg)
+
+The resource and its backing storage must outlive active allocations. Releasing early invalidates storage still held by containers; a null upstream makes an exceeded budget fail explicitly.
+
+Text description: Arena and storage: constructed first. PMR container: allocates from arena. Destroy container: then release the arena. Arena and storage → PMR container (then); PMR container → Destroy container (then).
 
 ```cpp
 #include <array>

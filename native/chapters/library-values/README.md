@@ -44,6 +44,12 @@ Experiment: Count calls to an expensive fallback and replace value_or with an ex
 
 variant owns one alternative from a closed set and tracks which is active. visit dispatches a callable to that active value, while get_if allows a nonthrowing type check. Some throwing transitions can leave a variant valueless_by_exception; it is not a universal never-empty sum type.
 
+![A tag chooses one active alternative](../../diagrams/lib-variant-visit.svg)
+
+Only the active branch is visited. The visitor must be well-formed for all alternatives. This shows the ordinary active-value case, not a possible valueless_by_exception state.
+
+Text description: Variant tag: which alternative?. Integer active: visit integer handler. String active: visit string handler. Variant tag → Integer active (integer); Variant tag → String active (string).
+
 ```cpp
 #include <iostream>
 #include <string>

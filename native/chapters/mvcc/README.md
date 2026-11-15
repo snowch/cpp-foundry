@@ -356,6 +356,12 @@ The oldest registered snapshot bounds which historical versions can still be vis
 
 This is a bounded logical reclamation model. Concurrent registration, iterator lifetime, and physical page reuse need additional synchronized ownership rules.
 
+![An old reader keeps required versions alive](../../diagrams/oldest-reader-gc.svg)
+
+Reclamation must retain every version required by an active snapshot. This lesson is a bounded one-row MVCC model; releasing one reader does not permit deleting history still needed by another.
+
+Text description: Register snapshot: reader keeps old revision. New commit: new version becomes current. Reader releases: reclaim unneeded history. Register snapshot → New commit (then); New commit → Reader releases (then).
+
 ```cpp
 #include <algorithm>
 #include <iostream>

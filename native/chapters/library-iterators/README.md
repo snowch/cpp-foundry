@@ -46,6 +46,12 @@ Experiment: Use a forward_list and identify which operations disappear. Count in
 
 Erasing from a vector invalidates iterators and references at or after the erased position. erase returns a valid iterator to the next surviving element, possibly end. A loop must decide whether to advance based on whether it erased an element.
 
+![An erase loop has two different next steps](../../diagrams/lib-erase-return.svg)
+
+The keep branch increments. The erase branch uses the iterator returned by vector::erase without incrementing again; the old iterator and later vector positions are invalidated.
+
+Text description: Current iterator: inspect the value. Keep element: increment iterator. Erase element: take returned iterator. Current iterator → Keep element (keep); Current iterator → Erase element (erase).
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -127,6 +133,12 @@ Experiment: Pre-size b and use b.begin instead. Compare sizes and capacities, th
 ## Treat stream iteration as single pass
 
 Input iterators can represent a single-pass source. Reading advances shared stream state, so copying an input iterator does not provide an independently rewindable sequence. A default stream iterator acts as the end sentinel once extraction fails or input ends.
+
+![A stream iterator consumes one shared input](../../diagrams/lib-stream-iterators.svg)
+
+The stream is consumed as accumulation proceeds. Copying an input iterator does not produce an independently rewindable source; materialize values when multiple passes are needed.
+
+Text description: Input characters: 3 4 5. Input iterator: extracts values once. Accumulator: total becomes 12. Input characters → Input iterator (then); Input iterator → Accumulator (then).
 
 ```cpp
 #include <iostream>

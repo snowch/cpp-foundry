@@ -198,6 +198,12 @@ A parser should produce a query representation rather than modify table state wh
 
 Select owns the parsed numeric filter through optional. Execution can inspect that value without revisiting the source text.
 
+![Keep parsing separate from execution](../../diagrams/sql-select-ast.svg)
+
+The parser recognizes only the documented SELECT subset and rejects trailing tokens. Constructing an AST does not execute a query or imply support for the full SQL language.
+
+Text description: SQL text: external characters. Lexer and parser: tokens become an AST. Validated query: execution may begin. SQL text → Lexer and parser (then); Lexer and parser → Validated query (then).
+
 ```cpp
 #include <charconv>
 #include <iostream>

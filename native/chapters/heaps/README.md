@@ -8,6 +8,12 @@ In a binary min-heap, every parent is no greater than its children. This guarant
 
 Heap validation should compare every parent-child edge, not require the entire array to be sorted.
 
+![A minimum heap imposes a partial order](../../diagrams/heap-order.svg)
+
+Each parent is no greater than its children. Siblings need not be ordered, and the underlying array is not a sorted sequence. Separate tie-breaking rules determine which equivalent-priority value comes first.
+
+Text description: Parent: minimum at the root. Left child: not below parent. Right child: not below parent. Parent → Left child (parent <= child); Parent → Right child (parent <= child).
+
 ```cpp
 #include <iostream>
 #include <optional>
