@@ -20,7 +20,7 @@ A modern C++20 course with **nine parts, 54 chapters, and 266 authored lessons**
 
 **34 original concept diagrams** explain selected ownership, library, algorithm, storage, and concurrency lessons. Each includes a model-specific caption, accessible text, and a standalone SVG in the native readings. They were created from scratch for this course, without copied third-party artwork. See [diagram sources and provenance](docs/diagrams.md).
 
-The home page groups the course into nine parts. The outline supports filtering by part; lesson contents show the active part with a part selector. Counts, chapter-end projects, and navigation are derived from the curriculum. The original 24 lesson URLs and per-lesson draft/completion keys remain valid.
+The home page groups the course into nine parts. The outline has a desktop part sidebar, a mobile part selector, and expandable chapter cards. Lesson contents use a sticky desktop panel and a compact mobile disclosure, with a part selector inside. Counts, chapter-end projects, and navigation are derived from the curriculum. The original 24 lesson URLs and per-lesson draft/completion keys remain valid.
 
 ## Database components and model limits
 
