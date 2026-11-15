@@ -103,7 +103,7 @@ Answer: 3. Capacity is storage availability, not the number of constructed eleme
 
 Experiment: Reserve a smaller amount after the first call and inspect capacity. Add a type with visible construction/destruction to study resize.
 
-## Frame input as complete lines
+## Read text one line at a time
 
 Before this chapter: [Keep several values in a vector](../values/README.md)
 
@@ -111,9 +111,11 @@ New terms and notation:
 
 A constructor’s member-initializer list, after the colon, gives members their starting values before the constructor body runs. Members initialize in declaration order, not in the order written in that list.
 
-A line-oriented command language needs clear framing before token parsing. getline extracts one line without retaining the delimiter, which prevents a malformed command from borrowing the next command’s text accidentally.
+A text reader lets a program take characters from an input source in order. std::istringstream is a reader backed by a string rather than a keyboard or file; #include <sstream> supplies it. We use fixed text here so every run starts with the same input.
 
-This example uses an in-memory stream for deterministic input. The same getline loop can read preloaded stdin in the browser or a native stream.
+std::getline(input, line) reads the next line from input into the string variable line. It removes the separating line break instead of storing it in line. Each successful read replaces line’s previous contents.
+
+The result of getline can be tested as a condition. In while (std::getline(input, line)), the body runs whenever reading a line succeeds. The loop stops when no more lines can be read, or when a read fails. An empty line still counts as a successful read.
 
 ```cpp
 #include <iostream>
@@ -137,19 +139,19 @@ Expected output:
 [SAVE]
 ```
 
-The empty line is a legitimate framed record. The application can choose to ignore it after framing, as the capstone does.
+The reader first supplies LIST, then an empty string for the blank line, then SAVE. Printing brackets around each line makes the otherwise invisible empty line visible as [].
 
-Pitfall: Mixing formatted extraction with getline can leave a newline waiting in the stream. Handle that transition deliberately.
+Pitfall: An empty line is different from having no more input. Test whether the read succeeded, not whether the resulting line happens to be empty.
 
-Question: Does getline keep the newline in line?
+Question: Does getline keep the separating line break in line?
 
 1. No
 2. Yes
 3. Only for empty lines
 
-Answer: 1. The delimiter is extracted but not appended to the string.
+Answer: 1. The line break is consumed by the reader but is not stored in line.
 
-Experiment: Add a final line without a newline and verify it is still processed. Decide how an overlong command should be rejected.
+Experiment: Add a final line without a line break and verify it is still processed. Then add two adjacent blank lines and predict the complete bracketed output before running.
 
 ## Remove elements with an explicit predicate
 
