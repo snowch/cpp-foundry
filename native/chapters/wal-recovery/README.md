@@ -184,7 +184,7 @@ This is a prefix-recovery model; it does not claim that arbitrary storage-device
 
 The lesson uses a tiny single-value redo-log model. A valid complete record is not automatically committed; commit markers matter. This picture does not specify production flush ordering or corruption-repair policy.
 
-Text description: Log bytes: may end mid-record. Validate records: stop at an invalid tail. Replay committed work: ignore uncommitted work. Log bytes → Validate records (then); Validate records → Replay committed work (then).
+Text description: Log bytes: may end mid- record. Validate records: stop at an invalid tail. Replay committed work: ignore uncommitted work. Log bytes → Validate records (then); Validate records → Replay committed work (then).
 
 ```cpp
 #include <iostream>

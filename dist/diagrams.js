@@ -24,7 +24,8 @@ export const diagrams=[
         "y": 200,
         "label": "Source files",
         "lines": [
-          "compile separately"
+          "compile",
+          "separately"
         ],
         "labelLines": [
           "Source files"
@@ -86,7 +87,8 @@ export const diagrams=[
           "alive"
         ],
         "labelLines": [
-          "Use the resource"
+          "Use the",
+          "resource"
         ]
       },
       {
@@ -128,7 +130,8 @@ export const diagrams=[
         "y": 60,
         "label": "Owner",
         "lines": [
-          "controls lifetime"
+          "controls",
+          "lifetime"
         ],
         "labelLines": [
           "Owner"
@@ -200,8 +203,8 @@ export const diagrams=[
         "y": 200,
         "label": "Move construction",
         "lines": [
-          "destination takes",
-          "it"
+          "destination",
+          "takes it"
         ],
         "labelLines": [
           "Move",
@@ -273,8 +276,8 @@ export const diagrams=[
         "y": 340,
         "label": "After reallocation",
         "lines": [
-          "reacquire element",
-          "access"
+          "reacquire",
+          "element access"
         ],
         "labelLines": [
           "After",
@@ -366,10 +369,12 @@ export const diagrams=[
         "y": 60,
         "label": "Current iterator",
         "lines": [
-          "inspect the value"
+          "inspect the",
+          "value"
         ],
         "labelLines": [
-          "Current iterator"
+          "Current",
+          "iterator"
         ]
       },
       {
@@ -378,7 +383,8 @@ export const diagrams=[
         "y": 200,
         "label": "Keep element",
         "lines": [
-          "increment iterator"
+          "increment",
+          "iterator"
         ],
         "labelLines": [
           "Keep element"
@@ -428,7 +434,8 @@ export const diagrams=[
           "3 4 5"
         ],
         "labelLines": [
-          "Input characters"
+          "Input",
+          "characters"
         ]
       },
       {
@@ -485,7 +492,8 @@ export const diagrams=[
           "1 2 2 3 : size 4"
         ],
         "labelLines": [
-          "Initial sequence"
+          "Initial",
+          "sequence"
         ]
       },
       {
@@ -494,11 +502,12 @@ export const diagrams=[
         "y": 200,
         "label": "After remove(2)",
         "lines": [
-          "retained prefix: 1",
-          "3"
+          "retained prefix:",
+          "1 3"
         ],
         "labelLines": [
-          "After remove(2)"
+          "After",
+          "remove(2)"
         ]
       },
       {
@@ -569,7 +578,8 @@ export const diagrams=[
           "yielded"
         ],
         "labelLines": [
-          "Transform square"
+          "Transform",
+          "square"
         ]
       }
     ],
@@ -598,7 +608,8 @@ export const diagrams=[
         "y": 60,
         "label": "Variant tag",
         "lines": [
-          "which alternative?"
+          "which",
+          "alternative?"
         ],
         "labelLines": [
           "Variant tag"
@@ -658,7 +669,8 @@ export const diagrams=[
         "y": 60,
         "label": "Text: 42x",
         "lines": [
-          "parse starts at 4"
+          "parse starts at",
+          "4"
         ],
         "labelLines": [
           "Text: 42x"
@@ -670,8 +682,8 @@ export const diagrams=[
         "y": 200,
         "label": "from_chars",
         "lines": [
-          "value 42; stops at",
-          "x"
+          "value 42; stops",
+          "at x"
         ],
         "labelLines": [
           "from_chars"
@@ -687,7 +699,8 @@ export const diagrams=[
           "text"
         ],
         "labelLines": [
-          "Full-field check"
+          "Full-field",
+          "check"
         ]
       }
     ],
@@ -719,8 +732,8 @@ export const diagrams=[
           "common unit: ms"
         ],
         "labelLines": [
-          "2 seconds + 750",
-          "ms"
+          "2 seconds +",
+          "750 ms"
         ]
       },
       {
@@ -743,8 +756,8 @@ export const diagrams=[
         "y": 340,
         "label": "Cast to whole seconds",
         "lines": [
-          "2; fractional part",
-          "lost"
+          "2; fractional",
+          "part lost"
         ],
         "labelLines": [
           "Cast to whole",
@@ -777,7 +790,8 @@ export const diagrams=[
         "y": 60,
         "label": "Shared owner",
         "lines": [
-          "keeps value alive"
+          "keeps value",
+          "alive"
         ],
         "labelLines": [
           "Shared owner"
@@ -789,7 +803,8 @@ export const diagrams=[
         "y": 60,
         "label": "Weak observer",
         "lines": [
-          "does not own value"
+          "does not own",
+          "value"
         ],
         "labelLines": [
           "Weak observer"
@@ -836,7 +851,8 @@ export const diagrams=[
         "y": 60,
         "label": "Arena and storage",
         "lines": [
-          "constructed first"
+          "constructed",
+          "first"
         ],
         "labelLines": [
           "Arena and",
@@ -913,7 +929,8 @@ export const diagrams=[
           "excluded half"
         ],
         "labelLines": [
-          "Inspect midpoint"
+          "Inspect",
+          "midpoint"
         ]
       },
       {
@@ -922,7 +939,8 @@ export const diagrams=[
         "y": 340,
         "label": "Stop condition",
         "lines": [
-          "first equals last"
+          "first equals",
+          "last"
         ],
         "labelLines": [
           "Stop condition"
@@ -967,7 +985,8 @@ export const diagrams=[
         "y": 200,
         "label": "Cache hit",
         "lines": [
-          "reuse saved result"
+          "reuse saved",
+          "result"
         ],
         "labelLines": [
           "Cache hit"
@@ -979,7 +998,8 @@ export const diagrams=[
         "y": 200,
         "label": "Cache miss",
         "lines": [
-          "compute and store"
+          "compute and",
+          "store"
         ],
         "labelLines": [
           "Cache miss"
@@ -1102,8 +1122,8 @@ export const diagrams=[
           "found or absent"
         ],
         "labelLines": [
-          "Matching key or",
-          "empty"
+          "Matching key",
+          "or empty"
         ]
       }
     ],
@@ -1324,7 +1344,8 @@ export const diagrams=[
           "AST"
         ],
         "labelLines": [
-          "Lexer and parser"
+          "Lexer and",
+          "parser"
         ]
       },
       {
@@ -1337,7 +1358,8 @@ export const diagrams=[
           "begin"
         ],
         "labelLines": [
-          "Validated query"
+          "Validated",
+          "query"
         ]
       }
     ],
@@ -1366,7 +1388,8 @@ export const diagrams=[
         "y": 60,
         "label": "Scan",
         "lines": [
-          "produce input rows"
+          "produce input",
+          "rows"
         ],
         "labelLines": [
           "Scan"
@@ -1378,7 +1401,8 @@ export const diagrams=[
         "y": 200,
         "label": "Filter",
         "lines": [
-          "keep matching rows"
+          "keep matching",
+          "rows"
         ],
         "labelLines": [
           "Filter"
@@ -1424,11 +1448,12 @@ export const diagrams=[
         "y": 60,
         "label": "Untrusted bytes",
         "lines": [
-          "check lengths and",
-          "fields"
+          "check lengths",
+          "and fields"
         ],
         "labelLines": [
-          "Untrusted bytes"
+          "Untrusted",
+          "bytes"
         ]
       },
       {
@@ -1441,7 +1466,8 @@ export const diagrams=[
           "structure"
         ],
         "labelLines": [
-          "Candidate state"
+          "Candidate",
+          "state"
         ]
       },
       {
@@ -1450,8 +1476,8 @@ export const diagrams=[
         "y": 340,
         "label": "Publish candidate",
         "lines": [
-          "replace committed",
-          "state"
+          "replace",
+          "committed state"
         ],
         "labelLines": [
           "Publish",
@@ -1665,7 +1691,8 @@ export const diagrams=[
         "y": 60,
         "label": "Log bytes",
         "lines": [
-          "may end mid-record"
+          "may end mid-",
+          "record"
         ],
         "labelLines": [
           "Log bytes"
@@ -1677,11 +1704,12 @@ export const diagrams=[
         "y": 200,
         "label": "Validate records",
         "lines": [
-          "stop at an invalid",
-          "tail"
+          "stop at an",
+          "invalid tail"
         ],
         "labelLines": [
-          "Validate records"
+          "Validate",
+          "records"
         ]
       },
       {
@@ -1690,12 +1718,12 @@ export const diagrams=[
         "y": 340,
         "label": "Replay committed work",
         "lines": [
-          "ignore uncommitted",
-          "work"
+          "ignore",
+          "uncommitted work"
         ],
         "labelLines": [
-          "Replay committed",
-          "work"
+          "Replay",
+          "committed work"
         ]
       }
     ],
@@ -1737,7 +1765,8 @@ export const diagrams=[
         "y": 200,
         "label": "Release store",
         "lines": [
-          "publish ready flag"
+          "publish ready",
+          "flag"
         ],
         "labelLines": [
           "Release store"
@@ -1749,12 +1778,12 @@ export const diagrams=[
         "y": 340,
         "label": "Acquire observes ready",
         "lines": [
-          "consumer may read",
-          "data"
+          "consumer may",
+          "read data"
         ],
         "labelLines": [
-          "Acquire observes",
-          "ready"
+          "Acquire",
+          "observes ready"
         ]
       }
     ],
@@ -1812,7 +1841,8 @@ export const diagrams=[
           "observes"
         ],
         "labelLines": [
-          "Consumer future"
+          "Consumer",
+          "future"
         ]
       }
     ],
@@ -1872,7 +1902,8 @@ export const diagrams=[
           "history"
         ],
         "labelLines": [
-          "Reader releases"
+          "Reader",
+          "releases"
         ]
       }
     ],
@@ -1901,8 +1932,8 @@ export const diagrams=[
         "y": 60,
         "label": "Build side",
         "lines": [
-          "group rows by join",
-          "key"
+          "group rows by",
+          "join key"
         ],
         "labelLines": [
           "Build side"
@@ -1975,7 +2006,8 @@ export const diagrams=[
         "y": 200,
         "label": "Publish new handle",
         "lines": [
-          "new readers use it"
+          "new readers use",
+          "it"
         ],
         "labelLines": [
           "Publish new",
@@ -1988,8 +2020,8 @@ export const diagrams=[
         "y": 340,
         "label": "Retire old generation",
         "lines": [
-          "after its readers",
-          "finish"
+          "after its",
+          "readers finish"
         ],
         "labelLines": [
           "Retire old",

@@ -36,6 +36,16 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
        if(box.x<rect.x+3||box.x+box.width>rect.x+rect.width-3||box.y<rect.y+3||box.y+box.height>rect.y+rect.height-3)failures.push(text.textContent);
       }
      }
+     // A second, wider fallback font catches tight labels across host platforms.
+     for(const group of svg.querySelectorAll('g')){
+      const rect=group.querySelector('rect').getBBox();
+      for(const text of group.querySelectorAll('text')){
+       text.style.fontFamily='monospace';
+       const box=text.getBBox();
+       if(box.x<rect.x+3||box.x+box.width>rect.x+rect.width-3)failures.push('fallback font: '+text.textContent);
+       text.style.removeProperty('font-family');
+      }
+     }
      return failures;
     });
     assert.deepEqual(failures,[],`${diagram.lesson} at ${width}px`);
