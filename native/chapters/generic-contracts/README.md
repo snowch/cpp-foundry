@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 lvalue rvalue 
@@ -43,7 +43,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. forward preserves the deduced argument category. The lvalue call selects the reference overload, while the temporary selects the rvalue overload through the same wrapper.
 
-Experiment: Replace forward with move and observe the changed dispatch. Add a const lvalue case and explain reference collapsing and constness separately.
+### Run the starter, then try a change
+
+Open `native/examples/gap-forwarding.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/gap-forwarding.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+relay(n);
+```
+
+With
+
+```cpp
+relay(std::move(n));
+```
+
+Rerun the terminal command. Compare the argument category printed for the first call. What category does the explicit move request?
 
 ## Express required operations without claiming semantic proof
 
@@ -64,7 +84,7 @@ int main() { std::cout << combine(2, 3) << " " << Addable<int>; }
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 5 1
@@ -82,7 +102,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. A requires expression checks declared syntactic requirements. The int type supports addition convertible to itself, so the constrained function is available. The fixture stays within its representable range.
 
-Experiment: Try a type with no addition and inspect the diagnostic. Then construct a syntactically valid nonassociative operation and explain which law the concept fails to prove.
+### Run the starter, then try a change
+
+Open `native/examples/gap-concept-requires.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/gap-concept-requires.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+combine(2, 3)
+```
+
+With
+
+```cpp
+combine(2.0, 3.5)
+```
+
+Rerun the terminal command. Compare the sum. Does the requires expression permit addition for these floating-point arguments too?
 
 ## Distinguish constant evaluation from optimization
 
@@ -108,7 +148,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 9
@@ -126,7 +166,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. constexpr permits both suitable compile-time and runtime calls. The constexpr variable and static_assert establish a compile-time check independently of whether a runtime optimizer would fold an expression.
 
-Experiment: Call sum with runtime input and compare constexpr with consteval. Keep both a static_assert fixture and a runtime assertion for the public interface.
+### Run the starter, then try a change
+
+Open `native/examples/gap-constexpr-validation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/gap-constexpr-validation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << answer;
+```
+
+With
+
+```cpp
+std::cout << sum(std::array{1, 1, 1});
+```
+
+Rerun the terminal command. Compare the printed sums. Can this constexpr function also supply an ordinary result outside static_assert?
 
 ## Destroy polymorphic owners through a virtual interface
 
@@ -162,7 +222,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7 1 1
@@ -180,7 +240,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. Polymorphic deletion needs an appropriate virtual destructor. The virtual call returns the derived implementation, and both destruction counters advance when the unique_ptr leaves scope.
 
-Experiment: Write a compile-time has_virtual_destructor check. Compare an owning polymorphic interface with a non-owning interface whose protected destructor prevents external deletion.
+### Run the starter, then try a change
+
+Open `native/examples/gap-virtual-destruction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/gap-virtual-destruction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+owner->value()
+```
+
+With
+
+```cpp
+owner->value() + 1
+```
+
+Rerun the terminal command. Compare the leading value with the two destruction counters. Does changing the caller’s calculation change which destructors run?
 
 ## Chapter project
 

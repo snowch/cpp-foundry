@@ -32,7 +32,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0 0 
@@ -50,7 +50,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Success requires both a clear error code and full consumption. 42 consumes the full input. 42x leaves trailing text, and the final value is outside the range of int.
 
-Experiment: Test leading whitespace, a plus sign, negative values, and empty input. Define the exact grammar before choosing whether preprocessing is allowed.
+### Run the starter, then try a change
+
+Open `native/examples/lib-charconv-complete.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-charconv-complete.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"42", "42x", "99999999999999999999"}
+```
+
+With
+
+```cpp
+{" 42", "+42", "-42"}
+```
+
+Rerun the terminal command. Compare the three complete-parse flags. Which sign and whitespace spellings does from_chars accept in this case?
 
 ## Recover deliberately after failed extraction
 
@@ -81,7 +101,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 42
@@ -99,7 +119,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. Recovery needs both state repair and input-position repair. The code clears the error and discards the bad line before reading 42 from the next line.
 
-Experiment: Try a line containing a numeric prefix followed by junk. Compare whole-line parsing with extraction followed by delimiter validation.
+### Run the starter, then try a change
+
+Open `native/examples/lib-stream-state.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-stream-state.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bad\n42\n
+```
+
+With
+
+```cpp
+12oops\n42\n
+```
+
+Rerun the terminal command. Compare the failure flag and the last value. Does successful extraction of a numeric prefix imply that the whole line is numeric?
 
 ## Control numeric presentation without changing values
 
@@ -120,7 +160,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1.25 2.00
@@ -138,7 +178,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. fixed makes precision count fractional digits. The same persistent precision produces two digits after the decimal point for both values.
 
-Experiment: Compare defaultfloat, fixed, and scientific. Format through a local string stream to avoid leaking presentation state into a caller-owned stream.
+### Run the starter, then try a change
+
+Open `native/examples/lib-format-streams.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-format-streams.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::setprecision(2)
+```
+
+With
+
+```cpp
+std::setprecision(1)
+```
+
+Rerun the terminal command. Compare both printed values. Does the number of digits after the decimal point change?
 
 ## Use C++20 format with an explicit support boundary
 
@@ -162,7 +222,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 id=0007 score=2.5
@@ -180,7 +240,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Library support must be checked independently of the language mode. The integer field receives zero padding to width four, and the floating field uses one fractional digit.
 
-Experiment: Add escaped braces, alignment, and a positional field. Compare a compile-time format string with runtime vformat error handling on a supported native library.
+### Run the starter, then try a change
+
+Open `native/examples/lib-format-feature.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-format-feature.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+id={:04d} score={:.1f}
+```
+
+With
+
+```cpp
+id={:06d} score={:.2f}
+```
+
+Rerun the terminal command. Compare the ID padding and the number of fraction digits in score. Which part of the format string controls each?
 
 ## Chapter project
 

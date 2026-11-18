@@ -80,7 +80,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 [SELECT][*][FROM][people][WHERE][id][=][7][;]
@@ -98,7 +98,27 @@ Question: Which stage identifies token boundaries?
 
 Answer: 1. The parser consumes the structured token sequence produced by lexing.
 
-Experiment: Vary whitespace around punctuation and confirm the token sequence is unchanged. Add an invalid character and check explicit rejection.
+### Run the starter, then try a change
+
+Open `native/examples/sql-tokenization.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sql-tokenization.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+id=7;
+```
+
+With
+
+```cpp
+id = 7 ;
+```
+
+Rerun the terminal command. Compare the bracketed tokens. Which characters separate tokens without becoming tokens themselves?
 
 ## Quoted text has its own lexical rules
 
@@ -177,7 +197,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada Lovelace
@@ -196,7 +216,27 @@ Question: Why do the returned tokens remain usable after the input line changes?
 
 Answer: 2. The token representation stores independent strings.
 
-Experiment: Test an empty quoted string, a doubled quote, and a missing closing quote. Decide which empty values the later schema permits.
+### Run the starter, then try a change
+
+Open `native/examples/sql-quoted-text.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sql-quoted-text.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+'Ada Lovelace'
+```
+
+With
+
+```cpp
+''
+```
+
+Rerun the terminal command. Compare the first printed text and the unchanged O’Brien line. Does the lexer preserve an empty quoted token?
 
 ## Parse into a typed query value
 
@@ -317,7 +357,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 all=1 id=7
@@ -335,7 +375,27 @@ Question: When should execution begin?
 
 Answer: 3. The query value is published only after the full command passes parsing.
 
-Experiment: Try quoted IDs, zero, overflow, and missing punctuation. Confirm every rejected command produces no executable query value.
+### Run the starter, then try a change
+
+Open `native/examples/sql-select-ast.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sql-select-ast.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+WHERE id=7;
+```
+
+With
+
+```cpp
+WHERE id=8;
+```
+
+Rerun the terminal command. Compare all= and id=. Which field represents a selective predicate and which shows that the all-rows query has none?
 
 ## Reject a valid prefix followed by extra input
 
@@ -455,7 +515,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 accepted
@@ -474,7 +534,27 @@ Question: Is a valid prefix enough for this interface?
 
 Answer: 1. The documented grammar accepts one complete statement.
 
-Experiment: Append comments, a second SELECT, and arbitrary words. Decide which syntax belongs in the grammar before accepting it.
+### Run the starter, then try a change
+
+Open `native/examples/sql-trailing-rejection.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sql-trailing-rejection.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+people; SAVE
+```
+
+With
+
+```cpp
+people; SELECT * FROM people;
+```
+
+Rerun the terminal command. Compare accepted and trailing tokens. Can a valid second command count as part of this one-query grammar?
 
 ## Keep syntax failure separate from table mutation
 
@@ -598,7 +678,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 rejected
@@ -617,7 +697,27 @@ Question: Which phase owns table side effects?
 
 Answer: 2. A clean phase boundary makes rejection preservation easier to enforce.
 
-Experiment: Replace the counter with a mock table operation and assert it is never called for malformed syntax or invalid numeric fields.
+### Run the starter, then try a change
+
+Open `native/examples/sql-parse-before-state.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sql-parse-before-state.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+id=2x;
+```
+
+With
+
+```cpp
+id=3;
+```
+
+Rerun the terminal command. Compare rejected and executed=. What has to happen before the program increments its execution counter?
 
 ## Chapter project
 

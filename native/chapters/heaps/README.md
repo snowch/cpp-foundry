@@ -74,7 +74,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 minimum=1 valid=1
@@ -92,7 +92,27 @@ Question: What does the heap invariant guarantee?
 
 Answer: 1. The parent-child relation establishes the root minimum.
 
-Experiment: Print the internal array and compare heap validity with global sortedness. Explain why they are different properties.
+### Run the starter, then try a change
+
+Open `native/examples/heap-order.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/heap-order.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{5, 2, 8, 1}
+```
+
+With
+
+```cpp
+{5, 2, 8, 3}
+```
+
+Rerun the terminal command. Compare minimum= and valid=. Does a new minimum change the requirement that each parent is no larger than its children?
 
 ## Restore order after appending a leaf
 
@@ -160,7 +180,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7654
@@ -178,7 +198,27 @@ Question: Why test at>0 before computing the parent?
 
 Answer: 2. The root has no parent.
 
-Experiment: Count swaps for increasing and decreasing insertions. Relate the maximum path length to the heap height.
+### Run the starter, then try a change
+
+Open `native/examples/sift-up.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sift-up.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{7, 6, 5, 4}
+```
+
+With
+
+```cpp
+{4, 5, 6, 7}
+```
+
+Rerun the terminal command. Compare successive minima. Which insertion order continually changes the heap’s top value?
 
 ## Restore order after removing the minimum
 
@@ -246,7 +286,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1258 empty=1
@@ -264,7 +304,27 @@ Question: Which child should a min-heap sift choose?
 
 Answer: 3. The smaller child preserves the local minimum relation after a swap.
 
-Experiment: Test zero, one, and two elements, plus equal keys. Validate the heap after every pop against an independent multiset.
+### Run the starter, then try a change
+
+Open `native/examples/sift-down.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sift-down.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{8, 2, 5, 1}
+```
+
+With
+
+```cpp
+{8, 2, 2, 1}
+```
+
+Rerun the terminal command. Compare the popped sequence and empty=. Do equal keys each get their own output position?
 
 ## Make scheduling ties deterministic
 
@@ -301,7 +361,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1:1 1:2 2:0 done
@@ -319,7 +379,27 @@ Question: What resolves equal priorities here?
 
 Answer: 1. The second pair component is an explicit tie-breaker.
 
-Experiment: Replace pairs with a named Task type and an explicit comparator. Test equivalent priorities in several insertion orders.
+### Run the starter, then try a change
+
+Open `native/examples/priority-ties.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/priority-ties.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tasks.push({1, 2});
+```
+
+With
+
+```cpp
+tasks.push({1, 3});
+```
+
+Rerun the terminal command. Compare the entries with priority 1. Which part of each pair determines their order when priorities agree?
 
 ## Use an independent sorted extraction oracle
 
@@ -397,7 +477,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 verified=1
@@ -415,7 +495,27 @@ Question: Why compare with the complete sorted input?
 
 Answer: 2. An independent sequence specifies every expected extraction.
 
-Experiment: Add interleaved push/pop sequences and compare the current minimum with a multiset after each step.
+### Run the starter, then try a change
+
+Open `native/examples/heap-reference.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/heap-reference.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input{3, 1, 3, -2, 8}
+```
+
+With
+
+```cpp
+input{3, 1, 3, -2, -2}
+```
+
+Rerun the terminal command. Compare verified=. Does the sorted reference check preserve both occurrences of the new equal minimum?
 
 ## Chapter project
 

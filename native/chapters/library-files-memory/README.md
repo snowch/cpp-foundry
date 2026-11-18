@@ -24,7 +24,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1
@@ -42,7 +42,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. Check the error code before trusting a result. The native program checks the error before using the returned path. It prints a property rather than a machine-specific working directory.
 
-Experiment: Run in a temporary directory, test missing paths through status(error_code), and separate permission failures from ordinary absence. Never point destructive experiments at personal data.
+### Run the starter, then try a change
+
+Open `native/examples/lib-filesystem-errors.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-filesystem-errors.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::filesystem::current_path(ec)
+```
+
+With
+
+```cpp
+std::filesystem::canonical("missing-for-this-experiment", ec)
+```
+
+Rerun the terminal command. Run in a temporary directory with no entry of that name. Compare the printed success flag. Which version needs the named filesystem entry to exist?
 
 ## Treat path normalization as lexical processing
 
@@ -63,7 +83,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 file.txt .txt
@@ -81,7 +101,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Lexical normalization does not access the filesystem. The filename and extension are inspected after a lexical cleanup. No file is created and no existence claim is made.
 
-Experiment: Compare lexically_normal with canonical on an isolated temporary fixture. Explain which operation can fail because an object does not exist.
+### Run the starter, then try a change
+
+Open `native/examples/lib-path-components.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-path-components.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+alpha/../beta/file.txt
+```
+
+With
+
+```cpp
+alpha/../beta/file.csv
+```
+
+Rerun the terminal command. Compare the final component and extension. Which operation uses the path text without opening a file?
 
 ## Observe shared state without creating a cycle
 
@@ -112,7 +152,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7 1
@@ -130,7 +170,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. weak_ptr does not keep the object alive. The first lock keeps the integer alive while it is used. Once the scope ends, only a weak observer remains and expired is true.
 
-Experiment: Create a parent owning a child and a child observing the parent through weak_ptr. Verify destruction with counters and then contrast a deliberate shared ownership cycle.
+### Run the starter, then try a change
+
+Open `native/examples/lib-weak-ownership.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-weak-ownership.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::make_shared<int>(7)
+```
+
+With
+
+```cpp
+std::make_shared<int>(12)
+```
+
+Rerun the terminal command. Compare the observed value and expired flag. Which output is about the value and which indicates the owner’s lifetime ended?
 
 ## Bound an allocation resource lifetime
 
@@ -166,7 +226,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7
@@ -184,7 +244,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. The resource must outlive containers using its allocations. The vector is destroyed before release. A null upstream resource makes exceeding the supplied storage an explicit allocation failure instead of a hidden heap fallback.
 
-Experiment: Reduce the buffer until allocation fails and catch bad_alloc at the operation boundary. Compare an upstream heap resource with null_memory_resource and document the chosen budget.
+### Run the starter, then try a change
+
+Open `native/examples/lib-pmr-lifetimes.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-pmr-lifetimes.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values.push_back(7)
+```
+
+With
+
+```cpp
+values.push_back(8)
+```
+
+Rerun the terminal command. Compare the printed first value. Is the vector still destroyed before release makes the arena’s storage reusable?
 
 ## Chapter project
 

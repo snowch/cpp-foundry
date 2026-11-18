@@ -37,7 +37,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada 90
@@ -56,7 +56,27 @@ Question: Where does second.score get zero?
 
 Answer: 1. The field declaration explicitly supplies its default.
 
-Experiment: Add an ID validation requirement and decide whether this aggregate should become a class with controlled construction.
+### Run the starter, then try a change
+
+Open `native/examples/aggregate-init.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/aggregate-init.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Person second{2, "Grace"};
+```
+
+With
+
+```cpp
+Person second{2, "Grace", 75};
+```
+
+Rerun the terminal command. Compare Grace’s score and Ada’s score. Which field previously used its default?
 
 ## Return a named status instead of a magic integer
 
@@ -78,7 +98,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 duplicate
@@ -96,7 +116,27 @@ Question: Should callers depend on duplicate being integer 1?
 
 Answer: 1. The name expresses the API alternative; storage encoding is a separate decision.
 
-Experiment: Add missing and invalid statuses. Write a formatter that handles each named outcome without exposing its integer value.
+### Run the starter, then try a change
+
+Open `native/examples/enum-status.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/enum-status.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Status result = Status::duplicate;
+```
+
+With
+
+```cpp
+Status result = Status::inserted;
+```
+
+Rerun the terminal command. Compare the printed label. What result does this comparison group under other?
 
 ## Prevent accidental domain conversions
 
@@ -134,7 +174,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7
@@ -152,7 +192,27 @@ Question: What does explicit control?
 
 Answer: 3. The validation and allocation choices are separate from implicit conversion rules.
 
-Experiment: Write a function accepting RowId and attempt to pass 7 directly. Compare that diagnostic with passing RowId{7}.
+### Run the starter, then try a change
+
+Open `native/examples/explicit-construction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/explicit-construction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+RowId id{7};
+```
+
+With
+
+```cpp
+RowId id = 7;
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the diagnostic about converting an integer to RowId. Put the braces back and run again. Which spelling asks for construction explicitly?
 
 ## Const member functions promise read-only access through this
 
@@ -187,7 +247,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3
@@ -205,7 +265,27 @@ Question: Why is value callable on counter?
 
 Answer: 2. The qualifier describes access through this during the call.
 
-Experiment: Add an increment member without const. Verify that it is rejected for a const Counter and accepted for a mutable one.
+### Run the starter, then try a change
+
+Open `native/examples/member-const.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/member-const.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+const Counter counter{3};
+```
+
+With
+
+```cpp
+const Counter counter{7};
+```
+
+Rerun the terminal command. Compare the values. Does calling value() change the object when the object was constructed with 7?
 
 ## Define equality from domain meaning
 
@@ -239,7 +319,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0
@@ -257,7 +337,27 @@ Question: Are a and c fully equal?
 
 Answer: 1. Defaulted equality compares every declared member.
 
-Experiment: Add a separate same_key function and show a case where same_key is true while full equality is false.
+### Run the starter, then try a change
+
+Open `native/examples/value-equality.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/value-equality.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+c{1, "Ada", 95}
+```
+
+With
+
+```cpp
+c{1, "Ada", 90}
+```
+
+Rerun the terminal command. Compare the second equality result. Can the rows share an ID and still compare unequal when their scores differ?
 
 ## Chapter project
 

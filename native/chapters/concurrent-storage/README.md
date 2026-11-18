@@ -46,7 +46,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 revision=0 value=10
@@ -64,7 +64,27 @@ Question: Why return a value from this read?
 
 Answer: 2. The copied observation has no borrowed mutable storage.
 
-Experiment: Extend the row to own a string and return a complete Row copy. Compare the lifetime contract with a scoped locked-view API.
+### Run the starter, then try a change
+
+Open `native/examples/locked-store.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/locked-store.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Store store;
+```
+
+With
+
+```cpp
+Store store; store.update(1, 20, 0);
+```
+
+Rerun the terminal command. Compare revision= and value=. Which two observations come from the same locked read after a successful update?
 
 ## Validate and update under the same mutex
 
@@ -111,7 +131,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 1 value=20
@@ -129,7 +149,27 @@ Question: Which operations share the lock?
 
 Answer: 2. The comparison must stay valid until the update publishes.
 
-Experiment: Coordinate two worker threads so both capture one revision before either updates. Check one success and one stale rejection.
+### Run the starter, then try a change
+
+Open `native/examples/revision-under-lock.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/revision-under-lock.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+store.update(1, 20, first.first)
+```
+
+With
+
+```cpp
+store.update(1, 21, first.first)
+```
+
+Rerun the terminal command. Compare the acceptance and rejection flags with value=. Which update determines the final value?
 
 ## Shared reading needs a consistent writer protocol
 
@@ -167,7 +207,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7 7 final=9
@@ -185,7 +225,27 @@ Question: Which mode should protect a write?
 
 Answer: 3. Writers must exclude conflicting readers and writers.
 
-Experiment: Add a coordinated overlapping writer and define allowed reader outcomes. Avoid assuming fairness or a particular scheduling order.
+### Run the starter, then try a change
+
+Open `native/examples/reader-writer-lock.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/reader-writer-lock.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+value = 9;
+```
+
+With
+
+```cpp
+value = 10;
+```
+
+Rerun the terminal command. Compare the two reader results and final=. Which results occur before the writer because both readers are joined first?
 
 ## Protect multi-field consistency as one observation
 
@@ -220,7 +280,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 free=6 used=4 total=10
@@ -238,7 +298,27 @@ Question: What defines the required synchronization boundary?
 
 Answer: 1. Related fields must be updated and observed coherently.
 
-Experiment: Replace the counters with a row map and index map. Define and test which lock scope preserves cross-structure consistency.
+### Run the starter, then try a change
+
+Open `native/examples/compound-storage-invariant.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/compound-storage-invariant.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+free = 8, used = 2
+```
+
+With
+
+```cpp
+free = 4, used = 6
+```
+
+Rerun the terminal command. Compare free=, used= and total=. Which quantity stays constant even after changing the initial allocation?
 
 ## Reclaim old data only after readers release ownership
 
@@ -264,7 +344,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 retained=1 released=1
@@ -282,7 +362,27 @@ Question: When can the old value be reclaimed?
 
 Answer: 2. Publication and reclamation are distinct events.
 
-Experiment: Model two readers with different completion times. Confirm the old generation remains retained until both release it.
+### Run the starter, then try a change
+
+Open `native/examples/snapshot-reclamation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/snapshot-reclamation.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+reader.reset();
+```
+
+With
+
+```cpp
+auto second_reader = reader; reader.reset();
+```
+
+Rerun the terminal command. Compare retained= and released=. Which remaining owner keeps the earlier generation alive?
 
 ## Chapter project
 

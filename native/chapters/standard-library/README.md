@@ -32,7 +32,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4
@@ -51,7 +51,27 @@ Question: What does end identify?
 
 Answer: 3. The algorithm excludes that boundary from its inspected elements.
 
-Experiment: Search an empty vector and a one-element vector. Check the iterator against end before reading through it.
+### Run the starter, then try a change
+
+Open `native/examples/iterator-ranges.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/iterator-ranges.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values.end(), 4)
+```
+
+With
+
+```cpp
+values.end(), 9)
+```
+
+Rerun the terminal command. Compare the first output and absent=. Why can a missing result be tested without reading through the end iterator?
 
 ## Make the destination of a transformation explicit
 
@@ -78,7 +98,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 4 9 size=3
@@ -96,7 +116,27 @@ Question: Why is back_inserter used?
 
 Answer: 1. The insertion iterator calls push_back on the destination.
 
-Experiment: Implement a pre-sized output version and compare its size contract with the insertion version. Test empty input.
+### Run the starter, then try a change
+
+Open `native/examples/transform-output.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/transform-output.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input{1, 2, 3}
+```
+
+With
+
+```cpp
+input{}
+```
+
+Rerun the terminal command. Compare the printed values and size=. How many times does the output adapter append for an empty input?
 
 ## Distinguish absence from a present zero
 
@@ -118,7 +158,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 present=1 value=0
@@ -137,7 +177,27 @@ Question: Is optional<int>{0} engaged?
 
 Answer: 3. Engagement is independent of the integer’s value.
 
-Experiment: Model a missing score and a real score of zero. Decide where presentation defaults may be introduced without changing the stored meaning.
+### Run the starter, then try a change
+
+Open `native/examples/optional-observation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/optional-observation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+missing.value_or(-1)
+```
+
+With
+
+```cpp
+missing.value_or(0)
+```
+
+Rerun the terminal command. Compare present=, missing= and fallback=. Does supplying zero as a fallback make the optional hold a value?
 
 ## Choose ordering and lookup contracts deliberately
 
@@ -166,7 +226,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 123 input=4 unique=3
@@ -184,7 +244,27 @@ Question: What information is lost in the set?
 
 Answer: 1. A set exposes unique sorted keys rather than the original sequence.
 
-Experiment: Compare set, multiset, and vector on the same input. Specify whether your database operator must preserve duplicate rows.
+### Run the starter, then try a change
+
+Open `native/examples/container-selection.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/container-selection.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input{3, 1, 3, 2}
+```
+
+With
+
+```cpp
+input{3, 1, 4, 2}
+```
+
+Rerun the terminal command. Compare the ascending sequence and the two counts. Which counts stay equal when there is no duplicate?
 
 ## Predicates need coherent semantic rules
 
@@ -215,7 +295,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada
@@ -235,7 +315,27 @@ Question: Does this comparator totally order equal-length names?
 
 Answer: 3. The alphabetical tie-breaker distinguishes the equal-length names.
 
-Experiment: Add an alphabetical tie-breaker and test both original and reversed input. Explain why deterministic output needs a defined tie rule.
+### Run the starter, then try a change
+
+Open `native/examples/algorithm-predicates.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/algorithm-predicates.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+names{"Grace", "Ada", "Linus"}
+```
+
+With
+
+```cpp
+names{"Linus", "Ada", "Grace"}
+```
+
+Rerun the terminal command. Compare the order of Grace and Linus across runs. What comparison decides which equal-length name comes first?
 
 ## Chapter project
 

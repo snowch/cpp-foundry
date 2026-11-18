@@ -30,7 +30,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7
@@ -49,7 +49,27 @@ Question: Why does the second call name double explicitly?
 
 Answer: 3. The explicit template argument resolves the intended common domain.
 
-Experiment: Attempt the mixed call without an explicit argument and read the conflicting-deduction diagnostic before designing an overload.
+### Run the starter, then try a change
+
+Open `native/examples/deduction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/deduction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+maximum<double>(3, 7.5)
+```
+
+With
+
+```cpp
+maximum(3, 7.5)
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the diagnostic naming the two argument types. Restore the explicit double argument and rerun. Why can the compiler choose one T only after the original spelling supplies it?
 
 ## A requires expression can check an operation
 
@@ -87,7 +107,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3
@@ -105,7 +125,27 @@ Question: What does Sized establish?
 
 Answer: 3. The requirement is structural; semantic promises remain separate.
 
-Experiment: Create a small user type satisfying Sized and a type without size. Compare the accepted call with the constraint diagnostic.
+### Run the starter, then try a change
+
+Open `native/examples/requires-expressions.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/requires-expressions.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+count(values)
+```
+
+With
+
+```cpp
+count(3)
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the constraint diagnostic for count. Put values back and rerun. Which required operation does a vector provide that an integer lacks?
 
 ## Select a compile-time branch
 
@@ -137,7 +177,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 integral
@@ -156,7 +196,27 @@ Question: When is this branch selected?
 
 Answer: 3. The condition depends on a compile-time type trait.
 
-Experiment: Add a branch that calls a method only present on one user type. Contrast an ordinary if with if constexpr.
+### Run the starter, then try a change
+
+Open `native/examples/if-constexpr.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/if-constexpr.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+print_kind(3.5);
+```
+
+With
+
+```cpp
+print_kind(3u);
+```
+
+Rerun the terminal command. Compare the second label. Is unsigned int integral according to the template’s condition?
 
 ## Constexpr permits evaluation in constant-expression contexts
 
@@ -183,7 +243,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 15
@@ -201,7 +261,27 @@ Question: Does constexpr force every call to be compile-time?
 
 Answer: 3. It enables constant evaluation where the context requires or permits it.
 
-Experiment: Add static assertions for zero and one. Specify a bounded input domain that keeps the sum representable.
+### Run the starter, then try a change
+
+Open `native/examples/constexpr-evaluation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/constexpr-evaluation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int input=5;
+```
+
+With
+
+```cpp
+int input=0;
+```
+
+Rerun the terminal command. Compare the printed sums. Does running triangle with zero affect the separate static assertion?
 
 ## Forward a callable without inventing ownership
 
@@ -236,7 +316,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 9
@@ -255,7 +335,27 @@ Question: Why use forward with a deduced parameter?
 
 Answer: 2. The wrapper preserves rather than unconditionally changes the argument category.
 
-Experiment: Wrap a move-only callable and test passing it as an lvalue and as a temporary. Avoid returning a borrowed reference from the wrapper.
+### Run the starter, then try a change
+
+Open `native/examples/forwarding.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/forwarding.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+invoke_once(add, 4);
+```
+
+With
+
+```cpp
+invoke_once(add, 8);
+```
+
+Rerun the terminal command. Compare the second printed number. Which invocation updates the captured total?
 
 ## Chapter project
 

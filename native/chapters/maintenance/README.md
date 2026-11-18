@@ -36,7 +36,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 AdaGrace offsets=0,3
@@ -54,7 +54,27 @@ Question: What must compaction update?
 
 Answer: 1. Physical positions change while logical identity should remain stable.
 
-Experiment: Add explicit slot IDs and verify lookup by ID returns the same live text before and after candidate compaction.
+### Run the starter, then try a change
+
+Open `native/examples/page-compaction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/page-compaction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"Ada", true}
+```
+
+With
+
+```cpp
+{"Al", true}
+```
+
+Rerun the terminal command. Compare the packed text and offsets=. How does shortening the first live value move the second?
 
 ## A reused slot needs a generation check
 
@@ -89,7 +109,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 stale_rejected=1 current=20
@@ -107,7 +127,27 @@ Question: Why is the old handle rejected?
 
 Answer: 1. The generation identifies the slot’s lifetime instance.
 
-Experiment: Specify a generation-exhaustion policy and test stale handles after several free/reuse cycles.
+### Run the starter, then try a change
+
+Open `native/examples/generation-handles.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/generation-handles.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Handle old{0, 1};
+```
+
+With
+
+```cpp
+Handle old{0, 2};
+```
+
+Rerun the terminal command. Compare stale_rejected= and current=. This uses the new slot generation in the handle. Which comparison allows it through?
 
 ## A checkpoint covers a precise committed prefix
 
@@ -134,7 +174,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 covered=2 recovered=30
@@ -152,7 +192,29 @@ Question: Which log records must still be replayed?
 
 Answer: 2. The checkpoint covers a prefix, not future commits.
 
-Experiment: Enumerate crashes around candidate write, publication, and log retirement. Define the retained recovery source at each boundary.
+### Run the starter, then try a change
+
+Open `native/examples/checkpoint-cutoff.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/checkpoint-cutoff.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+unsigned covered = 2;
+    int state = 20;
+```
+
+With
+
+```cpp
+unsigned covered = 3;
+    int state = 30;
+```
+
+Rerun the terminal command. Compare covered= and recovered=. If the checkpoint already covers the final record, which updates need replay?
 
 ## Publish a replacement without invalidating old readers
 
@@ -185,7 +247,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 old_size=3 new_size=2
@@ -203,7 +265,27 @@ Question: What protects the old generation here?
 
 Answer: 3. Retained ownership separates publication from reclamation.
 
-Experiment: Add a weak observer and verify expiration after the old reader releases ownership. Document the synchronized publication mechanism separately.
+### Run the starter, then try a change
+
+Open `native/examples/generation-publication.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/generation-publication.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::initializer_list<int>{2, 3}
+```
+
+With
+
+```cpp
+std::initializer_list<int>{3}
+```
+
+Rerun the terminal command. Compare old_size= and new_size=. Which reader still sees the previous generation?
 
 ## Refresh statistics from the state they describe
 
@@ -228,7 +310,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 old=1 refreshed=3
@@ -246,7 +328,27 @@ Question: Which state should a statistic identify?
 
 Answer: 3. Statistics need a defined data-view boundary.
 
-Experiment: Attach a revision stamp to the statistic and compare estimates with observed query counts after a skewed update batch.
+### Run the starter, then try a change
+
+Open `native/examples/statistics-refresh.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/statistics-refresh.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+return score >= 90;
+```
+
+With
+
+```cpp
+return score >= 96;
+```
+
+Rerun the terminal command. Compare old= and refreshed=. Which updated observation changes when you tighten the predicate, and which number remains a supplied estimate?
 
 ## Chapter project
 

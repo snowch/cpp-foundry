@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 octets=8 uint32=32
@@ -43,7 +43,27 @@ Question: What does this assertion establish?
 
 Answer: 3. It checks a compile-time implementation precondition.
 
-Experiment: List every additional assumption the capstone makes beyond these scalar widths and assign each an appropriate check.
+### Run the starter, then try a change
+
+Open `native/examples/audit-octets.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-octets.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout<<"octets=8 uint32=32\n";
+```
+
+With
+
+```cpp
+std::cout << "octets=" << CHAR_BIT << " uint32=" << std::numeric_limits<std::uint32_t>::digits << "\n";
+```
+
+Rerun the terminal command. Compare the output. Which measured type properties supply the values behind the two requirements?
 
 ## Compare against independently specified file bytes
 
@@ -70,7 +90,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 fixture=1
@@ -88,7 +108,27 @@ Question: What is still needed for a real exchange matrix?
 
 Answer: 1. Independent hosts must actually exchange the format fixtures.
 
-Experiment: Export a CPF1 file on two hosts and run both consumers against both files. Retain the exact bytes and toolchain versions.
+### Run the starter, then try a change
+
+Open `native/examples/audit-endianness.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-endianness.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+expected{0, 1, 0, 0}
+```
+
+With
+
+```cpp
+expected{0, 0, 1, 0}
+```
+
+Rerun the terminal command. Compare fixture= and exit status. The edit supplies the opposite byte-order expectation. Which order did the encoder write?
 
 ## Reject unsupported headers before allocating row storage
 
@@ -113,7 +153,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 accepted=0 retained=3
@@ -131,7 +171,27 @@ Question: When should unsupported format rejection occur?
 
 Answer: 1. Early format recognition establishes the decoding rules.
 
-Experiment: Test short headers and unrelated magic values. Verify no table-allocation or mutation callback runs for rejected headers.
+### Run the starter, then try a change
+
+Open `native/examples/audit-header-rejection.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-header-rejection.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+header{'C', 'P', 'F', '2'}
+```
+
+With
+
+```cpp
+header{'C', 'P', 'F', '1'}
+```
+
+Rerun the terminal command. Compare accepted= and retained=. At which decision does this simplified model replace its live row count?
 
 ## Audit bounds checks for overflow in the checks themselves
 
@@ -156,7 +216,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0 0
@@ -174,7 +234,27 @@ Question: Which condition must precede size-offset?
 
 Answer: 3. It proves the subtraction is representable in the intended range.
 
-Experiment: Enumerate small size/offset/length combinations and compare with an arbitrary-precision mathematical oracle.
+### Run the starter, then try a change
+
+Open `native/examples/audit-length-arithmetic.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-length-arithmetic.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+fits(8, 4, 4)
+```
+
+With
+
+```cpp
+fits(8, 4, 5)
+```
+
+Rerun the terminal command. Compare the first flag. How much space remains after offset 4 of an eight-byte buffer?
 
 ## Uniqueness must be checked during import too
 
@@ -206,7 +286,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 accepted=0 retained=4
@@ -224,7 +304,27 @@ Question: Should duplicate import overwrite the earlier row here?
 
 Answer: 1. The importer must enforce the same uniqueness rule as insertion.
 
-Experiment: Test duplicates at the beginning and end, and pair them with truncated payloads. Verify the entire live table remains unchanged.
+### Run the starter, then try a change
+
+Open `native/examples/audit-duplicates.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-duplicates.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+imported{1, 2, 1}
+```
+
+With
+
+```cpp
+imported{1, 2, 3}
+```
+
+Rerun the terminal command. Compare accepted= and retained=. When can the candidate’s count replace the live count?
 
 ## Complete consumption is part of format validation
 
@@ -247,7 +347,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 exact=1 trailing=0
@@ -265,7 +365,27 @@ Question: When can the candidate be published?
 
 Answer: 1. Complete-file validation is a prerequisite for publication.
 
-Experiment: Append every one-byte suffix to a valid capstone fixture and verify each is rejected without changing the saved snapshot.
+### Run the starter, then try a change
+
+Open `native/examples/audit-trailing-bytes.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-trailing-bytes.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+complete(8, 9)
+```
+
+With
+
+```cpp
+complete(8, 10)
+```
+
+Rerun the terminal command. Compare exact= and trailing=. Can reading a complete prefix accept a file with two unconsumed bytes?
 
 ## Check host replacement behavior rather than assuming it
 
@@ -291,7 +411,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 new
@@ -309,7 +429,27 @@ Question: What does this run establish?
 
 Answer: 1. The evidence is scoped to the actual host operation exercised.
 
-Experiment: Add checked candidate close and injected rename failure. Record Windows and POSIX adapter behavior separately.
+### Run the starter, then try a change
+
+Open `native/examples/audit-rename.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-rename.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+next<<"new";
+```
+
+With
+
+```cpp
+next<<"next";
+```
+
+Rerun the terminal command. Compare the printed text and exit status. The starter explicitly checks for new, so the file operation can succeed while that program check returns 1. Which text did the renamed file contain?
 
 ## Keep implementation, tests, and guarantees separate
 
@@ -346,7 +486,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 exact bytes:checked
@@ -366,7 +506,27 @@ Question: What should happen to an unqualified durability claim?
 
 Answer: 3. A guarantee needs an explicit failure model and relevant evidence.
 
-Experiment: Write an audit table for CPF1 covering numeric fields, UTF-8, close failure, rename, browser storage, stale tabs, and crash behavior.
+### Run the starter, then try a change
+
+Open `native/examples/audit-evidence.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/audit-evidence.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"rejected import", true, true}
+```
+
+With
+
+```cpp
+{"rejected import", true, false}
+```
+
+Rerun the terminal command. Compare the row’s qualification label and process status. Which requirement makes an unqualified result fail this audit?
 
 ## Chapter project
 

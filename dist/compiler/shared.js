@@ -565,7 +565,6 @@ class App {
     try {
       this.exports._start();
     } catch (exn) {
-      let writeStack = true;
       if (exn instanceof ProcExit) {
         if (exn.code === RAF_PROC_EXIT_CODE) {
           console.log('Allowing rAF after exit.');
@@ -577,16 +576,11 @@ class App {
         if (exn.code == 0) {
           return false;
         }
-        writeStack = false;
+        // The caller reports a normal nonzero exit separately from program output.
+        throw exn;
       }
 
-      // Write error message.
-      let msg = `\x1b[91mError: ${exn.message}`;
-      if (writeStack) {
-        msg = msg + `\n${exn.stack}`;
-      }
-      msg += '\x1b[0m\n';
-      this.memfs.hostWrite(msg);
+      this.memfs.hostWrite(`\x1b[91mError: ${exn.message}\n${exn.stack}\x1b[0m\n`);
 
       // Propagate error.
       throw exn;

@@ -36,7 +36,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1234 shifts=4
@@ -54,7 +54,27 @@ Question: What is sorted before iteration i?
 
 Answer: 1. Each iteration extends the sorted prefix by one element.
 
-Experiment: Count shifts for sorted and reversed inputs of the same size. Verify duplicate values are neither lost nor invented.
+### Run the starter, then try a change
+
+Open `native/examples/insertion-sort.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/insertion-sort.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{4, 1, 3, 2}
+```
+
+With
+
+```cpp
+values{4, 3, 2, 1}
+```
+
+Rerun the terminal command. Compare sorted output and shifts=. Why do inputs of equal size produce different numbers of shifts?
 
 ## Merge two sorted ranges
 
@@ -81,7 +101,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 124489
@@ -99,7 +119,27 @@ Question: What does merge require of each input?
 
 Answer: 2. The correctness argument relies on ordered remaining suffixes.
 
-Experiment: Test an empty side and equal values on both sides. Label equal records to investigate merge’s stability rule.
+### Run the starter, then try a change
+
+Open `native/examples/merge-ranges.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/merge-ranges.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+left{1, 4, 8}
+```
+
+With
+
+```cpp
+left{}
+```
+
+Rerun the terminal command. Compare the merged sequences. What must merge copy when the left input is empty?
 
 ## Preserve equivalent-record order when the contract needs it
 
@@ -131,7 +171,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 BAC
@@ -149,7 +189,27 @@ Question: Why does A remain before C?
 
 Answer: 3. Stability preserves their input-relative order.
 
-Experiment: Reverse the two key-2 records before sorting and compare. Then replace stability with an explicit label tie-breaker and explain the difference.
+### Run the starter, then try a change
+
+Open `native/examples/stable-order.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/stable-order.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{{2, "A"}, {1, "B"}, {2, "C"}}
+```
+
+With
+
+```cpp
+{{2, "C"}, {1, "B"}, {2, "A"}}
+```
+
+Rerun the terminal command. Compare the labels with equal keys. Does stability give them a fixed alphabetical order or preserve their relative order?
 
 ## Select a rank without fully sorting
 
@@ -173,7 +233,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 median=5
@@ -191,7 +251,27 @@ Question: Are both partitions fully sorted?
 
 Answer: 3. The operation establishes a rank partition, not complete sorting.
 
-Experiment: Select the three smallest values, sort that prefix for display, and compare it with an independently sorted copy.
+### Run the starter, then try a change
+
+Open `native/examples/selection-topk.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/selection-topk.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values.begin() + 2
+```
+
+With
+
+```cpp
+values.begin() + 1
+```
+
+Rerun the terminal command. Compare the number after median=. The label describes the starter; after the edit which sorted position is actually selected?
 
 ## Check ordering and permutation preservation independently
 
@@ -218,7 +298,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 verified=1
@@ -236,7 +316,27 @@ Question: Would an empty output satisfy is_sorted?
 
 Answer: 1. Orderedness alone does not establish permutation preservation.
 
-Experiment: Check empty, single, all-equal, already sorted, and reversed fixtures. Compare a custom implementation with the standard algorithm.
+### Run the starter, then try a change
+
+Open `native/examples/sort-oracle.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sort-oracle.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input{3, -1, 3, 0}
+```
+
+With
+
+```cpp
+input{-1, 0, 3, 3}
+```
+
+Rerun the terminal command. Compare verified= and process status. Does an already sorted input with the same elements satisfy the same independent expected sequence?
 
 ## Chapter project
 

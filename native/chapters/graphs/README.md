@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0:2 1:1 2:0 vertices=3
@@ -43,7 +43,27 @@ Question: Does an empty adjacency list mean the vertex is absent?
 
 Answer: 3. Vertex existence is determined by the outer representation.
 
-Experiment: Add a validation pass checking every edge endpoint before traversal. Test a disconnected vertex and a self-loop.
+### Run the starter, then try a change
+
+Open `native/examples/adjacency-values.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/adjacency-values.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+graph{{1, 2}, {2}, {}}
+```
+
+With
+
+```cpp
+graph{{1, 2}, {2}, {}, {}}
+```
+
+Rerun the terminal command. Compare vertices= and the per-vertex counts. How does the representation include an isolated vertex?
 
 ## Breadth-first traversal discovers shortest hop counts
 
@@ -91,7 +111,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0112
@@ -109,7 +129,27 @@ Question: When is a new vertex marked here?
 
 Answer: 2. Discovery establishes its shortest hop distance before enqueueing.
 
-Experiment: Add cycles and duplicate edges and verify the traversal still terminates. Compare distance results with hand-drawn shortest paths.
+### Run the starter, then try a change
+
+Open `native/examples/breadth-first.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/breadth-first.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{{1, 2}, {3}, {3}, {}}
+```
+
+With
+
+```cpp
+{{1, 2}, {0, 3}, {3}, {}}
+```
+
+Rerun the terminal command. Compare the distance output. How does remembering visited vertices keep the added cycle from changing the shortest distances?
 
 ## Depth-first traversal needs explicit visited state
 
@@ -142,7 +182,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 012
@@ -160,7 +200,27 @@ Question: Why mark before visiting neighbors?
 
 Answer: 3. The mark prevents recursive re-entry through a back edge.
 
-Experiment: Rewrite the traversal with an explicit stack. State how pushing neighbors changes the observable visit order.
+### Run the starter, then try a change
+
+Open `native/examples/depth-first.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/depth-first.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{{1, 2}, {2}, {0}}
+```
+
+With
+
+```cpp
+{{2, 1}, {2}, {0}}
+```
+
+Rerun the terminal command. Compare the visit order. Which adjacency list determines the first decision after vertex 0?
 
 ## Acyclic dependencies admit a topological order
 
@@ -200,7 +260,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0123 complete=1
@@ -218,7 +278,27 @@ Question: What signals a cycle in this algorithm?
 
 Answer: 3. A remaining cycle prevents its vertices from reaching indegree zero.
 
-Experiment: Add an edge from the last vertex back to the first and verify incomplete processing is reported.
+### Run the starter, then try a change
+
+Open `native/examples/topological-order.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/topological-order.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{{1, 2}, {3}, {3}, {}}
+```
+
+With
+
+```cpp
+{{1, 2}, {3}, {3}, {0}}
+```
+
+Rerun the terminal command. Compare the printed order and complete=. Why does the new cycle leave no vertex with zero remaining prerequisites?
 
 ## Weighted shortest paths require a compatible algorithm
 
@@ -262,7 +342,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2 3
@@ -280,7 +360,27 @@ Question: Which edge-weight assumption is required?
 
 Answer: 1. The smallest tentative distance can be safely advanced under the nonnegative-weight assumption.
 
-Experiment: Compare this result with all simple paths in the small fixture. Add input validation and checked distance addition before using external graph data.
+### Run the starter, then try a change
+
+Open `native/examples/weighted-path.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/weighted-path.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1, 1}, {3, 9}
+```
+
+With
+
+```cpp
+{1, 1}, {3, 2}
+```
+
+Rerun the terminal command. Compare the two printed path costs. Does reducing the weight of an edge change a shortest-path distance?
 
 ## Chapter project
 

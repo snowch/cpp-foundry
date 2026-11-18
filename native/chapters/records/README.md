@@ -28,7 +28,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 good=1
@@ -47,7 +47,27 @@ Question: What does name.size() count?
 
 Answer: 1. std::string is a sequence of char units; the capstone explicitly treats those units as UTF-8 bytes.
 
-Experiment: Try an empty name and a 64-byte name. Add a printable-name rule and apply it at every ingestion boundary.
+### Run the starter, then try a change
+
+Open `native/examples/row-model.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/row-model.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Row bad{0,"",101}
+```
+
+With
+
+```cpp
+Row bad{2,"",90}
+```
+
+Rerun the terminal command. Compare good= and bad=. Can a row with a permitted ID and score still fail validation?
 
 ## Uniqueness and updates are contracts
 
@@ -79,7 +99,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 inserted=1
@@ -101,7 +121,27 @@ Question: Which insertion preserves an existing row?
 
 Answer: 1. try_emplace reports the duplicate and leaves its mapped value unchanged.
 
-Experiment: Add an update for ID 9 that reports missing without changing size. Test deletion twice.
+### Run the starter, then try a change
+
+Open `native/examples/crud.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/crud.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+found->second.score = 95
+```
+
+With
+
+```cpp
+found->second.score = 97
+```
+
+Rerun the terminal command. Compare the printed Ada row and the final count=. Which value does update replace, and what does erase remove?
 
 ## Define bytes independently of object layout
 
@@ -132,7 +172,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 78 56 34 12 
@@ -151,7 +191,27 @@ Question: Why test exact bytes as well as roundtrips?
 
 Answer: 1. Independent format expectations catch a pair of functions that agree with each other but violate the external contract.
 
-Experiment: Write expected bytes for 0, 255, 256, and UINT32_MAX before running. In the Workbench, export a CPF1 file and inspect its header.
+### Run the starter, then try a change
+
+Open `native/examples/byte-format.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/byte-format.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace both occurrences of
+
+```cpp
+0x12345678u
+```
+
+With
+
+```cpp
+0x12345679u
+```
+
+Rerun the terminal command. Compare the bytes and roundtrip=. Which byte changes when the least significant byte increases?
 
 ## Close, reopen, and validate
 
@@ -181,7 +241,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 reopened: 1 Ada 90
@@ -199,7 +259,27 @@ Question: Does this example prove power-loss durability?
 
 Answer: 1. Durability requires a documented platform and failure model beyond the C++ stream abstraction.
 
-Experiment: Open the Workbench. INSERT two rows, SAVE, reload the page, and LIST. Export the database, then try importing a truncated copy.
+### Run the starter, then try a change
+
+Open `native/examples/persistence.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/persistence.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+1 Ada 90\n
+```
+
+With
+
+```cpp
+1 Ada 95\n
+```
+
+Rerun the terminal command. Compare the reopened line. What shows that the program reads back the bytes it wrote in the same run?
 
 ## Chapter project
 

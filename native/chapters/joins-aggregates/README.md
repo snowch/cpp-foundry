@@ -29,7 +29,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 AX
@@ -48,15 +48,35 @@ Question: How many outputs arise from one left row and two matching right rows?
 
 Answer: 3. Join multiplicity follows matching pairs.
 
-Experiment: Add two left duplicates and predict the cross-product size for that key before running.
+### Run the starter, then try a change
 
-## A hash join bucket owns all matching build rows
+Open `native/examples/nested-loop-join.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/nested-loop-join.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+left{{1, "A"}, {2, "B"}}
+```
+
+With
+
+```cpp
+left{{1, "A"}, {1, "B"}}
+```
+
+Rerun the terminal command. Compare the output pairs. How many right rows match each of the two left rows with key 1?
+
+## Keep every build row for a join key
 
 Before this chapter: [Compose operators while preserving the query contract](../query-execution/README.md)
 
-A hash join groups build-side rows by key, then probes with the other input. Each bucket must retain all duplicate payloads to preserve inner-join multiplicity.
+A hash join groups rows from its build input by key, then looks up each key from its probe input. Store all matching build rows so every matching pair can appear in the result.
 
-This small model uses an ordered map of vectors for deterministic display; the bucket contract is the same even when a hash container supplies lookup.
+The starter uses an ordered map and looks up one supplied key. The vector for that key holds all matching values. Use this run to inspect matches per key. A hash container would use a different lookup mechanism.
 
 ![A join separates build and probe work](../../diagrams/hash-join-buckets.svg)
 
@@ -82,7 +102,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 AX
@@ -101,7 +121,27 @@ Question: What must the bucket retain?
 
 Answer: 1. The probe must enumerate all matching build rows.
 
-Experiment: Compare complete result multisets with a nested-loop join across empty, duplicate-heavy, and unmatched fixtures.
+### Run the starter, then try a change
+
+Open `native/examples/hash-join-buckets.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/hash-join-buckets.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+buckets.at(1)
+```
+
+With
+
+```cpp
+buckets.at(3)
+```
+
+Rerun the terminal command. Compare the output pairs. Which stored values come from the selected key’s bucket?
 
 ## An unmatched left row needs an explicit absent payload
 
@@ -130,7 +170,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1:X
@@ -149,7 +189,27 @@ Question: Does an unmatched left row disappear?
 
 Answer: 3. The left-outer contract retains it with an absent right side.
 
-Experiment: Add a right-side filter and distinguish placing it in the join condition from placing it after the outer join.
+### Run the starter, then try a change
+
+Open `native/examples/left-outer-join.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/left-outer-join.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+right{{1, "X"}}
+```
+
+With
+
+```cpp
+right{{1, "X"}, {2, "Y"}}
+```
+
+Rerun the terminal command. Compare each key’s printed value. Which left key now matches rather than printing the missing marker?
 
 ## Group state by a declared key
 
@@ -179,7 +239,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 count=2 sum=30
@@ -198,7 +258,27 @@ Question: Why is aggregate state keyed separately?
 
 Answer: 2. Rows contribute to their matching group’s state.
 
-Experiment: Test an empty input and a new group appearing late. Compare results with a hand-computed fixture before optimizing.
+### Run the starter, then try a change
+
+Open `native/examples/grouped-aggregate.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/grouped-aggregate.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+rows{{1, 10}, {2, 7}, {1, 20}}
+```
+
+With
+
+```cpp
+rows{{1, 10}, {2, 7}, {1, 20}, {3, 8}}
+```
+
+Rerun the terminal command. Compare each group’s count= and sum=. What happens when a previously unseen group arrives last?
 
 ## Distinguish row count, present-value count, and absent sum
 
@@ -228,7 +308,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 rows=3 present=2 sum=5
@@ -246,7 +326,27 @@ Question: Does the present zero count as a value?
 
 Answer: 3. Optional engagement is independent of the contained number.
 
-Experiment: Run empty and all-absent inputs and keep sum disengaged. Define how COUNT and SUM results are presented in the query API.
+### Run the starter, then try a change
+
+Open `native/examples/aggregate-empty-null.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/aggregate-empty-null.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{0, std::nullopt, 5}
+```
+
+With
+
+```cpp
+values{0, 2, 5}
+```
+
+Rerun the terminal command. Compare rows=, present= and sum=. Which counts change when an absent field is replaced by a value?
 
 ## Chapter project
 

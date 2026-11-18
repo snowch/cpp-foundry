@@ -35,7 +35,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 2 3 visited=3
@@ -53,7 +53,27 @@ Question: What does the scan cost count here?
 
 Answer: 2. The counter measures candidate production.
 
-Experiment: Add a selective filter and count candidates separately from result rows. Compare those metrics with an indexed access path.
+### Run the starter, then try a change
+
+Open `native/examples/scan-operator.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/scan-operator.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << row.id << " ";
+```
+
+With
+
+```cpp
+if (row.id == 2) std::cout << row.id << " ";
+```
+
+Rerun the terminal command. Compare the printed IDs and visited=. Why does emitting fewer rows leave the full scan’s visit count unchanged?
 
 ## A filter changes membership without changing the source
 
@@ -87,7 +107,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12 source=3
@@ -105,7 +125,27 @@ Question: Does this filter erase nonmatching source rows?
 
 Answer: 2. Filtering result membership is distinct from deleting stored rows.
 
-Experiment: Test thresholds below all, between values, and above all scores. Define the expected empty-result behavior.
+### Run the starter, then try a change
+
+Open `native/examples/filter-operator.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/filter-operator.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+row.score >= 90
+```
+
+With
+
+```cpp
+row.score >= 96
+```
+
+Rerun the terminal command. Compare the selected IDs and source=. What does the source count describe even if the filter accepts no rows?
 
 ## Projection chooses result fields
 
@@ -136,7 +176,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada fields=1
@@ -154,7 +194,27 @@ Question: Why own names in a retained result?
 
 Answer: 3. Ownership decouples the result lifetime from the scan buffers.
 
-Experiment: Implement both immediate-consumption and retained-result interfaces. Document when copying is required for correctness.
+### Run the starter, then try a change
+
+Open `native/examples/projection-operator.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/projection-operator.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+names.at(0)
+```
+
+With
+
+```cpp
+names.at(1)
+```
+
+Rerun the terminal command. Compare the printed name and fields=. Which value changes when you read the second projected row?
 
 ## A limit can stop upstream work
 
@@ -193,7 +253,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12 visited=2
@@ -211,7 +271,27 @@ Question: Why is the third row not visited?
 
 Answer: 1. The pipeline stops requesting work after two emissions.
 
-Experiment: Make the first row fail the predicate and predict the new visited count. Compare LIMIT before and after a required sort.
+### Run the starter, then try a change
+
+Open `native/examples/limit-operator.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/limit-operator.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+limit = 2
+```
+
+With
+
+```cpp
+limit = 1
+```
+
+Rerun the terminal command. Compare the printed IDs and visited=. At what point can the scan stop after lowering the number it may emit?
 
 ## Compose operators while preserving the query contract
 
@@ -254,7 +334,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Grace
@@ -273,7 +353,27 @@ Question: Can LIMIT always move ahead of ORDER BY?
 
 Answer: 2. Operator order is constrained by query semantics.
 
-Experiment: Add equal scores and verify the ID tie rule. Write an independent expected result before changing the pipeline implementation.
+### Run the starter, then try a change
+
+Open `native/examples/operator-composition.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/operator-composition.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+row.score >= 90
+```
+
+With
+
+```cpp
+row.score >= 95
+```
+
+Rerun the terminal command. Compare the ordered names. Which step removes rows before the sort compares them?
 
 ## Chapter project
 

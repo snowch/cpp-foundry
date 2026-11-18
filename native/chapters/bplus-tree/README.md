@@ -118,7 +118,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 leaves=2 route2=0 route3=1
@@ -136,7 +136,27 @@ Question: Where does a key equal to the right leaf’s separator route?
 
 Answer: 1. The separator is the minimum key of the right leaf in this model.
 
-Experiment: Check keys below all entries, exactly at separators, between keys, and above all entries after several splits.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-routing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-routing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tree.route(3)
+```
+
+With
+
+```cpp
+tree.route(4)
+```
+
+Rerun the terminal command. Compare the final leaf index. The route3= label describes the starter. Does searching for 4 use the same leaf as the separator?
 
 ## Split an overflowing leaf before publishing structure
 
@@ -246,7 +266,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2 3 valid=1
@@ -264,7 +284,27 @@ Question: What is prepared before the live swap?
 
 Answer: 3. Fallible structural preparation is separate from publication.
 
-Experiment: Insert at the beginning, middle, and end of a full leaf. Verify the complete key sequence and occupancy after each split.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-split.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-split.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1, 2, 3, 4, 5}
+```
+
+With
+
+```cpp
+{5, 4, 3, 2, 1}
+```
+
+Rerun the terminal command. Compare the two leaf sizes and valid=. Do the insertion orders split after the same number of keys and preserve validity?
 
 ## A range query crosses leaf boundaries
 
@@ -375,7 +415,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 34567
@@ -393,7 +433,27 @@ Question: Is the upper key eight included?
 
 Answer: 2. The result contract is a half-open key interval.
 
-Experiment: Test an empty range, a missing lower key, and boundaries exactly on separators. Compare with a std::set range.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-range.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-range.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tree.range(3, 8)
+```
+
+With
+
+```cpp
+tree.range(4, 7)
+```
+
+Rerun the terminal command. Compare the keys. Which endpoint is excluded by the half-open range?
 
 ## Reject duplicates and bounded-root exhaustion without mutation
 
@@ -505,7 +565,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 duplicate=1 bounded=1 preserved=1
@@ -523,7 +583,27 @@ Question: What must rejection preserve?
 
 Answer: 2. An unsuccessful operation must retain the promised valid index state.
 
-Experiment: Try different insertion orders and record where the root limit is reached. Verify every earlier key remains searchable after rejection.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-rejection.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-rejection.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bounded = !tree.insert(19)
+```
+
+With
+
+```cpp
+bounded = !tree.insert(0)
+```
+
+Rerun the terminal command. Compare bounded= and preserved=. Can a leaf with room accept the new key even though the root is at its limit?
 
 ## Borrow from a sibling with spare occupancy
 
@@ -635,7 +715,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 left=2,3 right=4 valid=1
@@ -653,7 +733,27 @@ Question: When can a sibling donate?
 
 Answer: 3. Donation must leave both leaves valid.
 
-Experiment: Construct the mirrored left-sibling donation case and validate separator-equality searches after the borrow.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-borrow.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-borrow.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tree.erase(1);
+```
+
+With
+
+```cpp
+tree.erase(2);
+```
+
+Rerun the terminal command. Compare left=, right= and valid=. In each case which key can move from the right sibling to repair occupancy?
 
 ## Merge when neither sibling can donate
 
@@ -767,7 +867,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 leaves=1 keys=234 valid=1
@@ -785,7 +885,27 @@ Question: Why merge instead of borrowing in this fixture?
 
 Answer: 2. A minimum-sized sibling cannot donate without becoming invalid.
 
-Experiment: Compare the full pre/post key sets against an independent set after every borrow and merge sequence.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-merge.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-merge.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tree.erase(5);
+```
+
+With
+
+```cpp
+tree.erase(4);
+```
+
+Rerun the terminal command. Compare leaves=, keys= and valid=. Which key moved into the combined leaf and which was deleted?
 
 ## Give the root an explicit empty-tree representation
 
@@ -895,7 +1015,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 leaves=1 empty=1 missing=1 valid=1
@@ -913,7 +1033,30 @@ Question: Is the single empty root leaf valid here?
 
 Answer: 2. The root has an explicitly different occupancy rule.
 
-Experiment: Alternate deleting the final key and reinserting a new key. Check empty lookup and range-query behavior each time.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-empty-root.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-empty-root.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+tree.erase(7);
+    std::cout
+```
+
+With
+
+```cpp
+tree.erase(7);
+    tree.insert(9);
+    std::cout
+```
+
+Rerun the terminal command. Compare leaves=, empty=, missing= and valid=. Does reinserting after the last deletion reuse the single leaf?
 
 ## Check mixed updates against independent membership and structure
 
@@ -1036,7 +1179,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 reference=1
@@ -1054,7 +1197,27 @@ Question: Which properties are checked separately?
 
 Answer: 3. Representation validity and observable results are complementary checks.
 
-Experiment: Enumerate short insertion/deletion sequences and retain the smallest failing prefix. Add boundary and root-exhaustion cases separately.
+### Run the starter, then try a change
+
+Open `native/examples/bplus-reference.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/bplus-reference.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1, 6, 8, 3}
+```
+
+With
+
+```cpp
+{1, 6, 8, 3, 9}
+```
+
+Rerun the terminal command. Compare reference=. What does the independent model verify when both implementations receive an absent deletion?
 
 ## Chapter project
 

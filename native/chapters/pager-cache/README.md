@@ -94,7 +94,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 page=7 byte=42 size=16
@@ -112,7 +112,27 @@ Question: Is a frame slot a stable page identity?
 
 Answer: 2. Frames are reusable storage; page IDs identify logical contents.
 
-Experiment: Add two page IDs and inspect which frame contains each. Keep logical IDs separate from vector or array positions.
+### Run the starter, then try a change
+
+Open `native/examples/page-units.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/page-units.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+page.write(0, 42);
+```
+
+With
+
+```cpp
+page.write(0, 75);
+```
+
+Rerun the terminal command. Compare page=, byte= and size=. Which quantity changes when you write a different value to the same byte position?
 
 ## A scoped guard prevents eviction while a page is borrowed
 
@@ -218,7 +238,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 all pages pinned
@@ -237,7 +257,27 @@ Question: What makes the third pin fail initially?
 
 Answer: 2. Active users retain the two frames.
 
-Experiment: Throw while holding a guard and confirm the pin is released. Document that cache lifetime must cover all guards.
+### Run the starter, then try a change
+
+Open `native/examples/pin-guards.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/pin-guards.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+auto third = cache.pin(3);
+```
+
+With
+
+```cpp
+auto third = cache.pin(1);
+```
+
+Rerun the terminal command. Compare all pages pinned and after release=. Does another guard for a resident page require a new frame?
 
 ## Flush a dirty victim before reusing its frame
 
@@ -337,7 +377,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 reloaded=99
@@ -355,7 +395,27 @@ Question: What must happen before dirty-frame reuse?
 
 Answer: 3. Eviction must preserve the page’s logical contents.
 
-Experiment: Inject a backing-write failure before frame reuse and require the old frame to remain available with its dirty contents.
+### Run the starter, then try a change
+
+Open `native/examples/dirty-eviction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/dirty-eviction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+page.write(0, 99)
+```
+
+With
+
+```cpp
+page.write(0, 50)
+```
+
+Rerun the terminal command. Compare reloaded=. Which value survives eviction of the original frame?
 
 ## Separate cache hits from backing loads
 
@@ -457,7 +517,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 hits=1 misses=2
@@ -475,7 +535,27 @@ Question: Which request is a cache hit?
 
 Answer: 2. The page is already resident under the requested identity.
 
-Experiment: Trace a cyclic three-page workload through the two-frame cache. Predict hits and misses before measuring them.
+### Run the starter, then try a change
+
+Open `native/examples/cache-hits.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/cache-hits.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+auto page = cache.pin(2);
+```
+
+With
+
+```cpp
+auto page = cache.pin(1);
+```
+
+Rerun the terminal command. Compare hits= and misses=. Which access first loads page 1, and which subsequent accesses can reuse it?
 
 ## Moving a guard transfers its release responsibility
 
@@ -571,7 +651,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 pins=1 value=7
@@ -590,7 +670,27 @@ Question: What obligation moves with the guard?
 
 Answer: 3. The guard owns one release action.
 
-Experiment: Add move-assignment with a defined existing-pin release rule, or deliberately delete it. Test self-move and moved-from destruction without accessing inactive guards.
+### Run the starter, then try a change
+
+Open `native/examples/guard-moves.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/guard-moves.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+moved.write(1, 7)
+```
+
+With
+
+```cpp
+moved.write(1, 9)
+```
+
+Rerun the terminal command. Compare pins=, value= and released=. Does the value written by the moved guard change how many pins it owns?
 
 ## Chapter project
 

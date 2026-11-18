@@ -24,7 +24,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 scan=1000 index=7 choose=index
@@ -42,7 +42,27 @@ Question: What makes the two costs comparable here?
 
 Answer: 2. A cost model must define common units and relevant work.
 
-Experiment: Add per-page fetch and sequential-scan weights. State which observations would justify those weights.
+### Run the starter, then try a change
+
+Open `native/examples/plan-cost.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/plan-cost.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+matches = 4
+```
+
+With
+
+```cpp
+matches = 1000
+```
+
+Rerun the terminal command. Compare scan=, index= and choose=. Which path wins when the assumed match count reaches the whole table?
 
 ## Selectivity changes the cost of an index lookup
 
@@ -64,7 +84,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4:index
@@ -83,7 +103,27 @@ Question: Can a full-table match favor a scan?
 
 Answer: 1. An index can add traversal and fetch work when little is filtered out.
 
-Experiment: Find the crossover point in this model and test values on either side. Compare the prediction with a separately instrumented executor.
+### Run the starter, then try a change
+
+Open `native/examples/plan-selectivity.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/plan-selectivity.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{4u, 1000u}
+```
+
+With
+
+```cpp
+{498u, 499u}
+```
+
+Rerun the terminal command. Read the choices for the two nearby counts. Which lookup estimate is below the model’s scan cost of 1000?
 
 ## Stale statistics can select a poor plan
 
@@ -104,7 +144,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 estimated=5 observed=500 ratio=100
@@ -122,7 +162,27 @@ Question: Should estimates be confused with actual counts?
 
 Answer: 3. Statistics are predictions that must be compared with observations.
 
-Experiment: Create a skewed key distribution and compare a uniform estimate with measured equality counts. Define a refresh trigger.
+### Run the starter, then try a change
+
+Open `native/examples/plan-statistics.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/plan-statistics.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+estimated_matches = 5
+```
+
+With
+
+```cpp
+estimated_matches = 250
+```
+
+Rerun the terminal command. Compare estimated=, observed= and ratio=. The example supplies both counts as fixed values. How does a larger estimate change their gap?
 
 ## Projection can change whether row fetches are needed
 
@@ -143,7 +203,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 covered=11 fetch=27
@@ -161,7 +221,27 @@ Question: What determines coverage?
 
 Answer: 3. Every projected field must be available from the chosen path.
 
-Experiment: List columns for several projections and decide which are covered by an (id,score) index. Keep name fetches explicit.
+### Run the starter, then try a change
+
+Open `native/examples/covering-index.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/covering-index.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+matches = 8
+```
+
+With
+
+```cpp
+matches = 16
+```
+
+Rerun the terminal command. Compare covered= and fetch=. Which model adds a larger cost per match?
 
 ## Explain estimates and validate result equivalence
 
@@ -188,7 +268,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 index(id) predicate=id=7 estimated=5
@@ -206,7 +286,27 @@ Question: What must remain the same across legal plan choices?
 
 Answer: 2. Optimization may change work but must preserve semantics.
 
-Experiment: Execute a scan and a lookup on the same fixed table, compare results, and print estimated versus observed candidate counts.
+### Run the starter, then try a change
+
+Open `native/examples/explain-plan.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/explain-plan.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Plan plan{"index(id)", 3, 2};
+```
+
+With
+
+```cpp
+Plan plan{"index(id)", 3, 8};
+```
+
+Rerun the terminal command. Compare estimated= and the predicate. Does changing an assumed count execute the query or change the printed estimate?
 
 ## Chapter project
 

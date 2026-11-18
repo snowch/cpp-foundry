@@ -31,7 +31,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 count=20000
@@ -49,7 +49,27 @@ Question: What operation combines the update atomically?
 
 Answer: 2. The read-modify-write is indivisible for this atomic object.
 
-Experiment: Implement a deliberately separate load/store model under a controlled schedule to demonstrate a lost update without introducing a data race.
+### Run the starter, then try a change
+
+Open `native/examples/atomic-rmw.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/atomic-rmw.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+i < 10000
+```
+
+With
+
+```cpp
+i < 5000
+```
+
+Rerun the terminal command. Compare count=. How many increments do the two workers request altogether after changing the loop bound?
 
 ## A failed compare-exchange updates the expected value
 
@@ -73,7 +93,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 changed=0 expected=7 value=7
@@ -91,7 +111,27 @@ Question: What does expected contain after this failure?
 
 Answer: 1. Failure reports the currently observed atomic value through expected.
 
-Experiment: Retry with a decision based on the observed value. Specify whether the desired update should be recomputed after each failure.
+### Run the starter, then try a change
+
+Open `native/examples/compare-exchange.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/compare-exchange.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int expected = 5;
+```
+
+With
+
+```cpp
+int expected = 7;
+```
+
+Rerun the terminal command. Compare changed=, expected= and value=. What gets replaced when the original atomic value matches the expectation?
 
 ## Publish a prepared batch before readers inspect it
 
@@ -130,7 +170,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 batch=42
@@ -148,7 +188,27 @@ Question: What is made visible by observing the release?
 
 Answer: 1. Acquire/release establishes visibility of the writes ordered before publication.
 
-Experiment: Draw the happens-before chain explicitly. Explain why publishing a pointer without retaining its owner would still be unsafe.
+### Run the starter, then try a change
+
+Open `native/examples/release-acquire-data.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/release-acquire-data.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values = {20, 22}
+```
+
+With
+
+```cpp
+values = {20, 23}
+```
+
+Rerun the terminal command. Compare batch=. Which synchronization publishes the changed data before the reader sums it?
 
 ## Sequential consistency constrains the global atomic order
 
@@ -183,7 +243,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 allowed=1
@@ -201,7 +261,27 @@ Question: Why does the output avoid one exact read pair?
 
 Answer: 3. The contract constrains outcomes without fixing the scheduler.
 
-Experiment: Model the ordering constraints on paper. Compare with relaxed operations conceptually without claiming a finite run proves a memory-model theorem.
+### Run the starter, then try a change
+
+Open `native/examples/sequential-consistency.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sequential-consistency.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << "allowed=" << allowed
+```
+
+With
+
+```cpp
+std::cout << "first=" << first << " second=" << second << " allowed=" << allowed
+```
+
+Rerun the terminal command. Compare both observed loads and allowed=. The two loads can vary between runs. Which pair does the sequentially consistent check reject?
 
 ## Publish an owning immutable snapshot handle
 
@@ -235,7 +315,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 3
@@ -253,7 +333,27 @@ Question: Why is the old snapshot still alive?
 
 Answer: 3. Ownership, not just publication ordering, protects its lifetime.
 
-Experiment: Hold several readers across replacement and observe reclamation through weak_ptr expiration after their owners are released.
+### Run the starter, then try a change
+
+Open `native/examples/atomic-snapshot-owner.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/atomic-snapshot-owner.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{3, 4}
+```
+
+With
+
+```cpp
+{5, 6}
+```
+
+Rerun the terminal command. Compare the old and current first elements. Does publishing a replacement mutate the snapshot the reader already owns?
 
 ## Chapter project
 

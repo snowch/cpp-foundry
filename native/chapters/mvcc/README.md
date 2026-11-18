@@ -74,7 +74,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 10 20
@@ -92,7 +92,27 @@ Question: Is a version visible at its end stamp?
 
 Answer: 1. The visibility interval excludes its end.
 
-Experiment: Write three versions and test immediately before, exactly at, and after each begin/end boundary.
+### Run the starter, then try a change
+
+Open `native/examples/version-intervals.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/version-intervals.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+versions.write(20);
+```
+
+With
+
+```cpp
+versions.write(25);
+```
+
+Rerun the terminal command. Compare the two reads at stamps 1 and 2. Which interval contains the new value?
 
 ## A retained snapshot keeps its logical read stamp
 
@@ -164,7 +184,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 snapshot=10 current=30
@@ -182,7 +202,27 @@ Question: What remains fixed for this reader?
 
 Answer: 1. The stamp defines its visibility view.
 
-Experiment: Read the same row twice around several writes. Then extend the model to two rows committed under one shared transaction stamp.
+### Run the starter, then try a change
+
+Open `native/examples/stable-snapshot.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/stable-snapshot.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+versions.write(30);
+```
+
+With
+
+```cpp
+versions.write(40);
+```
+
+Rerun the terminal command. Compare snapshot= and current=. Which stamp remains fixed while current follows the version clock?
 
 ## A tombstone preserves historical visibility
 
@@ -253,7 +293,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 old=10 current_missing=1
@@ -271,7 +311,27 @@ Question: What does the tombstone change?
 
 Answer: 1. The new interval represents absence without rewriting earlier history.
 
-Experiment: Reinsert a value after the tombstone and test all three snapshot regions: present, absent, and present again.
+### Run the starter, then try a change
+
+Open `native/examples/versioned-delete.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/versioned-delete.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+versions.write(std::nullopt);
+```
+
+With
+
+```cpp
+versions.write(std::nullopt); versions.write(12);
+```
+
+Rerun the terminal command. Compare old= and current_missing=. Is the key still absent at the newest stamp after inserting again?
 
 ## Several readers can hold the same snapshot stamp
 
@@ -344,7 +404,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 retained=2 reader=10
@@ -362,7 +422,30 @@ Question: Why is a multiset used?
 
 Answer: 1. Duplicate stamps still represent distinct active readers.
 
-Experiment: Register three readers at one stamp and release them in different orders. Check old-version retention after every release.
+### Run the starter, then try a change
+
+Open `native/examples/snapshot-registration.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/snapshot-registration.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+versions.release(first);
+    versions.collect();
+```
+
+With
+
+```cpp
+versions.release(first);
+    versions.collect();
+    versions.write(30);
+```
+
+Rerun the terminal command. Compare retained= and reader=. Does a new version displace the old one while the other reader still holds its stamp?
 
 ## Reclaim only versions older than every active reader needs
 
@@ -443,7 +526,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 while_reading=3 after_release=1 current=30
@@ -461,7 +544,27 @@ Question: What must remain after all old readers finish?
 
 Answer: 2. The live committed state must not be reclaimed.
 
-Experiment: Add staggered readers at different stamps and verify collection stops precisely at the oldest still-needed interval.
+### Run the starter, then try a change
+
+Open `native/examples/oldest-reader-gc.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/oldest-reader-gc.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+versions.write(30);
+```
+
+With
+
+```cpp
+versions.write(30); versions.write(40);
+```
+
+Rerun the terminal command. Compare while_reading=, after_release= and current=. Which versions can collection remove after the oldest reader leaves?
 
 ## Chapter project
 

@@ -17,5 +17,5 @@ export function diagramSvg(diagram){
 }
 export function renderDiagram(id){
   const diagram=diagramFor(id);if(!diagram)return '';
-  return `<figure class="concept-diagram"><figcaption><span class="eyebrow">Concept diagram</span><strong>${escape(diagram.title)}</strong></figcaption>${diagramSvg(diagram)}<p class="diagram-caption">${escape(diagram.caption)}</p><details class="diagram-description"><summary>Text description</summary><p>${escape(diagramDescription(diagram))}</p></details></figure>`;
+  return `<figure class="concept-diagram"><figcaption><strong>${escape(diagram.title)}</strong></figcaption>${diagramSvg(diagram)}<p class="diagram-caption">${escape(diagram.caption)}</p><details class="diagram-description"><summary>Read the diagram in words</summary><p>${escape(diagramDescription(diagram))}</p></details></figure>`;
 }

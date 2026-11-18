@@ -2,7 +2,7 @@
 
 [Open the course](https://snowch.github.io/cpp-foundry/#/course) · [Workbench](https://snowch.github.io/cpp-foundry/#/workbench) · [Open in Codespaces](https://codespaces.new/snowch/cpp-foundry?quickstart=1)
 
-A modern C++20 course with **ten parts, 54 chapters, and 270 authored lessons**, from values and ownership through algorithms, data structures, database internals, recovery, portability, and concurrency. Each lesson includes an explanation, a complete worked program, expected output, a walkthrough, a pitfall, an understanding question with feedback, and an experiment. All readings and programs are also exported into `native/`.
+A modern C++20 course with **ten parts, 54 chapters, and 270 authored lessons**, from values and ownership through algorithms, data structures, database internals, recovery, portability, and concurrency. Each lesson includes an explanation, a complete worked program, expected output, a walkthrough, a pitfall, an understanding question with feedback, and a literal edit with output to compare. All readings and programs are also exported into `native/`.
 
 | Part | Chapters | Lessons | Focus |
 | --- | ---: | ---: | --- |
@@ -41,7 +41,7 @@ The Workbench remains the concrete CPF1 record-store capstone below. Its command
 
 ## Read, edit, and run
 
-Run compiles the current source to WebAssembly in a worker, links it against real C/C++ libraries, and executes it. Standard input is preloaded text; execution reaches EOF when that text is exhausted. Stop interrupts compilation or execution. Reset restores the original worked program. Download exports your current source.
+Run compiles the current source to WebAssembly in a worker, links it against real C/C++ libraries, and executes it. Enter standard input before running. Execution reaches end of file when it has read all that text. Stop interrupts compilation or execution. In Editor tools, Restore starter source keeps the earlier draft under Undo restore. Download source exports the current file.
 
 Drafts and input have independent localStorage keys per lesson. **Mark lesson as done** explicitly records reading completion; running code does not automatically complete a lesson. Completion changes reconcile across tabs. Browser storage failures retain session choices and explain how to keep a downloaded copy. Source drafts edited simultaneously in multiple tabs use the last successful localStorage write; they are not a collaborative editor.
 
@@ -117,6 +117,6 @@ The browser needs WebAssembly, workers, DecompressionStream, BigInt, and support
 
 Limits are 256 KB source, 64 KB preloaded stdin, 100 KB output, 1 MB database, a two-minute initialization/build deadline, and a five-second execution deadline. This single-file teaching editor does not provide native threads, interactive stdin, network sockets, a debugger, sanitizers, or arbitrary host-file access. Use the native toolchain for those investigations.
 
-Upstream JavaScript/memfs sources are pinned at `df1180d80184733c6a01599f76b92b4001d20f87`. Local changes support USTAR path prefixes and UTF-8 argv/stdin/output with streaming decoding. Existing upstream WASI/file compatibility fixes are retained. Third-party notices and licenses are served in [`dist/compiler/`](dist/compiler/); see [runtime provenance](docs/runtime.md).
+Upstream JavaScript/memfs sources are pinned at `df1180d80184733c6a01599f76b92b4001d20f87`. Local changes support USTAR path prefixes and UTF-8 argv/stdin/output with streaming decoding. A normal nonzero exit is reported separately from the program’s output. Existing upstream WASI/file compatibility fixes are retained. Third-party notices and licenses are served in [`dist/compiler/`](dist/compiler/); see [runtime provenance](docs/runtime.md).
 
 Finite successful tests establish the demonstrated behaviors, not complete C++20 conformance, absence of undefined behavior for every edited program, race freedom for arbitrary extensions, or production database reliability.

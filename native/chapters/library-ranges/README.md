@@ -31,7 +31,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 16 
@@ -49,7 +49,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. The source vector must outlive this borrowed pipeline. Iteration selects two even values and computes their squares on demand. No result vector is created.
 
-Experiment: Materialize the pipeline into an explicit vector using a loop. Compare repeated traversal with cached results using a side-effect-free transformation counter outside production code.
+### Run the starter, then try a change
+
+Open `native/examples/lib-lazy-views.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-lazy-views.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+n % 2 == 0
+```
+
+With
+
+```cpp
+n % 2 != 0
+```
+
+Rerun the terminal command. Compare the squared values. Which input values reach the transform after changing the filter?
 
 ## Sort records through a projection
 
@@ -76,7 +96,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Grace Ada 
@@ -94,7 +114,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. The projection chooses the compared field. The score projection puts Grace before Ada. The record values remain intact; only their positions change.
 
-Experiment: Add tied scores and compare a lexicographic comparator with stable_sort. Document whether input order or a name tie-break is required.
+### Run the starter, then try a change
+
+Open `native/examples/lib-ranges-projections.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-ranges-projections.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"Grace", 1}
+```
+
+With
+
+```cpp
+{"Grace", 4}
+```
+
+Rerun the terminal command. Compare the printed order of names. Which field controls the order even though the program prints a different field?
 
 ## Bound a generated range before consuming it
 
@@ -114,7 +154,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 2 3 4 
@@ -132,7 +172,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. The consumer must establish termination. The take adaptor stops iteration after four integers, so the unbounded source is never exhausted.
 
-Experiment: Compare iota(1,5) with an unbounded iota followed by take. Explain why moving a filter before the count bound can alter termination.
+### Run the starter, then try a change
+
+Open `native/examples/lib-ranges-take.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-ranges-take.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::views::take(4)
+```
+
+With
+
+```cpp
+std::views::take(0)
+```
+
+Rerun the terminal command. Compare the produced range. How does the take limit affect the number of values requested from iota?
 
 ## Keep algorithm results tied to a living range
 
@@ -160,7 +220,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 1
@@ -178,7 +238,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. A borrowed range still needs live underlying elements. The lvalue vector yields a usable iterator. The temporary-vector expression is inspected only as a type and yields dangling.
 
-Experiment: Compare the result type for a span over a living array. Then write a lifetime diagram for a span returned from a local array without executing invalid access.
+### Run the starter, then try a change
+
+Open `native/examples/lib-borrowed-result.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-borrowed-result.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::ranges::find(v, 4)
+```
+
+With
+
+```cpp
+std::ranges::find(v, 6)
+```
+
+Rerun the terminal command. Compare the found value and the dangling flag. Does changing the searched value change the temporary range’s result type?
 
 ## Chapter project
 

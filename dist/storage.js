@@ -4,10 +4,19 @@ export function read(key, fallback='') {
   if(memory.has(key)) return memory.get(key);
   try {return localStorage.getItem(prefix+key) ?? fallback;} catch {return fallback;}
 }
-export function write(key,value) {
+export function write(key,value,{sessionOnly=false}={}) {
   memory.set(key,value);
-  try {localStorage.setItem(prefix+key,value);return true;} catch {return false;}
+  if(sessionOnly)return false;
+  try {
+    if(value===null)localStorage.removeItem(prefix+key);
+    else localStorage.setItem(prefix+key,value);
+    return true;
+  } catch {return false;}
 }
+export function hasSaved(key,value) {
+  try {return (localStorage.getItem(prefix+key) ?? null)===value;} catch {return false;}
+}
+export function isInMemory(key) {return memory.has(key);}
 export function onStorage(callback) {
   addEventListener('storage',event=>{
     if(event.key?.startsWith(prefix)){

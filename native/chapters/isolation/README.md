@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 actual=17 intended=22
@@ -43,7 +43,27 @@ Question: What was lost?
 
 Answer: 1. The stale second write replaces the newer first result.
 
-Experiment: Add a revision check to the write boundary and replay this exact schedule. Require the second stale write to fail explicitly.
+### Run the starter, then try a change
+
+Open `native/examples/lost-update-schedule.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lost-update-schedule.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+committed = second_read + 7;
+```
+
+With
+
+```cpp
+second_read = committed; committed = second_read + 7;
+```
+
+Rerun the terminal command. Compare actual= and intended=. What changes when the second update starts from the value after the first update?
 
 ## Keep uncommitted values out of committed reads
 
@@ -68,7 +88,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 reader=10 committed=10 pending=0
@@ -86,7 +106,27 @@ Question: Which value may this committed reader observe?
 
 Answer: 1. The visibility interface excludes uncommitted candidate state.
 
-Experiment: Model two pending writers and one committed reader. Test that aborted values never enter the reader’s result sequence.
+### Run the starter, then try a change
+
+Open `native/examples/dirty-read-boundary.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/dirty-read-boundary.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int reader = committed;
+```
+
+With
+
+```cpp
+int reader = *pending;
+```
+
+Rerun the terminal command. Compare reader=, committed= and pending=. Which value can the reader still report after aborting the simulated write?
 
 ## Distinguish read-committed from snapshot reads
 
@@ -110,7 +150,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 read_committed=10,20 snapshot=10,10
@@ -128,7 +168,27 @@ Question: Does read-committed require both reads to match?
 
 Answer: 1. A later read may observe a later committed state.
 
-Experiment: Write explicit schedules for repeatable row reads and range predicates. State which guarantees your API actually supplies.
+### Run the starter, then try a change
+
+Open `native/examples/repeatable-observation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/repeatable-observation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+committed = 20;
+```
+
+With
+
+```cpp
+committed = 35;
+```
+
+Rerun the terminal command. Compare read_committed= and snapshot=. Which pair sees the replacement?
 
 ## Disjoint writes can violate a shared predicate
 
@@ -153,7 +213,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 on_call=0
@@ -171,7 +231,27 @@ Question: Why can disjoint writes still conflict logically?
 
 Answer: 2. The invariant spans the state both transactions read.
 
-Experiment: Add predicate or read-set validation and replay both commit orders. Require one client to retry instead of violating the on-call rule.
+### Run the starter, then try a change
+
+Open `native/examples/write-skew.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/write-skew.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+second_saw_alice = alice
+```
+
+With
+
+```cpp
+second_saw_alice = false
+```
+
+Rerun the terminal command. Compare on_call=. This models Bob already knowing Alice will be off duty. Which decision preserves someone on call?
 
 ## Validate the data a decision depended on
 
@@ -205,7 +285,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 second=0 invariant=1
@@ -223,7 +303,30 @@ Question: Why is the second decision rejected?
 
 Answer: 1. The coarse revision represents the whole read-view dependency.
 
-Experiment: Replace the coarse revision with per-row read versions and a predicate guard. Identify which additional phantom cases need range validation.
+### Run the starter, then try a change
+
+Open `native/examples/serial-validation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/serial-validation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+++revision;
+    }
+    bool second_ok
+```
+
+With
+
+```cpp
+}
+    bool second_ok
+```
+
+Rerun the terminal command. Compare second= and invariant=. What happens if the first write forgets to advance the validated revision?
 
 ## Chapter project
 

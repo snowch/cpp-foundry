@@ -31,7 +31,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Hello, Ada Lovelace
@@ -50,7 +50,27 @@ Question: Why does message survive name.clear()?
 
 Answer: 1. The return type is std::string, so the returned result is an owning value.
 
-Experiment: Change append_label to take its parameter by value. Predict whether main’s name changes, then run the program.
+### Run the starter, then try a change
+
+Open `native/examples/references.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/references.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+append_label(std::string&
+```
+
+With
+
+```cpp
+append_label(std::string
+```
+
+Rerun the terminal command. Compare the line beginning Hello. Does the label added to a copy change the name used by the caller?
 
 ## Value types and invariants
 
@@ -79,7 +99,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 90
@@ -98,7 +118,27 @@ Question: When does a Score become a valid constructed object?
 
 Answer: 1. A constructor that throws does not produce a successfully constructed Score.
 
-Experiment: Add a set operation that checks its candidate value before changing value_. Verify that rejection preserves the old score.
+### Run the starter, then try a change
+
+Open `native/examples/invariants.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/invariants.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Score invalid{101};
+```
+
+With
+
+```cpp
+Score invalid{100};
+```
+
+Rerun the terminal command. Compare the output from the catch handler. Which value is the first one that violates the score range?
 
 ## RAII ties cleanup to scope
 
@@ -140,7 +180,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 acquire
@@ -161,7 +201,27 @@ Question: Does the destructor run before the catch handler?
 
 Answer: 1. The local guard’s scope is left while the exception travels to the matching handler.
 
-Experiment: Add a second guard with a label and observe reverse construction order. Replace the throw with return and compare.
+### Run the starter, then try a change
+
+Open `native/examples/raii.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/raii.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+work();
+```
+
+With
+
+```cpp
+work(); std::cout << "after work\n";
+```
+
+Rerun the terminal command. Look for release and after work. Does the instruction following the throw run even though the guard releases its resource?
 
 ## Unique ownership and moving
 
@@ -196,7 +256,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 first empty=1
@@ -216,7 +276,27 @@ Question: Does std::move(first) itself allocate a second string?
 
 Answer: 1. The unique_ptr move transfers the stored pointer; it does not copy the pointed-to string.
 
-Experiment: Attempt auto third = second before reset. Read the deleted-copy diagnostic, then explicitly transfer ownership instead.
+### Run the starter, then try a change
+
+Open `native/examples/moves.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/moves.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+second.reset();
+```
+
+With
+
+```cpp
+auto third = std::move(second);
+```
+
+Rerun the terminal command. Compare second empty= with the original. What happens to ownership when an empty source is produced by move instead of reset?
 
 ## Chapter project
 

@@ -32,7 +32,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 Ada
@@ -53,7 +53,27 @@ Question: What must sort and binary_search agree on?
 
 Answer: 1. A search can discard half the range only when its ordering assumptions match the data.
 
-Experiment: Search for an absent ID. Then insert a new smallest ID at the end and restore the sorted invariant before searching again.
+### Run the starter, then try a change
+
+Open `native/examples/sorting.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sorting.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+binary_search(people, 2
+```
+
+With
+
+```cpp
+binary_search(people, 4
+```
+
+Rerun the terminal command. Compare found= and the printed sorted rows. Does searching change the collection?
 
 ## Choose an index for its contract
 
@@ -79,7 +99,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 inserted=1
@@ -101,7 +121,27 @@ Question: Which operation checks without inserting?
 
 Answer: 1. find observes the collection; operator[] is also a mutation operation for absent keys.
 
-Experiment: Replace find(9) with names[9], then explain the new size and empty string. Compare ordered iteration with unordered_map.
+### Run the starter, then try a change
+
+Open `native/examples/maps.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/maps.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+(names.find(9) == names.end())
+```
+
+With
+
+```cpp
+names[9].empty()
+```
+
+Rerun the terminal command. Compare missing= and size=. Does observing a missing ID through operator[] leave the map unchanged?
 
 ## Views describe a lazy computation
 
@@ -125,7 +165,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 75
@@ -145,7 +185,27 @@ Question: Where are 75 and 95 stored before iteration?
 
 Answer: 1. This pipeline computes transformed values as it is traversed.
 
-Experiment: Traverse the view twice with a counter in the transform. Explain why side effects can make a lazy pipeline harder to understand.
+### Run the starter, then try a change
+
+Open `native/examples/ranges.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/ranges.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+score >= 60
+```
+
+With
+
+```cpp
+score >= 80
+```
+
+Rerun the terminal command. Compare the transformed values and original=. Which values are accepted before adding five?
 
 ## Constrain templates to express intent
 
@@ -171,7 +231,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 9
@@ -189,7 +249,27 @@ Question: Does std::integral prove addition cannot overflow?
 
 Answer: 1. The concept checks the kind of type; representability depends on the actual values and operations.
 
-Experiment: Attempt total<double> with a double array and read the constraint diagnostic. Design a checked-total variant using optional.
+### Run the starter, then try a change
+
+Open `native/examples/concepts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/concepts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+total<int>(values)
+```
+
+With
+
+```cpp
+total<double>(values)
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the constraint diagnostic for total. Restore int and run again. What category of type does total require?
 
 ## Chapter project
 

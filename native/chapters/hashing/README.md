@@ -76,7 +76,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 bucket=1,1 values=10,80
@@ -94,7 +94,27 @@ Question: Do equal bucket numbers imply equal keys?
 
 Answer: 1. Collisions are expected and require full-key comparison.
 
-Experiment: Insert several keys separated by the capacity and inspect the probe sequence. State how absence is detected.
+### Run the starter, then try a change
+
+Open `native/examples/hash-buckets.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/hash-buckets.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+table.put(8, 80);
+```
+
+With
+
+```cpp
+table.put(8, 81);
+```
+
+Rerun the terminal command. Compare the two starting buckets and the two looked-up values. Which outputs show that keys with the same starting bucket stay distinct?
 
 ## Bound a probe sequence by the table capacity
 
@@ -168,7 +188,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 full=1 absent=1
@@ -186,7 +206,27 @@ Question: What bounds unsuccessful probing?
 
 Answer: 3. The loop explicitly counts at most capacity probes.
 
-Experiment: Fill the table in several insertion orders and verify unsuccessful operations always terminate and preserve existing values.
+### Run the starter, then try a change
+
+Open `native/examples/linear-probing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/linear-probing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+table.put(6, 60);
+```
+
+With
+
+```cpp
+table.put(6, 60); table.erase(3);
+```
+
+Rerun the terminal command. Compare full= and absent= for key 9. What changes after removing an item from the full table?
 
 ## Deletion must preserve later probe paths
 
@@ -266,7 +306,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 deleted=1 survivor=80
@@ -284,7 +324,27 @@ Question: Why does lookup cross a tombstone?
 
 Answer: 2. Deletion must retain the history needed by probing.
 
-Experiment: Reuse the tombstone with a new colliding key. Test duplicate rejection even when an earlier tombstone is available.
+### Run the starter, then try a change
+
+Open `native/examples/tombstones.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/tombstones.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+table.erase(1);
+```
+
+With
+
+```cpp
+table.erase(1); table.put(15, 150);
+```
+
+Rerun the terminal command. Compare deleted= and survivor=. Does a new colliding key stop the search from reaching the surviving key 8?
 
 ## Rebuild an index without changing its logical mappings
 
@@ -361,7 +421,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 10 40
@@ -379,7 +439,27 @@ Question: What must remain invariant across rehashing?
 
 Answer: 3. Rehashing changes representation while preserving logical contents.
 
-Experiment: Inject a candidate-capacity failure and keep the old table intact. Check every transferred key against an independent map.
+### Run the starter, then try a change
+
+Open `native/examples/rehashing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/rehashing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Hash<7> candidate;
+```
+
+With
+
+```cpp
+Hash<5> candidate;
+```
+
+Rerun the terminal command. Compare both looked-up values. Does changing the candidate’s bucket count change its transferred key/value pairs?
 
 ## Check a hash implementation against an independent model
 
@@ -466,7 +546,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 model=1
@@ -484,7 +564,27 @@ Question: Why is std::map a useful oracle here?
 
 Answer: 2. Independent behavior is more valuable than mirrored internals.
 
-Experiment: Enumerate short operation sequences and compare after every step, including full-table and duplicate insertion failures.
+### Run the starter, then try a change
+
+Open `native/examples/hash-reference.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/hash-reference.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1u, 8u, 2u}
+```
+
+With
+
+```cpp
+{1u, 8u, 2u, 9u}
+```
+
+Rerun the terminal command. Compare model=. What does the independent map check after adding a second collision?
 
 ## Chapter project
 
