@@ -30,7 +30,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada Changed
@@ -48,7 +48,27 @@ Question: Why are the copies independent?
 
 Answer: 1. The standard owning members define the desired copy behavior.
 
-Experiment: Add a second vector member and verify the default operations still satisfy your value contract without custom special members.
+### Run the starter, then try a change
+
+Open `native/examples/rule-zero.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/rule-zero.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+copy.names[0] = "Changed";
+```
+
+With
+
+```cpp
+copy.names[0] = "Lin";
+```
+
+Rerun the terminal command. Compare first and copy. Do edits to the copy change the original vector’s first value?
 
 ## A move-only member makes ownership transfer explicit
 
@@ -84,7 +104,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 12
@@ -102,7 +122,27 @@ Question: Can this Page be copied by its generated copy constructor?
 
 Answer: 3. unique_ptr deliberately deletes copying.
 
-Experiment: Add a string label and move the Page again. Check only moved-from properties guaranteed by the relevant member contracts.
+### Run the starter, then try a change
+
+Open `native/examples/move-only-types.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/move-only-types.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+make_unique<int>(12)
+```
+
+With
+
+```cpp
+make_unique<int>(16)
+```
+
+Rerun the terminal command. Compare both numbers. Which number records the original pointer’s state and which belongs to the object after the move?
 
 ## Define an independent copy when the domain needs one
 
@@ -147,7 +187,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 5 9
@@ -165,7 +205,27 @@ Question: What does the copy constructor duplicate?
 
 Answer: 1. Each successful Box construction owns its own int.
 
-Experiment: Test copy assignment and self-assignment. Add explicitly chosen move operations only after deciding how a moved-from Box may be observed.
+### Run the starter, then try a change
+
+Open `native/examples/copy-custom-owner.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/copy-custom-owner.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Box copy = first;
+```
+
+With
+
+```cpp
+Box copy{0}; copy = first;
+```
+
+Rerun the terminal command. Compare the two printed values. Does copy assignment preserve independence after editing the copy?
 
 ## Nonthrowing movement affects container choices
 
@@ -191,7 +251,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1
@@ -210,7 +270,27 @@ Question: What happens if an exception escapes a noexcept function?
 
 Answer: 3. noexcept is an enforceable exception-propagation promise.
 
-Experiment: Inspect is_nothrow_move_constructible for an aggregate of standard owning members. Explain which member determines the result.
+### Run the starter, then try a change
+
+Open `native/examples/noexcept-moves.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/noexcept-moves.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::is_copy_constructible_v<std::unique_ptr<int>>
+```
+
+With
+
+```cpp
+std::is_copy_constructible_v<int>
+```
+
+Rerun the terminal command. Compare the second line for int and unique_ptr<int>. Which type permits copying?
 
 ## Return values without forcing a move
 
@@ -238,7 +318,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 ready
@@ -256,7 +336,27 @@ Question: Does this prvalue return require an intermediate copy?
 
 Answer: 3. The prvalue construction is covered by guaranteed copy elision.
 
-Experiment: Make Message noncopyable and return the prvalue again. Separately study a named local return and distinguish its rule.
+### Run the starter, then try a change
+
+Open `native/examples/return-elision.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/return-elision.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << result.text
+```
+
+With
+
+```cpp
+Message second{std::move(result)}; std::cout << second.text
+```
+
+Rerun the terminal command. Compare the printed result. Which object was moved from and which now owns its string?
 
 ## Chapter project
 

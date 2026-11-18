@@ -22,7 +22,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 C++20 baseline enabled
@@ -40,7 +40,27 @@ Question: What does __cplusplus primarily describe?
 
 Answer: 2. The mode is distinct from compiler and library release numbers.
 
-Experiment: Compile the exported source with C++17 and C++20 flags and compare the baseline diagnostic. Record the toolchain versions separately.
+### Run the starter, then try a change
+
+Open `native/examples/standard-baseline.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/standard-baseline.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+__cplusplus>=202002L
+```
+
+With
+
+```cpp
+__cplusplus>=202302L
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the failed static assertion. Put 202002L back and rerun. Both runs use the editor’s C++20 mode. Which language version does each number ask for?
 
 ## Detect a required facility with its feature macro
 
@@ -63,7 +83,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 span=2
@@ -81,7 +101,27 @@ Question: Why prefer a facility feature macro?
 
 Answer: 3. The check targets the capability the code needs.
 
-Experiment: Add a documented required macro for concepts or ranges. Distinguish a missing facility from a runtime host limitation.
+### Run the starter, then try a change
+
+Open `native/examples/feature-test.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/feature-test.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int values[]{1,2}
+```
+
+With
+
+```cpp
+int values[]{1,2,3}
+```
+
+Rerun the terminal command. Compare span=. Does this input change affect the number reported by the span while leaving the required library feature unchanged?
 
 ## Include the header that declares each used facility
 
@@ -104,7 +144,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 elements=3
@@ -122,7 +162,27 @@ Question: Should a public header rely on an unrelated caller’s includes?
 
 Answer: 2. Its declared dependencies should be self-contained.
 
-Experiment: Create a tiny source that includes only one project header and main. Compile it with two standard-library/toolchain combinations when available.
+### Run the starter, then try a change
+
+Open `native/examples/required-headers.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/required-headers.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+#include <vector>
+```
+
+With
+
+```cpp
+// #include <vector>
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Read the diagnostic for vector if your toolchain emits one. Restore the include and run again. Why do you list a type’s own header even on another toolchain where a different header might include it transitively?
 
 ## Make effect ordering explicit
 
@@ -145,7 +205,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 2
@@ -163,7 +223,27 @@ Question: What establishes the order in this example?
 
 Answer: 1. Each completed statement precedes the next.
 
-Experiment: Audit an input-processing expression with several side effects and rewrite it as named steps with a stated precondition for each.
+### Run the starter, then try a change
+
+Open `native/examples/sequencing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sequencing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+++value;
+```
+
+With
+
+```cpp
+value += 3;
+```
+
+Rerun the terminal command. Compare the before and after numbers. Which statement occurs between the two reads?
 
 ## Object representation is not an interchange format
 
@@ -194,7 +274,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12345678
@@ -212,7 +292,27 @@ Question: What makes these bytes portable?
 
 Answer: 2. The format contract is independent of host object layout.
 
-Experiment: Write the matching encoder and independent fixtures. Keep ABI-dependent structs out of the persisted representation.
+### Run the starter, then try a change
+
+Open `native/examples/object-abi.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/object-abi.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bytes{0x78, 0x56, 0x34, 0x12}
+```
+
+With
+
+```cpp
+bytes{0x79, 0x56, 0x34, 0x12}
+```
+
+Rerun the terminal command. Compare the hexadecimal results. Which part changes when the first input byte increases?
 
 ## Chapter project
 

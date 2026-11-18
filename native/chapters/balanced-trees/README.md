@@ -138,7 +138,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12346 found=1
@@ -156,7 +156,27 @@ Question: Which traversal exposes sorted key order?
 
 Answer: 1. The ordering invariant places each node between its left and right descendants.
 
-Experiment: Insert duplicates and absent-search keys. Compare traversal with an independently maintained sorted set.
+### Run the starter, then try a change
+
+Open `native/examples/tree-ordering.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/tree-ordering.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{4, 2, 6, 1, 3}
+```
+
+With
+
+```cpp
+{4, 2, 6, 1, 3, 3}
+```
+
+Rerun the terminal command. Compare the ordered values and found=. Does inserting an existing key add a second node?
 
 ## Keep stored heights consistent with structure
 
@@ -283,7 +303,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 root=4 height=3 valid=1
@@ -301,7 +321,27 @@ Question: What height does an empty subtree have here?
 
 Answer: 3. The height convention makes leaf height one.
 
-Experiment: Validate heights after every insertion, not only at the end. Try reversed and zigzag insertion orders.
+### Run the starter, then try a change
+
+Open `native/examples/avl-height.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/avl-height.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1, 2, 3, 4, 5, 6, 7}
+```
+
+With
+
+```cpp
+{7, 6, 5, 4, 3, 2, 1}
+```
+
+Rerun the terminal command. Compare root=, height= and valid=. What does the height check establish after inserting the same keys in reverse?
 
 ## A rotation transfers ownership while preserving order
 
@@ -429,7 +469,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 20 20
@@ -447,7 +487,27 @@ Question: Do rotations need new node allocations here?
 
 Answer: 1. They transfer existing owning links.
 
-Experiment: Add a nonempty inner subtree and verify every key remains reachable after rotation. Compare the complete in-order sequences.
+### Run the starter, then try a change
+
+Open `native/examples/avl-single-rotation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/avl-single-rotation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{10, 20, 30}
+```
+
+With
+
+```cpp
+{10, 20, 40}
+```
+
+Rerun the terminal command. Compare the ascending and descending roots. Which key does the ascending insertion promote after rotation?
 
 ## Resolve a zigzag imbalance in two steps
 
@@ -575,7 +635,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 20 left=10 right=30 valid=1
@@ -593,7 +653,27 @@ Question: Why rotate the child first?
 
 Answer: 3. The first rotation changes the structural orientation of the heavy path.
 
-Experiment: Test the mirrored right-left case. Verify ordering and heights independently after both patterns.
+### Run the starter, then try a change
+
+Open `native/examples/avl-double-rotation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/avl-double-rotation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{30, 10, 20}
+```
+
+With
+
+```cpp
+{10, 30, 20}
+```
+
+Rerun the terminal command. Compare the root, left=, right= and valid=. Does the mirrored case produce the same ordering and valid heights?
 
 ## Deletion can require rebalancing toward the root
 
@@ -726,7 +806,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 delete verified=1
@@ -744,7 +824,29 @@ Question: Which checks are both needed?
 
 Answer: 3. Correct ordering, membership, heights, and ownership are separate properties.
 
-Experiment: Enumerate insertion permutations for four keys and delete every key in turn. Compare every intermediate state with std::set.
+### Run the starter, then try a change
+
+Open `native/examples/avl-delete-oracle.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/avl-delete-oracle.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+erase(root, 4);
+    erase(root, 1);
+```
+
+With
+
+```cpp
+erase(root, 1);
+    erase(root, 4);
+```
+
+Rerun the terminal command. Compare delete verified=. Does reversing the deletion order change the expected set or the requirement to maintain valid heights?
 
 ## Chapter project
 

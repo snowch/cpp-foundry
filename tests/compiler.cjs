@@ -22,7 +22,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     }
     let result=await run({code:'int main(){ invalid_cpp; }'});
     assert.equal(result.type,'error');assert.match(result.diagnostics,/undeclared identifier/);
-    result=await run({code:'int main(){return 7;}'});assert.equal(result.exitCode,7);
+    result=await run({code:'#include <iostream>\nint main(){std::cout<<"check=0"; return 7;}'});
+    assert.equal(result.type,'done');assert.equal(result.exitCode,7);assert.equal(result.output,'check=0');
     result=await run({code:'#include <iostream>\n#include <string>\nint main(){std::string s;std::getline(std::cin,s);std::cout<<s;}',input:'Zoë 中文\n'});
     assert.equal(result.output,'Zoë 中文');console.log('PASS diagnostics, nonzero exit, UTF-8 stdin/output');
     result=await run({code:'#include <iostream>\nint main(){for(int i=0;i<100001;++i)std::cout<<"x";}'});

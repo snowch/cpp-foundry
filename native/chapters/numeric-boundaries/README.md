@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 less=1 equal=0
@@ -43,7 +43,27 @@ Question: What does cmp_less preserve across signedness?
 
 Answer: 3. The helper handles the sign difference explicitly.
 
-Experiment: Test zero, negative one, and unsigned maximum. Compare results with a deliberately stated domain policy for missing values.
+### Run the starter, then try a change
+
+Open `native/examples/mixed-sign.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/mixed-sign.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int negative = -1;
+```
+
+With
+
+```cpp
+int negative = 1;
+```
+
+Rerun the terminal command. Compare less= and equal=. Does equal comparison still work across signed and unsigned types when the values are both 1?
 
 ## Validate representability before narrowing
 
@@ -74,7 +94,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 255:1
@@ -93,7 +113,27 @@ Question: When is the cast performed?
 
 Answer: 3. Representability is established before conversion.
 
-Experiment: Add a signed source version and test negative values. Keep the application’s field bounds separate from the destination type’s range.
+### Run the starter, then try a change
+
+Open `native/examples/checked-narrowing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/checked-narrowing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{255u, 256u}
+```
+
+With
+
+```cpp
+{0u, 256u}
+```
+
+Rerun the terminal command. Compare the result next to each source number. Which source values fit the destination type?
 
 ## Check multiplication without overflowing the check
 
@@ -122,7 +162,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42 overflow=1
@@ -140,7 +180,27 @@ Question: Why handle a==0 separately?
 
 Answer: 3. The guard itself must be valid for every permitted input.
 
-Experiment: Test zero, one, maximum, and factors immediately around a boundary. Apply the same discipline to byte-count calculations.
+### Run the starter, then try a change
+
+Open `native/examples/checked-multiply.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/checked-multiply.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::numeric_limits<unsigned>::max(), 2
+```
+
+With
+
+```cpp
+std::numeric_limits<unsigned>::max(), 1
+```
+
+Rerun the terminal command. Compare the product and overflow=. Can the largest unsigned value be multiplied by one without overflow?
 
 ## Division has more than a zero-denominator boundary
 
@@ -168,7 +228,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 zero=1 minimum=1
@@ -186,7 +246,27 @@ Question: Which nonzero denominator needs a special minimum-value check?
 
 Answer: 3. The positive quotient would exceed the signed maximum.
 
-Experiment: Add checked remainder and checked negation with the corresponding exceptional-value rules. Test them independently of division.
+### Run the starter, then try a change
+
+Open `native/examples/checked-division.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/checked-division.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+!divide(1, 0)
+```
+
+With
+
+```cpp
+!divide(1, 1)
+```
+
+Rerun the terminal command. Compare the zero= field and unchanged minimum=. Which new denominator removes the first rejection?
 
 ## Validate finite floating values and choose a tolerance policy
 
@@ -210,7 +290,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 close=1 finite_nan=0 self_equal=0
@@ -228,7 +308,27 @@ Question: Does NaN compare equal to itself?
 
 Answer: 3. NaN has special comparison behavior.
 
-Experiment: Define finite-input, relative-tolerance, and near-zero policies for a measurement domain before writing its parser and tests.
+### Run the starter, then try a change
+
+Open `native/examples/floating-domain.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/floating-domain.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+<1e-12
+```
+
+With
+
+```cpp
+<1e-18
+```
+
+Rerun the terminal command. Compare close= and the two NaN flags. Which outcome depends on the chosen tolerance?
 
 ## Chapter project
 

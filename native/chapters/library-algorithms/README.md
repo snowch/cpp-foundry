@@ -31,7 +31,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 2 2
@@ -49,7 +49,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. remove returns a logical end without shrinking the vector. Size remains four after remove, while the retained prefix has length two. Erasing the suffix leaves two elements.
 
-Experiment: Compare remove, remove_if, std::erase, and std::erase_if on duplicates and empty input. Check both the returned count and final sequence.
+### Run the starter, then try a change
+
+Open `native/examples/lib-remove-erase.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-remove-erase.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+v.end(), 2)
+```
+
+With
+
+```cpp
+v.end(), 9)
+```
+
+Rerun the terminal command. Compare the size before erase, the distance to the logical end and the final size. What does remove return when nothing matches?
 
 ## Supply a strict weak ordering
 
@@ -71,7 +91,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 1
@@ -89,7 +109,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. A strict comparator returns false for equal arguments. The strict comparator produces ascending order, which is also the ordering used by binary_search.
 
-Experiment: Sort records by score and attach original positions to show stability. Test irreflexivity and transitivity over a small finite domain.
+### Run the starter, then try a change
+
+Open `native/examples/lib-strict-order.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-strict-order.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::binary_search(v.begin(), v.end(), 3)
+```
+
+With
+
+```cpp
+std::binary_search(v.begin(), v.end(), 4)
+```
+
+Rerun the terminal command. Compare the two flags. Can the range be sorted correctly while a requested key is absent?
 
 ## Choose fold types and distinguish scans
 
@@ -111,7 +151,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 9 2 5 9
@@ -129,7 +169,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. The initial value determines accumulate’s accumulator type. The long long seed chooses a wider sum type. The inclusive scan includes the current input in each prefix.
 
-Experiment: Compare exclusive_scan with an initial zero. Use subtraction to explain why arbitrary regrouping differs from an ordered left fold.
+### Run the starter, then try a change
+
+Open `native/examples/lib-fold-scan.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-fold-scan.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::inclusive_scan(v.begin(), v.end(), prefix.begin());
+```
+
+With
+
+```cpp
+std::exclusive_scan(v.begin(), v.end(), prefix.begin(), 0);
+```
+
+Rerun the terminal command. Compare the three prefix values with the unchanged sum. Which values exclude their own element?
 
 ## Find a duplicate interval with equal_range
 
@@ -150,7 +210,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 3
@@ -168,7 +228,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. The equal range is half-open. The three copies of 2 occupy indices one through three; their interval starts at one and has length three.
 
-Experiment: Search for keys before, between, and after the stored values. Repeat with a descending comparator and preserve the matching ordering contract.
+### Run the starter, then try a change
+
+Open `native/examples/lib-bounds-duplicates.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-bounds-duplicates.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+v.end(), 2)
+```
+
+With
+
+```cpp
+v.end(), 3)
+```
+
+Rerun the terminal command. Compare the starting index and match count. What does the starting index describe when the match interval is empty?
 
 ## Chapter project
 

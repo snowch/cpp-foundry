@@ -71,7 +71,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 bytes=7 value-low=42
@@ -89,7 +89,27 @@ Question: How is the value encoded?
 
 Answer: 2. The record layout is independent of the process object layout.
 
-Experiment: Write an independent seven-byte fixture for a known value. Document the check’s collision limits before choosing a production integrity algorithm.
+### Run the starter, then try a change
+
+Open `native/examples/wal-records.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-records.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+record('P', 1, 42)
+```
+
+With
+
+```cpp
+record('P', 1, 300)
+```
+
+Rerun the terminal command. Compare bytes= and value-low=. What part of a 32-bit value fits in one byte?
 
 ## Recover only values with a complete commit marker
 
@@ -160,7 +180,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 before=0 after=42
@@ -178,7 +198,27 @@ Question: What authorizes publication in this model?
 
 Answer: 2. Tentative redo is distinct from committed redo.
 
-Experiment: Append an uncommitted second transaction after the committed one. Check that recovery preserves only the committed value.
+### Run the starter, then try a change
+
+Open `native/examples/wal-commit-marker.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-commit-marker.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+append(log, record('C', 1, 0));
+```
+
+With
+
+```cpp
+append(log, record('C', 2, 0));
+```
+
+Rerun the terminal command. Compare before= and after=. Does a commit for transaction 2 make transaction 1’s prepared value visible?
 
 ## A truncated final record is not a complete record
 
@@ -257,7 +297,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 value=0 valid=7 tail=1
@@ -275,7 +315,27 @@ Question: Is a six-byte commit prefix sufficient?
 
 Answer: 2. The fixed record and its check must be complete.
 
-Experiment: Enumerate every truncation point of the update and commit pair. Specify the expected committed value for each prefix.
+### Run the starter, then try a change
+
+Open `native/examples/wal-torn-tail.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-torn-tail.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+commit.end() - 1
+```
+
+With
+
+```cpp
+commit.end()
+```
+
+Rerun the terminal command. Compare value=, valid= and tail=. What changes once the final byte of the record is available?
 
 ## Stop at an invalid integrity boundary
 
@@ -348,7 +408,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 valid=0 value=0 tail=1
@@ -366,7 +426,27 @@ Question: When is a record applied?
 
 Answer: 1. Validation precedes state effects.
 
-Experiment: Create a two-byte change that preserves XOR to demonstrate the limit. Keep that limitation visible when replacing the teaching check with a stronger one.
+### Run the starter, then try a change
+
+Open `native/examples/wal-corrupt-record.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-corrupt-record.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+log[2] ^= 1;
+```
+
+With
+
+```cpp
+log[9] ^= 1;
+```
+
+Rerun the terminal command. Compare valid=, value= and tail=. How many bytes does recovery accept when the first damaged record is the commit?
 
 ## Associate redo with the correct transaction
 
@@ -437,7 +517,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 committed=10
@@ -455,7 +535,27 @@ Question: Which value does transaction one’s marker publish?
 
 Answer: 2. Recovery retains pending state by transaction identity.
 
-Experiment: Commit transaction two afterward and check the new visible value. Define and reject unsupported transaction-ID reuse.
+### Run the starter, then try a change
+
+Open `native/examples/wal-interleaving.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-interleaving.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+append(log, record('C', 1, 0));
+```
+
+With
+
+```cpp
+append(log, record('C', 1, 0)); append(log, record('C', 2, 0));
+```
+
+Rerun the terminal command. Compare committed=. Which value becomes visible after recovery sees the later commit?
 
 ## Redo should tolerate repeating already applied work
 
@@ -531,7 +631,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42 42
@@ -549,7 +649,27 @@ Question: Why is this redo repeatable?
 
 Answer: 2. Repeating the assignment has the same state effect.
 
-Experiment: Model an increment redo and show its repeated-recovery failure. Add an applied log-position rule before claiming general idempotence.
+### Run the starter, then try a change
+
+Open `native/examples/wal-idempotence.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-idempotence.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+auto second = recover(log, first.value);
+```
+
+With
+
+```cpp
+auto second = recover(log, 5);
+```
+
+Rerun the terminal command. Compare both values. How does assignment redo behave when recovery begins with a different earlier value?
 
 ## Enumerate crash prefixes against a committed-state oracle
 
@@ -625,7 +745,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 prefixes=15 verified=1
@@ -643,7 +763,27 @@ Question: Where does the expected commit boundary come from?
 
 Answer: 2. The oracle does not duplicate the parser’s transitions.
 
-Experiment: Extend to two transactions and compute expected states at every complete commit boundary. Preserve raw failing prefixes for debugging.
+### Run the starter, then try a change
+
+Open `native/examples/wal-crash-prefix-oracle.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-crash-prefix-oracle.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+length == 14
+```
+
+With
+
+```cpp
+length == 13
+```
+
+Rerun the terminal command. Compare prefixes=, verified= and exit status. Does the deliberately changed reference accept a commit before all its bytes exist?
 
 ## Separate checked writes from a host durability request
 
@@ -679,7 +819,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 write=1 sync=1 close=1
@@ -697,7 +837,27 @@ Question: Does this finite run prove power-loss durability on every device?
 
 Answer: 1. It verifies checked behavior on the selected host, under its documented assumptions.
 
-Experiment: Wrap the descriptor in RAII and inject write/sync failures through an adapter. Document when a commit acknowledgement is allowed.
+### Run the starter, then try a change
+
+Open `native/examples/wal-native-sync.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/wal-native-sync.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+const char byte = 'x';
+```
+
+With
+
+```cpp
+const char byte = 'y';
+```
+
+Rerun the terminal command. Compare write=, sync= and close=. Then enter od -An -tc "$run_dir/redo.log" to see the byte written inside this experiment’s temporary directory. These results describe the actual file operations on your host.
 
 ## Chapter project
 

@@ -1498,7 +1498,7 @@ export const diagrams=[
       }
     ],
     "height": 402,
-    "caption": "Any rejected field, duplicate, or trailing byte leaves the previous state intact. This is failure preservation within the model, not an operating-system crash-durability guarantee."
+    "caption": "The worked program reads two fields into temporary storage. If either field is truncated, the decoder leaves the previous values intact. A full importer also checks properties such as row uniqueness and trailing bytes."
   },
   {
     "lesson": "pin-guards",

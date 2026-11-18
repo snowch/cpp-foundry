@@ -1,3 +1,4 @@
+import {edits} from '../dist/experiment-edits.js';
 import assert from 'node:assert/strict';
 import {parts,chapters,lessons,byId} from '../dist/course.js';
 assert.equal(parts.length,10);assert.equal(chapters.length,54);assert.equal(lessons.length,270);
@@ -18,3 +19,10 @@ for(const lesson of lessons){
   assert.ok(typeof lesson.expected==='string',lesson.id);assert.match(lesson.code,/int main\(/,lesson.id);
 }
 console.log('Validated '+parts.length+' parts, '+chapters.length+' populated chapters, and '+lessons.length+' complete lessons.');
+
+assert.equal(Object.keys(edits).length, lessons.length);
+for(const lesson of lessons){
+  const edit=edits[lesson.id];
+  assert.ok(edit?.before && edit.after && edit.observe && edit.before!==edit.after, lesson.id+' has an exact edit and evidence');
+  assert.equal(lesson.code.split(edit.before).length-1, edit.all?2:1, lesson.id+' editable starter text');
+}

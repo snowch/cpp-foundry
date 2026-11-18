@@ -31,7 +31,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada
@@ -51,7 +51,27 @@ Question: Which object owns the characters after text.clear()?
 
 Answer: 1. copy is a separate string. first still carries its old pointer and length and must not be used as a valid view of the cleared string.
 
-Experiment: Write a prefix function returning string_view. Document that its caller must keep the input’s storage alive and unchanged while using the result.
+### Run the starter, then try a change
+
+Open `native/examples/borrowing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/borrowing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::span<int> middle(values + 1,1);
+```
+
+With
+
+```cpp
+std::span<int> middle(values,1);
+```
+
+Rerun the terminal command. Compare the middle printed number. Which array element actually changed after moving the span start?
 
 ## Parse the entire field
 
@@ -86,7 +106,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42: valid
@@ -108,7 +128,27 @@ Question: Why check both error and end?
 
 Answer: 1. The error code describes conversion; the end pointer tells you whether the whole field was consumed.
 
-Experiment: Try empty input, a leading space, +42, and the largest unsigned value. Add a separate upper bound for your application.
+### Run the starter, then try a change
+
+Open `native/examples/parsing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/parsing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"42","42x","-1","0","99999999999999999999"}
+```
+
+With
+
+```cpp
+{"42"," 42","+42","0","99999999999999999999"}
+```
+
+Rerun the terminal command. Compare the labelled valid/invalid lines. Do leading whitespace or a plus sign pass this parser?
 
 ## Exceptions and failure preservation
 
@@ -137,7 +177,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 empty name
@@ -157,7 +197,27 @@ Question: What makes this commit safe?
 
 Answer: 1. Preparation leaves current alone, and the final swap commits the validated candidate.
 
-Experiment: Add a maximum-name-length rule before swap. Verify that both invalid cases preserve current.
+### Run the starter, then try a change
+
+Open `native/examples/failure.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/failure.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+rename(name,"Grace");
+```
+
+With
+
+```cpp
+rename(name,"Lin");
+```
+
+Rerun the terminal command. Compare preserved= and committed=. Which line reflects the accepted replacement?
 
 ## Model alternatives explicitly
 
@@ -190,7 +250,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 90
@@ -209,7 +269,27 @@ Question: Is std::expected part of C++20?
 
 Answer: 1. Choose facilities from the course’s language baseline; variant and optional are available in C++20.
 
-Experiment: Replace the error string with a named Error struct containing a code and message. Extend the visitor to format it.
+### Run the starter, then try a change
+
+Open `native/examples/sum-types.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/sum-types.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{90,101}
+```
+
+With
+
+```cpp
+{100,101}
+```
+
+Rerun the terminal command. Compare the first line and the error line. Which boundary value selects the value alternative?
 
 ## Chapter project
 

@@ -29,7 +29,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 10
@@ -47,7 +47,27 @@ Question: Which measure decreases?
 
 Answer: 1. Each non-base call uses n-1.
 
-Experiment: Trace the calls for zero and one. Add a documented input bound that keeps both arithmetic and stack use acceptable.
+### Run the starter, then try a change
+
+Open `native/examples/recursive-progress.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/recursive-progress.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+sum(4)
+```
+
+With
+
+```cpp
+sum(0)
+```
+
+Rerun the terminal command. Compare the numeric results. Which branch supplies the new result without making another call?
 
 ## Split a range and combine subproblem results
 
@@ -78,7 +98,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 20
@@ -96,7 +116,27 @@ Question: Do these spans own copied elements?
 
 Answer: 3. The original array owns all elements until the calls finish.
 
-Experiment: Instrument visits and confirm each element contributes once. Compare recursion depth with a linear recursive summation.
+### Run the starter, then try a change
+
+Open `native/examples/divide-conquer.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/divide-conquer.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{2, 3, 4, 5, 6}
+```
+
+With
+
+```cpp
+values{2, 3, 4, 5, 0}
+```
+
+Rerun the terminal command. Compare the totals. Does replacing the final element’s value change the collection size or its contribution?
 
 ## Cache results for repeated subproblems
 
@@ -133,7 +173,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 55
@@ -151,7 +191,27 @@ Question: What is being cached?
 
 Answer: 3. Repeated calls reuse the stored result for a state.
 
-Experiment: Count newly computed states and cache hits separately. Reject n beyond the declared table size before recursion.
+### Run the starter, then try a change
+
+Open `native/examples/memoization.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/memoization.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+fib(10, memo)
+```
+
+With
+
+```cpp
+fib(0, memo)
+```
+
+Rerun the terminal command. Compare the returned values. Which argument permits returning from the base case without finding an earlier result?
 
 ## Choose an order that makes dependencies available
 
@@ -176,7 +236,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 55
@@ -194,7 +254,27 @@ Question: Why compute next first?
 
 Answer: 2. The temporary preserves the recurrence’s inputs until the new state is known.
 
-Experiment: Compare against the memoized implementation for every n from zero to ten. Add a checked-addition failure path.
+### Run the starter, then try a change
+
+Open `native/examples/tabulation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/tabulation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+n < 10
+```
+
+With
+
+```cpp
+n < 5
+```
+
+Rerun the terminal command. Compare the returned values. How many updates advance the pair for the shortened loop?
 
 ## Undo tentative state before exploring a sibling
 
@@ -228,7 +308,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 .
@@ -249,7 +329,27 @@ Question: What must hold when a recursive call returns?
 
 Answer: 1. Each call restores the mutation it introduced before returning.
 
-Experiment: Record the path size on entry and verify it is unchanged on return. Add a pruning rule for a bounded subset sum.
+### Run the starter, then try a change
+
+Open `native/examples/backtracking-state.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/backtracking-state.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+subsets(1, 2, path)
+```
+
+With
+
+```cpp
+subsets(1, 1, path)
+```
+
+Rerun the terminal command. Compare the listed paths. Which branches remain after removing item 2 from the choice set?
 
 ## Chapter project
 

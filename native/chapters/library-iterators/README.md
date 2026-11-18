@@ -26,7 +26,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3 6
@@ -44,7 +44,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. Advancing a list iterator takes linear steps. The vector difference counts three elements. advance reaches the list value 6 by walking two links.
 
-Experiment: Use a forward_list and identify which operations disappear. Count increments in a wrapper iterator instead of timing a three-element fixture.
+### Run the starter, then try a change
+
+Open `native/examples/lib-iterator-categories.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-iterator-categories.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::advance(it, 2);
+```
+
+With
+
+```cpp
+std::advance(it, 1);
+```
+
+Rerun the terminal command. Compare the two numbers. Which count describes a vector range, and which result follows the list iterator?
 
 ## Continue traversal using erase’s result
 
@@ -76,7 +96,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 13
@@ -94,7 +114,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. Use the iterator returned by erase. Two adjacent even values are removed without skipping either. The iterator returned by erase replaces the invalid old iterator.
 
-Experiment: Test empty input, all-even input, and alternating values. Rewrite with std::erase_if and compare the returned count.
+### Run the starter, then try a change
+
+Open `native/examples/lib-erase-return.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-erase-return.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+v{1, 2, 4, 3}
+```
+
+With
+
+```cpp
+v{2, 4, 6, 8}
+```
+
+Rerun the terminal command. Compare the retained sequence. When every value is erased, what makes the loop stop safely?
 
 ## Insert through an output iterator
 
@@ -118,7 +158,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 4 9 
@@ -136,7 +176,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. back_inserter grows the destination. transform emits one square per input element; the adapter inserts each result into b.
 
-Experiment: Pre-size b and use b.begin instead. Compare sizes and capacities, then adapt the example to insert into a set.
+### Run the starter, then try a change
+
+Open `native/examples/lib-output-adapters.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-output-adapters.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+a{1, 2, 3}, b
+```
+
+With
+
+```cpp
+a{}, b
+```
+
+Rerun the terminal command. Compare the output sequence. How many elements does back_inserter produce for the empty input?
 
 ## Treat stream iteration as single pass
 
@@ -164,7 +224,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12
@@ -182,7 +242,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. Stream input iteration consumes the source. accumulate consumes all three integers and produces their sum without materializing a vector.
 
-Experiment: Add malformed text between two numbers and inspect the stream state. Materialize the valid prefix when two independent traversals are required.
+### Run the starter, then try a change
+
+Open `native/examples/lib-stream-iterators.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-stream-iterators.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+3 4 5
+```
+
+With
+
+```cpp
+3 bad 5
+```
+
+Rerun the terminal command. Compare the sums. At which item does the integer iterator stop?
 
 ## Chapter project
 

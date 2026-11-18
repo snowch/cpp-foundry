@@ -34,7 +34,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3 contracts passed
@@ -52,7 +52,27 @@ Question: Would idempotence alone prove sorting is correct?
 
 Answer: 1. Combine properties with independent expected outcomes and meaningful boundary cases.
 
-Experiment: Add reversed, all-equal, single-element, and negative-value cases. For the capstone, check that a rejected duplicate leaves the original bytes unchanged.
+### Run the starter, then try a change
+
+Open `native/examples/contracts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/contracts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{3,1,2,1}
+```
+
+With
+
+```cpp
+values{1,1,2,3}
+```
+
+Rerun the terminal command. Compare the number of reported contracts. Is the independently expected result the same when the original values arrive already sorted?
 
 ## Separate language guarantees from host contracts
 
@@ -76,7 +96,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 byte bits=8
@@ -96,7 +116,27 @@ Question: What does static_assert verify?
 
 Answer: 1. It checks implementation assumptions; file validation and host-specific behavior need separate checks.
 
-Experiment: Build the exported source with another compiler. Exchange a saved file between hosts and document any filesystem adapter differences.
+### Run the starter, then try a change
+
+Open `native/examples/portability.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/portability.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+"uint32 bits=" << std::numeric_limits<std::uint32_t>::digits
+```
+
+With
+
+```cpp
+"uint16 bits=" << std::numeric_limits<std::uint16_t>::digits
+```
+
+Rerun the terminal command. Compare the bit widths and format statement. Why does using a narrower scalar change the width but leave the rule about explicit persisted bytes intact?
 
 ## Protect a shared invariant with a lock
 
@@ -131,7 +171,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 count=20000
@@ -149,7 +189,27 @@ Question: Must a concurrent reader follow the locking protocol?
 
 Answer: 1. A conflicting read and write can form a data race even when only the writer locks.
 
-Experiment: Run the native example, then design a locked two-field update. Use ThreadSanitizer where your host supports it; do not infer race freedom from one successful run.
+### Run the starter, then try a change
+
+Open `native/examples/threads.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/threads.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+i<10000
+```
+
+With
+
+```cpp
+i<5000
+```
+
+Rerun the terminal command. Compare count=. Why does the final count reflect both workers’ loop bounds when read after their joins?
 
 ## Publish initialized data with acquire/release
 
@@ -183,7 +243,7 @@ int main() {
 }
 ```
 
-Expected output:
+Original program output:
 
 ```text
 snapshot sum=60
@@ -201,7 +261,27 @@ Question: Can the writer freely mutate values after publishing?
 
 Answer: 1. Publication establishes visibility of prior writes. It does not synchronize future conflicting accesses.
 
-Experiment: Draw the happens-before chain from vector initialization to the reader. Extend to immutable snapshots using shared ownership and a documented replacement protocol.
+### Run the starter, then try a change
+
+Open `native/examples/publication.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/publication.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values={10,20,30}
+```
+
+With
+
+```cpp
+values={10,20,40}
+```
+
+Rerun the terminal command. Compare snapshot sum=. Which store and load must be paired before the reader treats the new vector values as published?
 
 ## Chapter project
 

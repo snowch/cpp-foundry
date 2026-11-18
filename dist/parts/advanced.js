@@ -80,8 +80,8 @@ cpp('iostream string utility vector',"    const std::vector<std::pair<int, std::
 'Replacing the right input with a unique-key map can silently discard duplicate join matches.',
 ['How many outputs arise from one left row and two matching right rows?','Two','One','Zero unless keys are unique'],'Join multiplicity follows matching pairs.',
 'Add two left duplicates and predict the cross-product size for that key before running.');
-add('joins-aggregates','hash-join-buckets','A hash join bucket owns all matching build rows',
-'A hash join groups build-side rows by key, then probes with the other input. Each bucket must retain all duplicate payloads to preserve inner-join multiplicity.\n\nThis small model uses an ordered map of vectors for deterministic display; the bucket contract is the same even when a hash container supplies lookup.',
+add('joins-aggregates','hash-join-buckets','Keep every build row for a join key',
+'A hash join groups rows from its build input by key, then looks up each key from its probe input. Store all matching build rows so every matching pair can appear in the result.\n\nThe starter uses an ordered map and looks up one supplied key. The vector for that key holds all matching values. Use this run to inspect matches per key. A hash container would use a different lookup mechanism.',
 cpp('iostream map string utility vector',"    const std::vector<std::pair<int, std::string>> build{{1, \"X\"}, {1, \"Y\"}, {3, \"Z\"}};\n    std::map<int, std::vector<std::string>> buckets;\n    for (const auto &[key, value] : build)\n        buckets[key].push_back(value);\n    for (const auto &value : buckets.at(1))\n        std::cout << \"A\" << value << \"\\n\";"),'AX\nAY',
 'Both payloads remain in the key-one bucket, matching the nested-loop reference result.',
 'One scalar payload per join key loses multiplicity unless the schema genuinely guarantees uniqueness.',

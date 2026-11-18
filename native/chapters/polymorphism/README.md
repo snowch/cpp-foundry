@@ -37,7 +37,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3
@@ -55,7 +55,27 @@ Question: Does virtual dispatch require heap allocation?
 
 Answer: 2. The dynamic type can belong to an ordinary local object.
 
-Experiment: Add a second implementation and call both through a const Store reference. Keep construction and lifetime ownership explicit.
+### Run the starter, then try a change
+
+Open `native/examples/virtual-interface.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/virtual-interface.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << interface.count() << "\n";
+```
+
+With
+
+```cpp
+std::cout << interface.count() << " " << store.count() << "\n";
+```
+
+Rerun the terminal command. Compare the values printed through the base reference and the complete object. Which function supplies count() in both cases?
 
 ## Delete polymorphic objects through a valid owner
 
@@ -87,7 +107,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 derived
@@ -106,7 +126,27 @@ Question: Which destructor runs first?
 
 Answer: 3. Virtual destruction begins with the most-derived object.
 
-Experiment: Add an owning member to Derived and verify it is released. Explain why resource safety depends on the base deletion contract.
+### Run the starter, then try a change
+
+Open `native/examples/virtual-destruction.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/virtual-destruction.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+owner.reset();
+```
+
+With
+
+```cpp
+std::cout << "leaving scope\n";
+```
+
+Rerun the terminal command. Compare the marker and destructor messages. What order does letting the owner leave scope produce?
 
 ## Copying a base value can discard derived state
 
@@ -140,7 +180,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 2
@@ -158,7 +198,27 @@ Question: What is sliced’s dynamic type?
 
 Answer: 3. It is a newly constructed Base value containing only the base portion.
 
-Experiment: Compare vector<Base>, vector<unique_ptr<Base>>, and vector<variant<A,B>> for ownership, extensibility, and copying.
+### Run the starter, then try a change
+
+Open `native/examples/object-slicing.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/object-slicing.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Base sliced = derived;
+```
+
+With
+
+```cpp
+const Base &sliced = derived;
+```
+
+Rerun the terminal command. Compare both printed kind values. Which statement in the starter copied only the Base portion?
 
 ## Visit a closed set of complete value types
 
@@ -195,7 +255,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 lookup 7
@@ -213,7 +273,27 @@ Question: Does this variant store a borrowed Lookup pointer?
 
 Answer: 2. The complete Lookup object is stored as the active alternative.
 
-Experiment: Add a RangeLookup alternative and extend the explanation contract. Compare compiler diagnostics from an incomplete visitor.
+### Run the starter, then try a change
+
+Open `native/examples/variant-visitation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/variant-visitation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+plan = Lookup{7};
+```
+
+With
+
+```cpp
+plan = Scan{};
+```
+
+Rerun the terminal command. Compare the printed operation. Which value determines the visitor call?
 
 ## Compose behavior before adding inheritance
 
@@ -246,7 +326,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0
@@ -264,7 +344,27 @@ Question: What relationship is represented here?
 
 Answer: 2. The policy is a component, not a base-class identity.
 
-Experiment: Add a minimum score to the policy and test its boundaries independently before integrating it into the store.
+### Run the starter, then try a change
+
+Open `native/examples/composition.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/composition.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+ScorePolicy{100}
+```
+
+With
+
+```cpp
+ScorePolicy{89}
+```
+
+Rerun the terminal command. Compare the two decisions. Which comparison fails after lowering the permitted maximum?
 
 ## Chapter project
 

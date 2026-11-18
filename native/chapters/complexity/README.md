@@ -35,7 +35,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 absent=4 first=1
@@ -53,7 +53,27 @@ Question: What is n in this model?
 
 Answer: 3. The search problem grows with the number of candidate elements.
 
-Experiment: Double the range with an absent key and predict the inspection count before running. Keep setup and output outside any later timed region.
+### Run the starter, then try a change
+
+Open `native/examples/count-work.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/count-work.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+inspections(values, 7)
+```
+
+With
+
+```cpp
+inspections(values, 8)
+```
+
+Rerun the terminal command. Compare both counts. Why does a last-position hit inspect as many elements as the absent key?
 
 ## Distinguish upper bounds from tight bounds
 
@@ -73,7 +93,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1:5 <= 5
@@ -93,7 +113,27 @@ Question: What is the tight growth class of 3n+2?
 
 Answer: 2. Both linear upper and lower bounds hold beyond a fixed threshold.
 
-Experiment: Write a proof of the two inequalities for every n>=1. Explain why O(n squared) is also true but less informative.
+### Run the starter, then try a change
+
+Open `native/examples/growth-bounds.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/growth-bounds.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1u, 2u, 4u}
+```
+
+With
+
+```cpp
+{1u, 2u, 4u, 8u}
+```
+
+Rerun the terminal command. Find the new inequality at 8. Which side is the model’s actual count and which is its bound?
 
 ## Compare doubling behavior
 
@@ -118,7 +158,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 log=2 linear=4 square=16
@@ -137,7 +177,27 @@ Question: How does n squared change when n doubles?
 
 Answer: 2. The square of 2n is 4n squared.
 
-Experiment: Extend the table to 16 and 32. Explain why n log n combines the number of levels with work per level.
+### Run the starter, then try a change
+
+Open `native/examples/growth-comparison.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/growth-comparison.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{4u, 8u}
+```
+
+With
+
+```cpp
+{16u, 32u}
+```
+
+Rerun the terminal command. Compare log=, linear= and square=. Which quantity increases by one each time n doubles?
 
 ## Amortized cost describes an operation sequence
 
@@ -162,7 +222,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 appends=9 copied=15 capacity=16
@@ -180,7 +240,27 @@ Question: Can one append still cost linear work?
 
 Answer: 3. The sequence bound permits occasional expensive operations.
 
-Experiment: Calculate the total after eight appends and compare it with nine. Prove an upper bound in terms of the final length.
+### Run the starter, then try a change
+
+Open `native/examples/amortized-append.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/amortized-append.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+length < 9
+```
+
+With
+
+```cpp
+length < 8
+```
+
+Rerun the terminal command. Compare copied= and capacity=. The literal appends=9 label is unchanged by this edit; which loop bound provides the actual number of appends?
 
 ## Make a prediction before collecting observations
 
@@ -214,7 +294,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 4 8 ratio=2
@@ -232,7 +312,27 @@ Question: What should precede timing?
 
 Answer: 2. Measurement is interpretable only when the workload and result contract are clear.
 
-Experiment: Add first-position hits as a separately labeled workload. Explain why combining the cases can hide the growth you intended to study.
+### Run the starter, then try a change
+
+Open `native/examples/benchmark-contract.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/benchmark-contract.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+.first(4), 99
+```
+
+With
+
+```cpp
+.first(4), 1
+```
+
+Rerun the terminal command. Compare small and large work counts and ratio=. Why does comparing a first-position hit with an absent key change what this ratio measures?
 
 ## Chapter project
 

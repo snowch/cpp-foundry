@@ -28,7 +28,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2750 2
@@ -46,7 +46,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. Duration counts must be interpreted with their period. The common millisecond duration holds 2750. Casting to whole seconds truncates the positive remainder.
 
-Experiment: Try negative durations and distinguish duration_cast truncation from floor and round. Design a timeout parameter that rejects negative input explicitly.
+### Run the starter, then try a change
+
+Open `native/examples/lib-chrono-units.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-chrono-units.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+milliseconds(750)
+```
+
+With
+
+```cpp
+milliseconds(1250)
+```
+
+Rerun the terminal command. Compare the millisecond and whole-second counts. Which conversion discards the fractional second?
 
 ## Separate elapsed time from civil time
 
@@ -70,7 +90,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 25
@@ -88,7 +108,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. Use a steady clock for elapsed-time intervals. Synthetic steady-clock points make the expected difference deterministic without relying on actual scheduling or clock resolution.
 
-Experiment: Write a native benchmark that measures many operations and reports its clock. Keep its nondeterministic timing out of exact-output correctness tests.
+### Run the starter, then try a change
+
+Open `native/examples/lib-clock-contracts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-clock-contracts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+start + std::chrono::milliseconds(25)
+```
+
+With
+
+```cpp
+start + std::chrono::milliseconds(75)
+```
+
+Rerun the terminal command. Compare the second value. Why does changing a constructed interval affect this result without measuring real elapsed time?
 
 ## Separate the engine sequence from distribution mapping
 
@@ -117,7 +157,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 1
@@ -135,7 +175,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Distribution output sequences may vary between library implementations. Two equal-seeded engines agree. The distribution test verifies bounds instead of asserting an implementation-specific sequence of dice rolls.
 
-Experiment: Save and restore engine state, then verify continuation. Compare a fixed test seed with an externally supplied workload seed and record which library performed distribution mapping.
+### Run the starter, then try a change
+
+Open `native/examples/lib-random-engine.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-random-engine.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+a(123), b(123)
+```
+
+With
+
+```cpp
+a(123), b(124)
+```
+
+Rerun the terminal command. Compare the two flags. Which flag tests seed agreement and which tests the die’s allowed range?
 
 ## Check representation before shifting and bit casting
 
@@ -163,7 +223,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 3 5 1
@@ -181,7 +241,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Bit operations still require valid shift counts. The mask has three set bits and needs five binary positions. Eight has exactly one set bit.
 
-Experiment: Add zero and the highest single-bit value of uint32_t. Compare bit_width with numeric_limits digits and explain why leading zero bits do not contribute.
+### Run the starter, then try a change
+
+Open `native/examples/lib-bit-utilities.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-bit-utilities.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+mask = 0b10110
+```
+
+With
+
+```cpp
+mask = 0
+```
+
+Rerun the terminal command. Compare set-bit count, bit width and the independent single-bit flag. Which values describe mask?
 
 ## Chapter project
 

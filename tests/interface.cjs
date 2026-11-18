@@ -93,7 +93,13 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     const blocked=[];
     await context.route('**/*',route=>{blocked.push(route.request().url());return route.abort();});
     await source.fill('#include <iostream>\nint main(){ std::cout << "offline edit"; }');
+    assert.match(await page.locator('.output-context').innerText(),/earlier source or input/);
+    assert.equal(await page.locator('.output').innerText(),'editable');
     assert.equal(await run(),'offline edit');assert.deepEqual(blocked,[]);
+    await source.fill('int main(){missing_name;}');
+    assert.equal(await run(),'offline edit');
+    assert.match(await page.locator('.run-diagnostic').innerText(),/missing_name/);
+    assert.match(await page.locator('.output-context').innerText(),/last program that ran/);
     await context.unroute('**/*');
     await source.fill('int main(){for(;;){}}');await page.locator('.run').click();
     await page.waitForFunction(()=>document.querySelector('.status').textContent==='Running…');
@@ -103,6 +109,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     assert.match(await page.locator('.status').innerText(),/stopped after five seconds/);
     await source.fill('int main(){return 0;}');assert.equal(await run(),'(no output)');
     console.log('PASS question feedback, completion persistence/tabs, draft persistence, offline compilation, Stop/recovery');
+    await page.locator('.editor-tools summary').click();
     await page.locator('.reset').click();
     assert.match(await source.inputValue(),/Hello/);
     await page.screenshot({path:'test-results/lesson-desktop.png',fullPage:true});
@@ -156,6 +163,36 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     await fallbackPage.locator('#completed').check();
     assert.match(await fallbackPage.locator('#notice').innerText(),/session/);
     await fallback.close();
-    console.log('PASS responsive layouts, storage-failure feedback, no page errors');
+    const limited=await browser.newContext();
+    await limited.addInitScript(()=>{
+      const original=Storage.prototype.setItem;
+      Storage.prototype.setItem=function(key,value){
+        const blocked=sessionStorage.getItem('quota-target');
+        if(this===localStorage&&blocked&&key==='cpp-foundry:v1:'+blocked+':first-program')
+          throw new DOMException('rehearsed quota','QuotaExceededError');
+        return original.call(this,key,value);
+      };
+    });
+    const limitedPage=await limited.newPage();
+    await limitedPage.goto(url+'#/lesson/first-program');
+    const longDraft='#include <iostream>\nint main(){std::cout<<"Only durable source";}\n';
+    await limitedPage.locator('.source').fill(longDraft);
+    await limitedPage.evaluate(()=>sessionStorage.setItem('quota-target','restore'));
+    await limitedPage.locator('.editor-tools summary').click();
+    await limitedPage.locator('.reset').click();
+    await limitedPage.locator('.source-save-warning').waitFor();
+    const retained=()=>limitedPage.evaluate(()=>localStorage.getItem('cpp-foundry:v1:draft:first-program'));
+    assert.equal(await retained(),longDraft);
+    await limitedPage.reload();
+    assert.equal(await limitedPage.locator('.source').inputValue(),longDraft);
+    await limitedPage.evaluate(()=>sessionStorage.removeItem('quota-target'));
+    await limitedPage.locator('.editor-tools summary').click();
+    await limitedPage.locator('.reset').click();
+    await limitedPage.evaluate(()=>sessionStorage.setItem('quota-target','draft'));
+    await limitedPage.locator('.undo').click();
+    assert.equal(await limitedPage.locator('.source').inputValue(),longDraft);
+    assert.equal(await limitedPage.evaluate(()=>localStorage.getItem('cpp-foundry:v1:restore:first-program')),longDraft);
+    await limited.close();
+    console.log('PASS responsive layouts, quota-safe source restore and undo, and no page errors');
   } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

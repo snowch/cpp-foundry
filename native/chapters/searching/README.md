@@ -35,7 +35,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 first=0
@@ -54,7 +54,27 @@ Question: Is a found position of zero a success?
 
 Answer: 2. Presence and numeric index value are different concepts.
 
-Experiment: Test empty input, duplicates, and a last-position hit. State whether a future index implementation must preserve first-match behavior.
+### Run the starter, then try a change
+
+Open `native/examples/linear-search-result.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/linear-search-result.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+find(values, 8)
+```
+
+With
+
+```cpp
+find(values, 1)
+```
+
+Rerun the terminal command. Compare first= and missing=. Which index is returned for the value at the last position?
 
 ## Maintain a half-open candidate interval
 
@@ -95,7 +115,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 3 5
@@ -113,7 +133,27 @@ Question: Can lower return values.size()?
 
 Answer: 1. The boundary position is a valid search answer.
 
-Experiment: Trace first and last for empty input and for a key below every element. Explain why the interval shrinks each iteration.
+### Run the starter, then try a change
+
+Open `native/examples/binary-search-invariant.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/binary-search-invariant.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+lower(values, 3)
+```
+
+With
+
+```cpp
+lower(values, 0)
+```
+
+Rerun the terminal command. Compare the first position with the unchanged later results. Where can a key smaller than every element be inserted?
 
 ## Find the full range of equal keys
 
@@ -137,7 +177,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 matches=3
@@ -155,7 +195,27 @@ Question: Is the upper boundary included in the equal range?
 
 Answer: 2. The result is the half-open interval [first,last).
 
-Experiment: Test a missing key, all-equal input, and a key at the final position. Check the count against a linear reference.
+### Run the starter, then try a change
+
+Open `native/examples/duplicate-range.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/duplicate-range.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{1, 3, 3, 3, 8}
+```
+
+With
+
+```cpp
+values{3, 3, 3, 3, 3}
+```
+
+Rerun the terminal command. Compare matches=. What interval does equal-key search return when all five values match?
 
 ## Search a monotone predicate
 
@@ -180,7 +240,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 prefix=3 next=9
@@ -198,7 +258,27 @@ Question: What ordering of predicate results is required?
 
 Answer: 2. The algorithm searches one monotone boundary.
 
-Experiment: Create an all-true and an all-false fixture. Handle boundary==end before dereferencing it.
+### Run the starter, then try a change
+
+Open `native/examples/partition-point.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/partition-point.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+return value < 8;
+```
+
+With
+
+```cpp
+return value < 2;
+```
+
+Rerun the terminal command. Compare prefix= and next=. Which position ends an all-false prefix in this nonempty range?
 
 ## Account for building and maintaining an index
 
@@ -226,7 +306,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 shifted=1
@@ -245,7 +325,27 @@ Question: Which additional cost matters for a sorted vector?
 
 Answer: 1. Maintaining order has a mutation cost.
 
-Experiment: Compare batches of many lookups with batches of many insertions. State which costs belong in the workload model.
+### Run the starter, then try a change
+
+Open `native/examples/index-tradeoffs.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/index-tradeoffs.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+index{1, 4, 9}
+```
+
+With
+
+```cpp
+index{1, 4, 8, 9}
+```
+
+Rerun the terminal command. Compare shifted= and the sorted keys. How many existing elements move when the added 8 is already to the right of the insertion point?
 
 ## Chapter project
 

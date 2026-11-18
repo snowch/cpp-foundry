@@ -58,7 +58,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 private=99 committed=10
@@ -76,7 +76,27 @@ Question: Why are committed rows unchanged?
 
 Answer: 1. Owning value semantics separate the two mutable states.
 
-Experiment: Mutate several private rows and verify a second reader of committed state sees none of them before commit.
+### Run the starter, then try a change
+
+Open `native/examples/transaction-begin.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/transaction-begin.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows.at(1) = 99
+```
+
+With
+
+```cpp
+transaction.rows.at(1) = 42
+```
+
+Rerun the terminal command. Compare private= and committed=. Does changing the private table immediately change another view of committed state?
 
 ## A transaction needs a coherent read view
 
@@ -128,7 +148,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 own=1 external=0
@@ -146,7 +166,27 @@ Question: Which state supplies this transaction’s reads?
 
 Answer: 1. The read view and tentative writes share one private state.
 
-Experiment: Model deletion and a repeated read of the same key. Document whether absence comes from the base state or a transaction-local deletion.
+### Run the starter, then try a change
+
+Open `native/examples/read-own-writes.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/read-own-writes.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows[3] = 30;
+```
+
+With
+
+```cpp
+transaction.rows.erase(3);
+```
+
+Rerun the terminal command. Compare own= and external=. What does each report about a key the transaction did not insert?
 
 ## Publish a complete candidate at commit
 
@@ -208,7 +248,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 commit=1 value=99 revision=1
@@ -226,7 +266,27 @@ Question: What publishes the prepared state?
 
 Answer: 1. Preparation and publication are separate operations.
 
-Experiment: Update two related rows and verify the committed view changes only at the commit boundary under a serialized test schedule.
+### Run the starter, then try a change
+
+Open `native/examples/transaction-commit.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/transaction-commit.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows.at(1) = 99
+```
+
+With
+
+```cpp
+transaction.rows.at(1) = 42
+```
+
+Rerun the terminal command. Compare commit=, value= and revision=. Which field records the published value and which records the successful publication?
 
 ## Rollback discards tentative ownership
 
@@ -279,7 +339,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 value=10 inactive=1 commit=0
@@ -297,7 +357,27 @@ Question: Can this rolled-back transaction commit?
 
 Answer: 2. The active-state check rejects ended transactions.
 
-Experiment: Specify behavior for repeated rollback and repeated commit. Test that every ended transaction remains unable to publish.
+### Run the starter, then try a change
+
+Open `native/examples/transaction-rollback.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/transaction-rollback.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows.at(1) = 99
+```
+
+With
+
+```cpp
+transaction.rows.at(1) = 42
+```
+
+Rerun the terminal command. Compare value=, inactive= and commit=. Does rollback leave any of the private value in the store?
 
 ## Reject a commit based on an old revision
 
@@ -355,7 +435,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 stale=1 retained=50,20
@@ -373,7 +453,27 @@ Question: What must be protected together in a concurrent implementation?
 
 Answer: 2. The check must remain valid through publication.
 
-Experiment: Implement the same schedule with a mutex-protected store. Keep the stale-candidate rejection deterministic with explicit coordination.
+### Run the starter, then try a change
+
+Open `native/examples/stale-commit.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/stale-commit.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+stale.rows.at(2) = 80
+```
+
+With
+
+```cpp
+stale.rows.at(2) = 81
+```
+
+Rerun the terminal command. Compare stale= and retained=. Does changing the contents of a stale candidate make its revision current?
 
 ## Commit related fields as one logical unit
 
@@ -427,7 +527,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7+23=30
@@ -445,7 +545,29 @@ Question: Which invariant should every committed transfer preserve?
 
 Answer: 2. The operation changes two fields while preserving their sum.
 
-Experiment: Reject an oversized transfer before changing either candidate balance. Test committed state after both rejection and success.
+### Run the starter, then try a change
+
+Open `native/examples/batch-invariant.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/batch-invariant.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows.at(1) -= 3;
+    transaction.rows.at(2) += 3;
+```
+
+With
+
+```cpp
+transaction.rows.at(1) -= 4;
+    transaction.rows.at(2) += 4;
+```
+
+Rerun the terminal command. Compare the two balances and total. Which quantity does this paired transfer preserve?
 
 ## Fallible preparation must precede publication
 
@@ -504,7 +626,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 negative balance
@@ -523,7 +645,27 @@ Question: Where must fallible validation occur?
 
 Answer: 3. The old committed state remains the fallback until preparation succeeds.
 
-Experiment: Inject failures at several preparation boundaries and compare committed bytes and revision with an independently captured before-state.
+### Run the starter, then try a change
+
+Open `native/examples/commit-preparation-failure.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/commit-preparation-failure.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+transaction.rows.at(1) = -1
+```
+
+With
+
+```cpp
+transaction.rows.at(1) = 11
+```
+
+Rerun the terminal command. Compare the message, committed= and revision=. When does the store publish the prepared balance?
 
 ## Make begin, commit, and abort states explicit
 
@@ -575,7 +717,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 first=1 second=0 revision=1
@@ -593,7 +735,27 @@ Question: How many successful commits can this candidate perform?
 
 Answer: 2. Successful commit marks it inactive.
 
-Experiment: Write a small transition table for active, committed, and aborted states. Test each allowed and rejected transition explicitly.
+### Run the starter, then try a change
+
+Open `native/examples/transaction-lifecycle.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/transaction-lifecycle.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bool first = store.commit(transaction), second = store.commit(transaction);
+```
+
+With
+
+```cpp
+rollback(transaction); bool first = store.commit(transaction), second = store.commit(transaction);
+```
+
+Rerun the terminal command. Compare the two commit results and revision=. What does each attempt report after the candidate has already ended?
 
 ## Chapter project
 

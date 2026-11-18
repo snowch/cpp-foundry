@@ -25,7 +25,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 joined=42
@@ -43,7 +43,28 @@ Question: What makes the result read synchronized?
 
 Answer: 2. Thread completion synchronizes with the completed join.
 
-Experiment: Move the worker into an inner scope and rely on jthread destruction. Explain the required declaration and destruction order.
+### Run the starter, then try a change
+
+Open `native/examples/joined-lifetime.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/joined-lifetime.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::jthread worker([&] { result = 42; });
+    worker.join();
+```
+
+With
+
+```cpp
+{ std::jthread worker([&] { result = 42; }); }
+```
+
+Rerun the terminal command. Compare joined=. Which closing brace destroys the jthread and waits before the result is printed?
 
 ## Acquire several mutexes with a consistent protocol
 
@@ -74,7 +95,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 8 22 total=30
@@ -92,7 +113,29 @@ Question: Which state must be protected as one unit?
 
 Answer: 3. The invariant spans both shared values.
 
-Experiment: Add a concurrent observer using the same lock set. Check the conserved total without reading either balance outside the protocol.
+### Run the starter, then try a change
+
+Open `native/examples/multi-lock.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/multi-lock.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+--a;
+        ++b;
+```
+
+With
+
+```cpp
+a -= 2;
+        b += 2;
+```
+
+Rerun the terminal command. Compare the final balances and total=. What remains unchanged when both workers move two units under the same locks?
 
 ## Wait for a predicate, not just a notification
 
@@ -167,7 +210,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 sum=15
@@ -185,7 +228,27 @@ Question: What makes a consumer wait finish?
 
 Answer: 2. The mutex-protected predicate defines readiness.
 
-Experiment: Add two consumers and aggregate results without racing. Check every produced value is consumed exactly once.
+### Run the starter, then try a change
+
+Open `native/examples/condition-queue.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/condition-queue.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{1, 2, 3, 4, 5}
+```
+
+With
+
+```cpp
+{1, 2, 3, 4, 6}
+```
+
+Rerun the terminal command. Compare sum=. What allows the consumer to process queued values and then finish after close?
 
 ## Define whether close drains or discards pending work
 
@@ -251,7 +314,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 rejected=1 values=78 done
@@ -269,7 +332,27 @@ Question: When does pop return no value?
 
 Answer: 2. The draining policy retains accepted work until consumed.
 
-Experiment: Test close on an empty queue and close while a producer is waiting for space. Ensure all participants can finish.
+### Run the starter, then try a change
+
+Open `native/examples/draining-close.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/draining-close.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+queue.push(8);
+```
+
+With
+
+```cpp
+queue.push(6);
+```
+
+Rerun the terminal command. Compare rejected= and values=. Which accepted items are drained even though later pushes are refused?
 
 ## A stop request is a cooperative signal
 
@@ -299,7 +382,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 observed=1
@@ -317,7 +400,27 @@ Question: Does request_stop kill the worker immediately?
 
 Answer: 2. The token is a signal, not forced termination.
 
-Experiment: Add a stop_callback that wakes a waiting protocol, or use a supported stop-aware wait. Test cleanup after a stop request.
+### Run the starter, then try a change
+
+Open `native/examples/cooperative-stop.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/cooperative-stop.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+worker.request_stop();
+```
+
+With
+
+```cpp
+std::cout << "requested=" << worker.request_stop() << " ";
+```
+
+Rerun the terminal command. Compare requested= with observed=. Which result reports the caller setting the request and which comes from the worker after it sees the request?
 
 ## Chapter project
 

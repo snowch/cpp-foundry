@@ -30,7 +30,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42
@@ -48,7 +48,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. An ordinary future provides one get result. The promise moves into the worker and sets its result. get waits until the state is ready and consumes the future’s retrieval right.
 
-Experiment: Replace set_value with set_exception and verify propagation at get. Add an abandoned-producer case and distinguish it from a legitimate application failure.
+### Run the starter, then try a change
+
+Open `native/examples/lib-future-promise.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-future-promise.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+p.set_value(42)
+```
+
+With
+
+```cpp
+p.set_value(7)
+```
+
+Rerun the terminal command. Compare the result read by get. Which operation supplies that value to the future?
 
 ## Capture task exceptions in the result state
 
@@ -75,7 +95,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 task failed
@@ -93,7 +113,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. packaged_task does not schedule itself. The callable executes synchronously in this fixture, but its exception is observed later by get rather than escaping from task invocation.
 
-Experiment: Run the same task on a jthread and verify identical error observation. Then return a successful value and contrast result transport with execution policy.
+### Run the starter, then try a change
+
+Open `native/examples/lib-packaged-task.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-packaged-task.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+throw std::runtime_error("task failed");
+```
+
+With
+
+```cpp
+return 42;
+```
+
+Rerun the terminal command. Compare the exception message with the numeric result. In which run does future.get return normally?
 
 ## Select deferred execution explicitly
 
@@ -118,7 +158,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0 1 9
@@ -136,7 +176,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. Deferred execution occurs when the result is demanded. The counter is zero before get and one afterward because deferred execution occurs in the waiting thread.
 
-Experiment: Contrast explicit async and deferred launch without asserting nondeterministic interleavings. State who owns each captured object until the task finishes.
+### Run the starter, then try a change
+
+Open `native/examples/lib-async-policy.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-async-policy.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+++calls;
+```
+
+With
+
+```cpp
+calls += 2;
+```
+
+Rerun the terminal command. Compare calls before and after get and the returned value. Does the deferred callable run before get?
 
 ## Share a ready result with multiple readers
 
@@ -163,7 +223,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7 7
@@ -181,7 +241,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. shared_future supports repeated observation of one state. Two threads retrieve the same published integer. Each writes a separate local result, and joining both threads establishes safe observation before printing.
 
-Experiment: Publish an immutable configuration object to several readers. Add a failure case and verify each reader observes the stored exception without sharing mutable error state.
+### Run the starter, then try a change
+
+Open `native/examples/lib-shared-future.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-shared-future.cpp -pthread -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+promise.set_value(7)
+```
+
+With
+
+```cpp
+promise.set_value(8)
+```
+
+Rerun the terminal command. Compare both printed values. Can each reader retrieve the same published result?
 
 ## Chapter project
 

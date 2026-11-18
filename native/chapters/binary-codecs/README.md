@@ -46,7 +46,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 exact=1
@@ -64,7 +64,27 @@ Question: What extra evidence does the literal fixture add?
 
 Answer: 2. It checks the bytes independently of the decoder.
 
-Experiment: Add fixtures for zero, 255, 256, and UINT32_MAX. Compare every byte rather than only the decoded value.
+### Run the starter, then try a change
+
+Open `native/examples/codec-exact-bytes.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/codec-exact-bytes.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+expected{4, 3, 2, 1}
+```
+
+With
+
+```cpp
+expected{1, 2, 3, 4}
+```
+
+Rerun the terminal command. Compare exact= and the exit status. The edited reference uses big-endian byte order. Which order does put32 actually write?
 
 ## Check remaining bytes before consuming a field
 
@@ -110,7 +130,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 truncated cursor=0
@@ -128,7 +148,27 @@ Question: What happens to the cursor on this rejection?
 
 Answer: 1. The precondition check occurs before reading or advancing.
 
-Experiment: Test every prefix length from zero through four and cursors at, before, and beyond the end.
+### Run the starter, then try a change
+
+Open `native/examples/codec-bounds.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/codec-bounds.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bytes{1, 2, 3}
+```
+
+With
+
+```cpp
+bytes{1, 2}
+```
+
+Rerun the terminal command. Compare truncated and cursor=. Does the cursor advance if a shorter prefix is rejected?
 
 ## A length prefix needs its own domain bound
 
@@ -161,7 +201,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada
@@ -179,7 +219,27 @@ Question: Which checks are both necessary?
 
 Answer: 1. Format bounds and application bounds address different failures.
 
-Experiment: Try zero, 64, and a truncated declared payload. Add UTF-8 validation before accepting the name as a record field.
+### Run the starter, then try a change
+
+Open `native/examples/codec-length-prefix.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/codec-length-prefix.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bytes{3, 'A', 'd', 'a'}
+```
+
+With
+
+```cpp
+bytes{3, 'B', 'o', 'b'}
+```
+
+Rerun the terminal command. Compare the decoded names. What tells the reader how many payload bytes belong to each name?
 
 ## Validate a complete candidate before replacing live state
 
@@ -191,7 +251,7 @@ The example’s two-field fixture is deliberately small. A full table additional
 
 ![Publish decoded state only after validation](../../diagrams/codec-candidate-import.svg)
 
-Any rejected field, duplicate, or trailing byte leaves the previous state intact. This is failure preservation within the model, not an operating-system crash-durability guarantee.
+The worked program reads two fields into temporary storage. If either field is truncated, the decoder leaves the previous values intact. A full importer also checks properties such as row uniqueness and trailing bytes.
 
 Text description: Untrusted bytes: check lengths and fields. Candidate state: validate full structure. Publish candidate: replace committed state. Untrusted bytes → Candidate state (then); Candidate state → Publish candidate (then).
 
@@ -232,7 +292,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 rejected 7,8
@@ -250,7 +310,27 @@ Question: When is the candidate published?
 
 Answer: 3. The final swap is separated from fallible preparation.
 
-Experiment: Add a trailing-byte check before swap. Verify every truncated prefix leaves the independently captured live state unchanged.
+### Run the starter, then try a change
+
+Open `native/examples/codec-candidate-import.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/codec-candidate-import.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+truncated{1, 0, 0, 0}
+```
+
+With
+
+```cpp
+truncated{1, 0, 0, 0, 2, 0, 0, 0}
+```
+
+Rerun the terminal command. Compare rejected and the two live numbers. When does the decoder replace live state?
 
 ## Recognize a format version before interpreting its fields
 
@@ -278,7 +358,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0
@@ -296,7 +376,27 @@ Question: What should an unsupported version do?
 
 Answer: 3. A format boundary needs an intentional compatibility policy.
 
-Experiment: Document a migration function that reads the old format into a validated domain value before writing a new version.
+### Run the starter, then try a change
+
+Open `native/examples/codec-version-header.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/codec-version-header.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+future{'C', 'P', 'F', '2'}
+```
+
+With
+
+```cpp
+future{'C', 'P', 'F', '1'}
+```
+
+Rerun the terminal command. Compare the second recognition result. Which format byte must match before the parser can continue?
 
 ## Chapter project
 

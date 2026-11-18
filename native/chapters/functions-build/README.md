@@ -39,7 +39,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada!
@@ -58,7 +58,27 @@ Question: Why is original unchanged?
 
 Answer: 1. The caller and parameter own distinct string objects.
 
-Experiment: Compare value, const-reference, and mutable-reference signatures. State which versions can implement this operation without changing the caller.
+### Run the starter, then try a change
+
+Open `native/examples/value-parameters.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/value-parameters.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::string original = "Ada";
+```
+
+With
+
+```cpp
+std::string original = "Grace";
+```
+
+Rerun the terminal command. Compare the return value with original on the second line. Does decorating the copy add an exclamation mark to the caller’s string?
 
 ## Return related results together
 
@@ -106,7 +126,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2 9
@@ -124,7 +144,27 @@ Question: How should an empty input be represented in a nonthrowing redesign?
 
 Answer: 1. optional can distinguish absence from valid minimum and maximum values.
 
-Experiment: Change the return type to optional<Bounds> and test empty, single-element, and repeated-element inputs.
+### Run the starter, then try a change
+
+Open `native/examples/return-results.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/return-results.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+bounds({4, 2, 9})
+```
+
+With
+
+```cpp
+bounds({4, 4, 4})
+```
+
+Rerun the terminal command. Compare the two numbers. What do minimum and maximum report when every input is the same?
 
 ## Overloads select from the static argument types
 
@@ -155,7 +195,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 integer
@@ -174,7 +214,27 @@ Question: Which overload receives 7.0?
 
 Answer: 1. The literal’s static type is double.
 
-Experiment: Call show with a float and with a short. Explain the promotion that makes each overload a better match.
+### Run the starter, then try a change
+
+Open `native/examples/overload-resolution.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/overload-resolution.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+show(7);
+```
+
+With
+
+```cpp
+show(short{7});
+```
+
+Rerun the terminal command. Compare the first label. Does the short argument select integer or floating?
 
 ## A declaration states an interface before its definition
 
@@ -208,7 +268,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 36
@@ -226,7 +286,27 @@ Question: Which stage resolves a separately compiled function definition?
 
 Answer: 3. The linker connects references to external definitions.
 
-Experiment: Move the declaration to a header and the definition to a second native source file. Build both files, then omit the implementation and inspect the link error.
+### Run the starter, then try a change
+
+Open `native/examples/declarations-linking.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/declarations-linking.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+square(6)
+```
+
+With
+
+```cpp
+square(7)
+```
+
+Rerun the terminal command. Compare the printed squares. Which function definition supplies the calculation for both calls?
 
 ## Headers must tolerate repeated inclusion
 
@@ -256,7 +336,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 100
@@ -274,7 +354,27 @@ Question: Does inline guarantee machine-code inlining?
 
 Answer: 1. inline has language linkage/definition rules independent of optimizer decisions.
 
-Experiment: Create two source files including this header. Link them together and explain why the inline definition is permitted.
+### Run the starter, then try a change
+
+Open `native/examples/header-guards.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/header-guards.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+clamp_score(120)
+```
+
+With
+
+```cpp
+clamp_score(90)
+```
+
+Rerun the terminal command. Compare the printed scores. What does clamp_score do with a value inside the allowed interval?
 
 ## Chapter project
 

@@ -37,7 +37,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42
@@ -56,7 +56,27 @@ Question: Does get transfer ownership?
 
 Answer: 3. The unique_ptr remains the sole owner.
 
-Experiment: Write a function accepting const int* and document whether null is permitted. Compare that observer interface with accepting unique_ptr<int>.
+### Run the starter, then try a change
+
+Open `native/examples/observer-owner.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/observer-owner.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+make_unique<int>(42)
+```
+
+With
+
+```cpp
+make_unique<int>(15)
+```
+
+Rerun the terminal command. Compare the number and empty=. Which output comes from the observed object, and which reports the later state of its owner?
 
 ## A named owner can outlive an expression
 
@@ -87,7 +107,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada Lovelace
@@ -105,7 +125,27 @@ Question: Why is this view valid at the output?
 
 Answer: 1. The owner’s scope covers the use of its borrowed storage.
 
-Experiment: Draw lifetimes for the safe code and the dangling alternative without executing undefined behavior. Rewrite an API to return an owning string.
+### Run the starter, then try a change
+
+Open `native/examples/temporary-lifetime.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/temporary-lifetime.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::string_view view = owner;
+```
+
+With
+
+```cpp
+std::string_view view = std::string_view(owner).substr(0, 3);
+```
+
+Rerun the terminal command. Compare the printed names. Which object keeps the shortened view’s characters alive until output?
 
 ## Reallocation invalidates element observers
 
@@ -133,7 +173,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 20 size=3
@@ -151,7 +191,27 @@ Question: What is safely reacquired here after growth?
 
 Answer: 1. The access derives a new reference from the current vector.
 
-Experiment: Insert at the beginning and observe how the same index changes meaning. Design a record lookup around stable IDs instead.
+### Run the starter, then try a change
+
+Open `native/examples/vector-invalidation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/vector-invalidation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values.push_back(30);
+```
+
+With
+
+```cpp
+values.insert(values.begin(), 30);
+```
+
+Rerun the terminal command. Compare the element at chosen and size=. Has the number of elements changed between the two versions, or the meaning of the index?
 
 ## A view can expose mutations without owning them
 
@@ -184,7 +244,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 193
@@ -202,7 +262,27 @@ Question: Does span<const int> keep the array alive?
 
 Answer: 2. A span packages access; ownership stays with the array.
 
-Experiment: Pass a span<const int> to a sum function accepting arrays and vectors. Document which caller mutations would invalidate the borrow.
+### Run the starter, then try a change
+
+Open `native/examples/view-mutation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/view-mutation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+middle.front() = 9;
+```
+
+With
+
+```cpp
+middle.front() = 8;
+```
+
+Rerun the terminal command. Compare the sequence. Which element of values changed through the span?
 
 ## A weak observer can detect expired shared ownership
 
@@ -233,7 +313,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7
@@ -252,7 +332,27 @@ Question: Does weak_ptr extend the object lifetime?
 
 Answer: 3. Only successful shared ownership keeps the object alive.
 
-Experiment: Model parent/child ownership and choose which back-reference should be weak. Check expiration after releasing the root owner.
+### Run the starter, then try a change
+
+Open `native/examples/shared-weak.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/shared-weak.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+auto owner = std::make_shared<int>(7);
+```
+
+With
+
+```cpp
+auto owner = std::make_shared<int>(9);
+```
+
+Rerun the terminal command. Compare the printed value and expired=. Does a different object value change the observer’s lifetime?
 
 ## Chapter project
 

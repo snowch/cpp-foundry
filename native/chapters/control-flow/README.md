@@ -30,7 +30,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 retry
@@ -50,7 +50,27 @@ Question: Which score first passes this rule?
 
 Answer: 1. The comparison includes equality at 60.
 
-Experiment: Add 0 and 101. Decide whether invalid scores need a separate rejection branch before the pass/fail decision.
+### Run the starter, then try a change
+
+Open `native/examples/branch-contracts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/branch-contracts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{59, 60, 100}
+```
+
+With
+
+```cpp
+{59, 60, 101}
+```
+
+Rerun the terminal command. Compare the final message for 100 and 101. Does this branch enforce the domain 0–100 as well as the pass threshold?
 
 ## Use short-circuiting to establish a precondition
 
@@ -82,7 +102,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0
@@ -101,7 +121,27 @@ Question: Why is front safe in this condition?
 
 Answer: 2. The right operand runs only after the guard succeeds.
 
-Experiment: Reverse the operands on paper and explain the failed precondition. Add a helper that counts how often the right operand runs.
+### Run the starter, then try a change
+
+Open `native/examples/short-circuit.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/short-circuit.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values.push_back(7);
+```
+
+With
+
+```cpp
+values.push_back(6);
+```
+
+Rerun the terminal command. Compare the first and second output lines. Which is affected by changing the value that is present?
 
 ## State what a loop has already processed
 
@@ -135,7 +175,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0:0
@@ -156,7 +196,27 @@ Question: Before iteration i, which elements are included?
 
 Answer: 3. The current element is added after the trace.
 
-Experiment: Change the vector to include a negative value. Write the invariant independently of the actual numbers, then check the trace.
+### Run the starter, then try a change
+
+Open `native/examples/loop-invariants.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/loop-invariants.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+values{3, 1, 4}
+```
+
+With
+
+```cpp
+values{3, -1, 4}
+```
+
+Rerun the terminal command. Compare each index:sum line and total=. Is the sum shown beside index 1 printed before or after adding the negative value?
 
 ## Dispatch a closed set of commands
 
@@ -194,7 +254,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 scan rows
@@ -213,7 +273,27 @@ Question: What prevents the list case from also saving?
 
 Answer: 2. break exits the switch.
 
-Experiment: Add a count command and handle it in the switch. Compile with warnings enabled and inspect what happens when its case is missing.
+### Run the starter, then try a change
+
+Open `native/examples/switch-enums.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/switch-enums.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{Command::list, Command::save}
+```
+
+With
+
+```cpp
+{Command::save, Command::list}
+```
+
+Rerun the terminal command. Compare the two printed messages. Which part of the program chooses their order?
 
 ## Make a decreasing measure visible
 
@@ -242,7 +322,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 13 6 3 1 steps=4
@@ -260,7 +340,27 @@ Question: Which quantity proves this loop progresses?
 
 Answer: 1. Integer halving strictly reduces every positive value.
 
-Experiment: Try 0, 1, and a power of two. Predict the step count and document how the empty-work case behaves.
+### Run the starter, then try a change
+
+Open `native/examples/termination.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/termination.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+remaining = 13
+```
+
+With
+
+```cpp
+remaining = 0
+```
+
+Rerun the terminal command. Compare the printed trace and steps=. Why is the loop body skipped at zero?
 
 ## Chapter project
 

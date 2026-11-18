@@ -6,13 +6,13 @@ Write useful programs with strings, vectors, and small functions.
 
 Start here. No earlier C++ knowledge is required; the lessons introduce the source notation before asking you to change it.
 
-A program is a list of instructions for the computer. C++20 names the language version used in this course. This first program displays a greeting. Click Run code below and look for Hello, Ada! in the output box. You do not need to install anything to run this example.
+A program is a list of instructions for the computer. C++20 names the language version used in this course. The first example prints a greeting. You can run it in your browser without installing a compiler.
 
 Read the program from top to bottom. #include <iostream> asks the compiler to use the iostream header: a supplied file that makes text-output tools available. main names the starting group of instructions. int says this group reports a whole-number status when it finishes, and () means this example supplies no inputs to that group. The braces { and } enclose its instructions. A semicolon ; ends each instruction inside the braces.
 
 The prefix std:: identifies a name from the standard library, C++’s supplied collection of reusable tools. std::cout names the destination for normal text output. Think of << here as “send the text on the right to the output.” The double quotes mark literal text: characters to display rather than instructions to execute. Inside that text, \n means start a new line. It is two characters in the source spelling but requests one line break in the output.
 
-Run code first compiles the C++ source: it checks the language rules and translates the instructions into a runnable program. It then runs that program. A compiler diagnostic is a message about a problem in the source; the output box can show these messages as well as the program’s text. The final instruction return 0; ends main and reports successful completion to the environment running the program.
+Run code first compiles the C++ source: it checks the language rules and translates the instructions into a runnable program. It then runs that program. A compiler diagnostic explains a problem in your source. If compilation fails, read the message beside Program output and correct the source before running again. The final instruction return 0; ends main and reports successful completion to the environment running the program.
 
 ```cpp
 #include <iostream>
@@ -24,7 +24,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Hello, Ada!
@@ -42,7 +42,27 @@ Question: Which part is the literal text sent to the output?
 
 Answer: 1. The quoted characters are the greeting. \n requests the line break. main identifies the starting instructions and return 0 reports successful completion.
 
-Experiment: Change only Ada to your own name and run again. Next, remove the semicolon after the output instruction and run. Read the diagnostic, restore the semicolon, and confirm that the greeting runs again.
+### Run the starter, then try a change
+
+Open `native/examples/first-program.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/first-program.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+Hello, Ada!
+```
+
+With
+
+```cpp
+Hello, Grace!
+```
+
+Rerun the terminal command. Compare the two greetings. Which part of the quoted text did your edit change?
 
 ## Store numbers and calculate a result
 
@@ -65,7 +85,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 42
@@ -83,7 +103,27 @@ Question: What does std::cout << total print in this example?
 
 Answer: 1. Using the variable’s name reads its current value, which is 20 + 22, or 42.
 
-Experiment: Change apples to 5 and pears to 8, predict the total, then run. Add the instruction total = total + 1; before printing and explain why the output increases by one.
+### Run the starter, then try a change
+
+Open `native/examples/numbers.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/numbers.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int apples = 20;
+```
+
+With
+
+```cpp
+int apples = 5;
+```
+
+Rerun the terminal command. Compare the printed totals. Where does the addition use the new value?
 
 ## Give text a name
 
@@ -107,7 +147,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 Ada
@@ -126,7 +166,27 @@ Question: Which instruction replaces the stored text?
 
 Answer: 1. name = "Grace";. The first output uses the starting value Ada. Assignment replaces it with Grace before the second output instruction reads it.
 
-Experiment: Change both names, then print name twice before replacing it. Explain which output instructions read the earlier value and which read the later value.
+### Run the starter, then try a change
+
+Open `native/examples/text-values.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/text-values.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+name = "Grace";
+```
+
+With
+
+```cpp
+name = "Lin";
+```
+
+Rerun the terminal command. Which of the two output lines changes when the assignment comes after the first print?
 
 ## Choose which instructions run
 
@@ -149,7 +209,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 pass
@@ -167,7 +227,27 @@ Question: Which score makes this condition true?
 
 Answer: 1. 60. The comparison is true for 60, so the first output runs. The retry output is skipped.
 
-Experiment: Try 59, 60, and 61. Predict the chosen message before running each version. Replace >= with > and explain the change at exactly 60.
+### Run the starter, then try a change
+
+Open `native/examples/decisions-basics.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/decisions-basics.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+score >= 60
+```
+
+With
+
+```cpp
+score > 60
+```
+
+Rerun the terminal command. Compare pass and retry for the same score of 60. Which comparison includes the boundary?
 
 ## Repeat instructions with a while loop
 
@@ -189,7 +269,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1
@@ -209,7 +289,27 @@ Question: Why does this loop stop?
 
 Answer: 1. count becomes 4, making count <= 3 false. Each repetition prints the current count and then increases it. After printing 3, count becomes 4, and the next condition check ends the loop.
 
-Experiment: Change the starting count to 4 and predict whether the body runs at all. Then change the upper bound to 5 and predict the entire output.
+### Run the starter, then try a change
+
+Open `native/examples/loop-basics.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/loop-basics.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int count = 1;
+```
+
+With
+
+```cpp
+int count = 4;
+```
+
+Rerun the terminal command. Compare the printed sequence with the empty output. Is the loop condition true the first time it is checked?
 
 ## Name a calculation with a function
 
@@ -234,7 +334,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12
@@ -252,7 +352,27 @@ Question: Which expression calls the new function?
 
 Answer: 1. Parentheses after the function name supply the call’s input. twice(6) runs the calculation and produces its result.
 
-Experiment: Call twice with 0, 3, and -2, printing each result. Then write an int plus_one(int value) function using return value + 1; and call it from main.
+### Run the starter, then try a change
+
+Open `native/examples/functions.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/functions.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+twice(6)
+```
+
+With
+
+```cpp
+twice(-2)
+```
+
+Rerun the terminal command. Compare 12 with the new result. How does the input reach the multiplication inside twice?
 
 ## Keep several values in a vector
 
@@ -278,7 +398,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 70
@@ -300,7 +420,27 @@ Question: How many elements are present after push_back(100)?
 
 Answer: 1. push_back adds one element to the three starting elements, so the size becomes four.
 
-Experiment: Append another score and predict both the printed sequence and the final count. Then start with std::vector<int> scores{}; and explain why the loop prints no scores before an append.
+### Run the starter, then try a change
+
+Open `native/examples/collections.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/collections.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+scores.push_back(100);
+```
+
+With
+
+```cpp
+scores.push_back(110);
+```
+
+Rerun the terminal command. Compare the last printed score and count=. Which value changes when only the appended value changes?
 
 ## Keep local names inside their braces
 
@@ -323,7 +463,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12
@@ -342,7 +482,27 @@ Question: Which name is available in the final output instruction?
 
 Answer: 1. outer. The inner block prints 10 + 2. After its closing brace, the program can still read outer, but the name inner is no longer available.
 
-Experiment: Try adding std::cout << inner; after the inner block and read the compiler diagnostic. Remove that instruction, then move inner’s declaration into main and explain how its scope changes.
+### Run the starter, then try a change
+
+Open `native/examples/scope-basics.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/scope-basics.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::cout << outer << "\n";
+```
+
+With
+
+```cpp
+std::cout << inner << "\n";
+```
+
+Rerun the terminal command. This edit deliberately tests a compiler diagnostic. Find the diagnostic naming inner. Put outer back and run again. Which enclosing block defines the name inner?
 
 ## Chapter project
 

@@ -24,7 +24,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 0 unknown Ada
@@ -42,7 +42,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. Check engagement before dereferencing. The empty optional yields a fallback. After assignment, value accesses the stored name.
 
-Experiment: Count calls to an expensive fallback and replace value_or with an explicit branch. Distinguish an absent name from an invalid name in your API.
+### Run the starter, then try a change
+
+Open `native/examples/lib-optional-access.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-optional-access.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+name.value_or("unknown")
+```
+
+With
+
+```cpp
+name.value_or("missing")
+```
+
+Rerun the terminal command. Compare the fallback and the final stored name. Does reading a fallback assign that fallback to the optional?
 
 ## Handle each tagged alternative
 
@@ -78,7 +98,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 number=7 text=Ada
@@ -96,7 +116,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 2. A visitor must handle every possible active alternative. The visitor instantiates handling for both alternatives and dispatches according to the active tag.
 
-Experiment: Add a monostate alternative for an explicit empty command. Write a visitor with an overload per type and test each alternative independently.
+### Run the starter, then try a change
+
+Open `native/examples/lib-variant-visit.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-variant-visit.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::variant<int, std::string> value = 7;
+```
+
+With
+
+```cpp
+std::variant<int, std::string> value = std::string("Grace");
+```
+
+Rerun the terminal command. Compare the first labels. Which visitor branch is selected by the active type?
 
 ## Expand grouped arguments into a callable
 
@@ -125,7 +165,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 7 9
@@ -143,7 +183,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. tie stores references to existing objects. apply calls add with two integers. The tied element aliases n, so assignment changes n.
 
-Experiment: Compare make_tuple, tie, and a named struct. Add a third callable argument and examine the compile error when the tuple shape no longer matches.
+### Run the starter, then try a change
+
+Open `native/examples/lib-tuple-apply.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-tuple-apply.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::tuple{3, 4}
+```
+
+With
+
+```cpp
+std::tuple{5, 4}
+```
+
+Rerun the terminal command. Compare the first result and the final n. Which values are supplied by the tuple and which are reached through tie?
 
 ## Choose callable storage and captured state
 
@@ -170,7 +230,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 5 7
@@ -188,7 +248,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. C++20 std::function requires a copyable target. The stored value capture retains 3 despite the later assignment to n. The concrete move-only lambda owns its integer.
 
-Experiment: Try assigning the move-only lambda to std::function and explain the diagnostic. Compare passing a callable as a template parameter with type-erased storage.
+### Run the starter, then try a change
+
+Open `native/examples/lib-callable-ownership.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-callable-ownership.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+[n](int x)
+```
+
+With
+
+```cpp
+[&n](int x)
+```
+
+Rerun the terminal command. Compare the first result with the unchanged second result. When does the reference capture read n?
 
 ## Chapter project
 

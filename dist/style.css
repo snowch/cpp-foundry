@@ -47,3 +47,24 @@ h1,h2,h3{line-height:1.2;letter-spacing:-.035em;text-wrap:balance}p{margin:0 0 1
 .lesson-foundations p:last-child{margin-bottom:0}
 .lesson-article>.lesson-prerequisites{font-size:12px;line-height:1.8;color:var(--muted);padding:13px 16px;background:white;border:1px solid var(--line);border-radius:8px}
 .lesson-prerequisites a{color:var(--accent)}
+
+/* Keep guides, source, and output legible at the same width. */
+.lesson-position { color:var(--muted); font-size:12px; }
+.experiment ol,.workbench-steps { padding-inline-start:1.4em; }
+.experiment li,.workbench-steps li { margin-block:.55em; }
+.experiment code,.workbench-steps code,.lesson-article>p { overflow-wrap:anywhere; }
+.experiment code,.workbench-steps code { white-space:pre-wrap; }
+.editor-tools { min-width:0; }
+.editor-tools summary { cursor:pointer; }
+.tool-buttons { display:flex; flex-wrap:wrap; gap:6px; padding-top:6px; }
+.source-save-warning,.run-warning,.output-context,.input-area p { margin:0; padding:11px 15px; font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+.source-save-warning,.run-warning { color:#762f10; background:#fff2e6; }
+.output-context { color:#553d74; background:#eee7f9; }
+.output-area h3 { font-size:13px; margin:0; padding:10px 15px; }
+.run-diagnostic { margin:0; padding:12px 15px; white-space:pre-wrap; overflow-wrap:anywhere; background:#fff2e6; color:#602f18; }
+.editor textarea.source,.editor .output,.editor textarea.stdin,.native-source { font-size:13px; line-height:1.6; }
+.button[hidden],.tool-buttons [hidden] { display:none; }
+.workbench-steps { max-width:70ch; }
+:focus-visible { outline:2px solid #6a47a7; outline-offset:3px; }
+
+.editor-heading label { color:#504667; font-weight:650; }

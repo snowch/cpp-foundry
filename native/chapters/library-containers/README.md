@@ -31,7 +31,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 3
@@ -49,7 +49,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. reserve does not increase size. The code retains an index rather than an address across a capacity increase. It reacquires access through at after reallocation.
 
-Experiment: Save capacity before each push, identify which pushes reallocate, and compare with resize. Add an insertion before the saved index and explain why that index now needs adjustment.
+### Run the starter, then try a change
+
+Open `native/examples/lib-vector-invalidation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-vector-invalidation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+v.reserve(32);
+```
+
+With
+
+```cpp
+v.insert(v.begin(), 9);
+```
+
+Rerun the terminal command. Compare the printed size and indexed value. Why does the same numeric index now name the inserted element?
 
 ## Compare end growth and stable list nodes
 
@@ -74,7 +94,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 3 4 1
@@ -92,7 +112,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. A spliced list iterator still denotes its moved element. The list iterator still denotes 4 after its node moves into b. The deque demonstrates both ends without storing an invalidated deque iterator.
 
-Experiment: Record the full contents of both lists after splicing. Compare a vector implementation and identify which operation becomes linear.
+### Run the starter, then try a change
+
+Open `native/examples/lib-deque-list.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-deque-list.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+b.splice(b.end(), a, it);
+```
+
+With
+
+```cpp
+b.splice(b.begin(), a, it);
+```
+
+Rerun the terminal command. Compare the third and fourth values. Does moving the node to a different destination position change what the saved iterator reads?
 
 ## Distinguish lookup, insertion, and replacement
 
@@ -119,7 +159,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 1 0 2 0
@@ -137,7 +177,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 3. try_emplace preserves an existing mapped value. The second insertion reports false and preserves the original mapped value. contains checks another key without inserting it.
 
-Experiment: Add insert_or_assign and inspect its insertion flag. Then compare find with operator[] for a missing name and check the map size.
+### Run the starter, then try a change
+
+Open `native/examples/lib-map-insertion.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-map-insertion.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+auto again = m.try_emplace("Ada", 9);
+```
+
+With
+
+```cpp
+auto again = m.insert_or_assign("Ada", 9);
+```
+
+Rerun the terminal command. Compare the insertion flag and the stored value. Can the value change when the insertion flag is false?
 
 ## Hash equality and rehash contracts
 
@@ -172,7 +232,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2 0
@@ -190,7 +250,27 @@ Question: Which statement correctly describes this example’s contract?
 
 Answer: 1. Equal keys must have equal hashes. The example checks values by key after rehash instead of assuming an iteration order. The count survives the bucket reorganization.
 
-Experiment: Introduce a constant hash functor, insert many distinct keys, and verify correctness while discussing worst-case lookup. Reacquire iterators after rehash.
+### Run the starter, then try a change
+
+Open `native/examples/lib-unordered-contracts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lib-unordered-contracts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+counts.rehash(100);
+```
+
+With
+
+```cpp
+counts.rehash(200);
+```
+
+Rerun the terminal command. Compare the count for Ada and the membership result for Grace. Does changing the requested bucket count change the stored data?
 
 ## Chapter project
 

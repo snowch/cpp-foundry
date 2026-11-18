@@ -33,7 +33,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 cases=6 valid=1
@@ -51,7 +51,27 @@ Question: What domain is exhaustively tested?
 
 Answer: 3. The coverage is complete only within the stated finite domain.
 
-Experiment: Apply permutation workloads to the custom AVL and B+ examples, checking contents and invariants after every operation.
+### Run the starter, then try a change
+
+Open `native/examples/permutation-oracle.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/permutation-oracle.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input{1, 2, 3}
+```
+
+With
+
+```cpp
+input{3, 2, 1}
+```
+
+Rerun the terminal command. Compare cases= and valid=. Why does starting at the final permutation visit fewer cases?
 
 ## Inject failures at named preparation boundaries
 
@@ -91,7 +111,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 rejected live=10 owners=0
@@ -109,7 +129,27 @@ Question: Which two properties are checked?
 
 Answer: 1. Resources can be released correctly while state semantics are still wrong.
 
-Experiment: Add failure points before allocation, after candidate construction, and before publication. Check each against a captured independent before-state.
+### Run the starter, then try a change
+
+Open `native/examples/failure-injection.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/failure-injection.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+int candidate = 99;
+```
+
+With
+
+```cpp
+int candidate = 11;
+```
+
+Rerun the terminal command. Compare rejected, live= and owners=. Which value becomes visible when the candidate avoids the injected failure?
 
 ## Enumerate logical commit orders without timing sleeps
 
@@ -142,7 +182,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 orders=2
@@ -160,7 +200,27 @@ Question: What determines the order in this fixture?
 
 Answer: 1. The modeled transitions are deterministic and reproducible.
 
-Experiment: Implement the same schedule with barriers or condition variables and compare the real synchronized store against the model.
+### Run the starter, then try a change
+
+Open `native/examples/schedule-model.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/schedule-model.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+if (commits == 1)
+```
+
+With
+
+```cpp
+if (commits == 2)
+```
+
+Rerun the terminal command. Compare orders= and status. The edit asks which schedules accept both writes. How does revision validation prevent the second write?
 
 ## Separate work accounting from setup and presentation
 
@@ -188,7 +248,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 input=5 key_comparisons=5
@@ -206,7 +266,27 @@ Question: What is measured here?
 
 Answer: 2. The counter targets a specifically defined unit of work.
 
-Experiment: Time a larger repeated workload only after validating results. Keep initialization and output outside the measured region.
+### Run the starter, then try a change
+
+Open `native/examples/benchmark-separation.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/benchmark-separation.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+if (value == 99)
+```
+
+With
+
+```cpp
+if (value == 1)
+```
+
+Rerun the terminal command. Compare input= and key_comparisons=. Which workload ends after the first element, and why is neither count a time measurement?
 
 ## Canonicalize release metadata before comparing builds
 
@@ -241,7 +321,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 deterministic=1
@@ -259,7 +339,27 @@ Question: What additional evidence supports reproducible artifacts?
 
 Answer: 3. The actual produced bytes must be compared under recorded build inputs.
 
-Experiment: Extend the manifest with pinned compiler/library versions, flags, and cryptographic artifact digests, then rebuild in a clean environment.
+### Run the starter, then try a change
+
+Open `native/examples/reproducible-manifest.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/reproducible-manifest.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+{"a.cpp", 12}, {"b.cpp", 7}
+```
+
+With
+
+```cpp
+{"a.cpp", 12}, {"b.cpp", 8}
+```
+
+Rerun the terminal command. Compare deterministic=. Which changed size means the second manifest no longer describes the same inputs?
 
 ## Chapter project
 

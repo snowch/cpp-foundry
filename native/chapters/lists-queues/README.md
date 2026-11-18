@@ -38,7 +38,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 12
@@ -56,7 +56,27 @@ Question: Who owns the second node?
 
 Answer: 2. The chain has one owning link per node.
 
-Experiment: Add a third node and draw owners separately from observer pointers. Explain why an owning back-link would create a different lifetime problem.
+### Run the starter, then try a change
+
+Open `native/examples/owned-list.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/owned-list.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+prepend(head, 1);
+```
+
+With
+
+```cpp
+prepend(head, 1); prepend(head, 3);
+```
+
+Rerun the terminal command. Compare the traversal sequences. Where does a new owning head appear in the output?
 
 ## Detach an owner before destroying a node
 
@@ -93,7 +113,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 2
@@ -111,7 +131,27 @@ Question: Why keep the removed node in a local owner?
 
 Answer: 1. The local establishes the required lifetime during the ownership transfer.
 
-Experiment: Handle an empty list and a single-node list. Return an optional removed value without returning a pointer to the destroyed node.
+### Run the starter, then try a change
+
+Open `native/examples/remove-owned-node.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/remove-owned-node.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+prepend(head, 2);
+```
+
+With
+
+```cpp
+prepend(head, 3);
+```
+
+Rerun the terminal command. Compare the value after removal. Which previous node becomes reachable through head once the old head is destroyed?
 
 ## A stack exposes last-in, first-out behavior
 
@@ -139,7 +179,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 321
@@ -157,7 +197,27 @@ Question: Which item is removed first?
 
 Answer: 1. LIFO refers to insertion history rather than numeric order.
 
-Experiment: Implement the same interface with a vector and compare the empty-state contract. Use the stack to traverse a small tree iteratively.
+### Run the starter, then try a change
+
+Open `native/examples/lifo-stack.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/lifo-stack.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+work.push(3);
+```
+
+With
+
+```cpp
+work.push(4);
+```
+
+Rerun the terminal command. Compare the first printed element. Which added item does a last-in, first-out stack return first?
 
 ## Separate a ring’s logical order from its array positions
 
@@ -212,7 +272,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 full=1 first=1
@@ -231,7 +291,29 @@ Question: What disambiguates full and empty here?
 
 Answer: 2. Count is zero when empty and capacity when full.
 
-Experiment: Test several complete wrap cycles and a rejected insertion. Compare every popped value with a deque reference model.
+### Run the starter, then try a change
+
+Open `native/examples/ring-buffer.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/ring-buffer.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+queue.push(4);
+    while
+```
+
+With
+
+```cpp
+queue.push(5);
+    while
+```
+
+Rerun the terminal command. Compare full= and first= with the remaining sequence. Which value fills the space opened by the first pop?
 
 ## A queue preserves arrival order
 
@@ -257,7 +339,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 10 20 30 empty=1
@@ -275,7 +357,27 @@ Question: What additional contract does a concurrent queue need?
 
 Answer: 2. Container ownership and inter-thread coordination are separate responsibilities.
 
-Experiment: Add a bounded capacity rule to a queue wrapper. Specify whether full insertion rejects, blocks, or drops an item.
+### Run the starter, then try a change
+
+Open `native/examples/fifo-deque.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/fifo-deque.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+pending.push_back(30);
+```
+
+With
+
+```cpp
+pending.push_back(40);
+```
+
+Rerun the terminal command. Compare the final printed item and empty=. How does FIFO place the new value after the original two?
 
 ## Chapter project
 

@@ -29,7 +29,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 [LIST]
@@ -48,7 +48,27 @@ Question: Where should this normalization happen?
 
 Answer: 2. The protocol defines which delimiters are framing rather than payload.
 
-Experiment: Test empty lines and a final line without a terminator. Document whether embedded carriage returns are valid payload or rejected controls.
+### Run the starter, then try a change
+
+Open `native/examples/line-endings.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/line-endings.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+LIST\r\nSAVE\n
+```
+
+With
+
+```cpp
+LIST\r\n\r\nSAVE
+```
+
+Rerun the terminal command. Compare the bracketed lines. Which line is empty, and why does SAVE appear even without a final newline?
 
 ## Binary payloads can contain zero bytes
 
@@ -78,7 +98,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 bytes=3 zeros=1
@@ -96,7 +116,27 @@ Question: What supplies the binary length here?
 
 Answer: 2. The owned byte sequence tracks its complete length.
 
-Experiment: Write and reopen the same three bytes in binary mode. Compare exact bytes and distinguish end-of-file from a zero byte.
+### Run the starter, then try a change
+
+Open `native/examples/binary-zero.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/binary-zero.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+A\0B
+```
+
+With
+
+```cpp
+A\0\0
+```
+
+Rerun the terminal command. Compare bytes= and zeros=. Why does a zero byte change the second count without ending the loop?
 
 ## A Unicode boundary is not an arbitrary byte position
 
@@ -121,7 +161,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 bytes=2 lead=c3 continuation=ab
@@ -139,7 +179,27 @@ Question: Can either individual byte represent this character alone?
 
 Answer: 3. The code point is encoded by the complete multibyte sequence.
 
-Experiment: Inspect a three-byte and a four-byte code point. Compare valid boundaries with the capstone’s byte-length limit.
+### Run the starter, then try a change
+
+Open `native/examples/text-byte-slices.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/text-byte-slices.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+std::string text = "ë";
+```
+
+With
+
+```cpp
+std::string text = "€";
+```
+
+Rerun the terminal command. Compare bytes= and the first two bytes. The program prints only those two byte values. Does its byte count report another byte?
 
 ## Keep logical names separate from host path rules
 
@@ -160,7 +220,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 people.cpf
@@ -178,7 +238,27 @@ Question: Does lexically_normal resolve symlinks?
 
 Answer: 3. It transforms path syntax without querying the filesystem.
 
-Experiment: Define allowed database basenames and reject traversal components before passing names to a host adapter.
+### Run the starter, then try a change
+
+Open `native/examples/path-contracts.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/path-contracts.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+logs/../people.cpf
+```
+
+With
+
+```cpp
+logs/../backup/people.cpf
+```
+
+Rerun the terminal command. Compare the normalized paths. Which components are removed without checking whether either path exists?
 
 ## EOF is a stream state, not a stored byte
 
@@ -204,7 +284,7 @@ int main() {
 
 ```
 
-Expected output:
+Original program output:
 
 ```text
 count=2 eof=1 bad=0
@@ -222,7 +302,27 @@ Question: What controls this loop?
 
 Answer: 2. Only a successful read contributes a processed byte.
 
-Experiment: Test empty input and inject an error state in a separate stream fixture. Specify which failures may retain a previous candidate.
+### Run the starter, then try a change
+
+Open `native/examples/eof-state.cpp` in your checkout. From the repository root, use this command in a Linux or Codespaces terminal to compile and run the current file in a fresh temporary directory.
+
+```sh
+run_dir=$(mktemp -d) && g++ -std=c++20 -Wall -Wextra -Werror native/examples/eof-state.cpp -o "$run_dir/example" && (cd "$run_dir" && ./example)
+```
+
+Replace
+
+```cpp
+input("AB")
+```
+
+With
+
+```cpp
+input("")
+```
+
+Rerun the terminal command. Compare count=, eof= and bad=. How does clean input exhaustion differ from an input error?
 
 ## Chapter project
 
