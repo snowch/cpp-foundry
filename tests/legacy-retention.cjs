@@ -1,0 +1,10 @@
+const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
+(async()=>{const {retainLegacyAssets}=await import('../tools/retain-legacy-assets.mjs'),dir=await fs.mkdtemp(path.join(os.tmpdir(),'foundry-legacy-'));try{
+ const v='a'.repeat(16),id='b'.repeat(64),html=`<script src="app.${v}.js"></script>`,toolchain={assets:{'clang.gz':{bytes:4,sha256:'c'.repeat(64)}}};await fs.mkdir(dir+'/compiler');await fs.writeFile(dir+'/compiler/toolchain.json',JSON.stringify(toolchain));
+ const files=new Map([['/',html],['/compiler/toolchain.json',JSON.stringify(toolchain)],['/app.'+v+'.js',`new Worker(new URL('./compiler/worker.${v}.js',import.meta.url));fetch('./record-store.${v}.cpp')`],['/style.'+v+'.css','body{}'],['/compiler/worker.'+v+'.js',`importScripts('./shared.${v}.js')`],['/compiler/shared.'+v+'.js','const API={};'],['/record-store.'+v+'.cpp','int main(){}']]);
+ const fetcher=async url=>new Response(files.get(url.pathname)||'missing',{status:files.has(url.pathname)?200:404});
+ const retained=await retainLegacyAssets(dir,'https://course.test/',id,{fetcher});assert.equal(retained.length,5);assert.equal(await fs.readFile(`${dir}/releases/${id}/compiler/worker.${v}.js`,'utf8'),`importScripts('./shared.${v}.js')`);
+ files.set('/release.json',JSON.stringify({id,legacyAssets:retained}));for(const file of retained)files.set(`/releases/${id}/${file.path}`,await fs.readFile(`${dir}/${file.path}`));assert.equal((await retainLegacyAssets(dir,'https://course.test/','d'.repeat(64),{fetcher})).length,5);
+ files.set(`/releases/${id}/compiler/worker.${v}.js`,'corrupted');await assert.rejects(retainLegacyAssets(dir,'https://course.test/','d'.repeat(64),{fetcher}),/failed verification/);
+ console.log('PASS pre-offline worker/shared/lazy-source graph retention, subsequent exact-byte retention and corruption rejection');
+}finally{await fs.rm(dir,{recursive:true,force:true});}})().catch(error=>{console.error(error);process.exitCode=1;});
