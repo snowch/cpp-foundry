@@ -4,6 +4,14 @@
 
 A modern C++20 course with **ten parts, 54 chapters, and 270 authored lessons**, from values and ownership through algorithms, data structures, database internals, recovery, portability, and concurrency. Each lesson includes an explanation, a complete worked program, expected output, a walkthrough, a pitfall, an understanding question with feedback, and a literal edit with output to compare. All readings and programs are also exported into `native/`.
 
+## Prerequisites
+
+No previous programming, C or C++ experience is required. Start with the first chapter and follow the course in order; later lessons link to their earlier prerequisites. Basic arithmetic and comfort typing and editing text are enough to begin.
+
+For browser examples, use an up-to-date browser (Chrome is the tested option) and internet access to load the site and compiler. A laptop or desktop keyboard makes editing easier. No compiler installation or account is required to start.
+
+Later lessons marked **Native terminal** require a compatible C++20 compiler and standard library, either locally or in GitHub Codespaces. This can be set up when those lessons are reached. Codespaces requires a GitHub account and uses its compute/storage allowance. See [native setup details](#local-development-and-native-programs).
+
 | Part | Chapters | Lessons | Focus |
 | --- | ---: | ---: | --- |
 | Learn modern C++ | 5 | 28 | Values, control flow, functions/builds, text, domain types, standard library |

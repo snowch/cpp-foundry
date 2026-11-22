@@ -68,3 +68,13 @@ h1,h2,h3{line-height:1.2;letter-spacing:-.035em;text-wrap:balance}p{margin:0 0 1
 :focus-visible { outline:2px solid #6a47a7; outline-offset:3px; }
 
 .editor-heading label { color:#504667; font-weight:650; }
+
+/* Entry requirements belong before the curriculum, with readable text at phone widths. */
+.course-prerequisites { margin:0 0 48px; }
+.course-prerequisites .section-heading { align-items:start; }
+.prerequisites-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:0; }
+.prerequisites-list>div { padding:20px; background:var(--white); border:1px solid var(--line); border-radius:12px; min-width:0; }
+.prerequisites-list dt { font-size:15px; font-weight:650; line-height:1.5; margin:0 0 8px; }
+.prerequisites-list dd { margin:0; color:var(--muted); font-size:14px; line-height:1.8; overflow-wrap:anywhere; }
+.prerequisites-list a { color:var(--accent); }
+@media(max-width:780px) { .prerequisites-list { grid-template-columns:1fr; } .course-prerequisites { margin-bottom:36px; } }
