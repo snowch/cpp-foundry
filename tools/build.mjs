@@ -1,6 +1,8 @@
 import {createHash} from 'node:crypto';
 import {cp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {buildOffline} from './offline.mjs';
 
 const source=path.resolve('dist'), output=path.resolve('.build/site');
 async function files(directory,prefix='') {
@@ -8,7 +10,7 @@ async function files(directory,prefix='') {
   for(const entry of await readdir(directory,{withFileTypes:true})) {
     const name=path.posix.join(prefix,entry.name);
     if(entry.isDirectory())result.push(...await files(path.join(directory,entry.name),name));
-    else if(/\.(js|css|cpp)$/.test(name))result.push(name);
+    else if(/\.(js|mjs|css|cpp)$/.test(name))result.push(name);
   }
   return result.sort();
 }
@@ -18,7 +20,7 @@ for(const name of names){
   contents.set(name,bytes.toString());hash.update(name).update('\0').update(bytes).update('\0');
 }
 const version=hash.digest('hex').slice(0,16);
-const versions=new Map(names.map(name=>[name,name.replace(/(\.[^.]+)$/,`.${version}$1`)]));
+const versions=new Map(names.map(name=>[name,name.endsWith('.mjs')?name:name.replace(/(\.[^.]+)$/,`.${version}$1`)]));
 await rm(output,{recursive:true,force:true});
 await mkdir(output,{recursive:true});
 await cp(source,output,{recursive:true});
@@ -35,5 +37,9 @@ for(const [name,content] of contents){
   await writeFile(path.join(output,versions.get(name)),revised);
 }
 const html=await readFile(path.join(source,'index.html'),'utf8');
-await writeFile(path.join(output,'index.html'),html.replace(/(src|href)="(app\.js|style\.css)"/g,(_,attribute,name)=>`${attribute}="${versions.get(name)}"`));
+await writeFile(path.join(output,'index.html'),html.replace(/(src|href)="\.\/([^"/]+\.(?:js|css))"/g,(_,attribute,name)=>`${attribute}="./${versions.get(name)}"`));
 console.log(`Built .build/site with versioned application assets (${version}).`);
+
+const commit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const date=execFileSync('git',['show','-s','--format=%cs','HEAD'],{encoding:'utf8'}).trim();
+await buildOffline(output,{commit,date});

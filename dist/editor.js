@@ -1,3 +1,4 @@
+import {execute,stopRunner,runtimeRecovery} from './course-controls.mjs';
 import {read,write,hasSaved,isInMemory} from './storage.js';
 
 export function download(name,bytes,type='application/octet-stream') {
@@ -17,7 +18,7 @@ export function mountEditor(target,{id,code,input='',persistent=false,getDatabas
     ${persistent?`<div class="input-area"><label class="input-label" for="program-input">Program input</label><p>Enter one command per line before choosing <strong>Run code</strong>.</p>`:`<details class="input-area" ${input?'open':''}><summary class="input-label">Program input (stdin)</summary><label class="input-label" for="program-input">Text passed to the program when it starts</label>`}
     <textarea id="program-input" class="stdin" aria-label="Program input" spellcheck="false"></textarea>${persistent?'</div>':'</details>'}
     <div class="editor-controls"><button type="button" class="button small warm run" aria-keyshortcuts="Control+Enter Meta+Enter">Run code</button><button type="button" class="button small secondary stop" hidden>Stop</button><span class="status" role="status"></span></div>
-    <p class="run-warning" role="status" hidden></p><pre class="run-diagnostic" aria-label="Compiler or runtime messages" hidden></pre>
+    <p class="run-warning" role="status" hidden></p><button type="button" class="button secondary runtime-reload" hidden>Reload lesson</button><pre class="run-diagnostic" aria-label="Compiler or runtime messages" hidden></pre>
     <div class="output-area"><h3>Program output</h3><p class="output-context" hidden></p><pre class="output" aria-label="Program output" aria-live="polite">Choose Run code to see the output.</pre></div>
   </section>`;
   const root=target.querySelector('.editor');
@@ -25,11 +26,12 @@ export function mountEditor(target,{id,code,input='',persistent=false,getDatabas
   const source=get('.source'),stdin=get('.stdin'),output=get('.output'),status=get('.status');
   const run=get('.run'),stop=get('.stop'),reset=get('.reset'),undo=get('.undo');
   const saveWarning=get('.source-save-warning'),runWarning=get('.run-warning');
-  const diagnostics=get('.run-diagnostic'),provenance=get('.output-context');
-  const draftKey='draft:'+id,inputKey='input:'+id,recoveryKey='restore:'+id;
+  const diagnostics=get('.run-diagnostic'),provenance=get('.output-context'),recoveryButton=get('.runtime-reload');recoveryButton.onclick=()=>runtimeRecovery.reload();
+  const draftKey='draft:'+id,inputKey='input:'+id,recoveryKey='restore:'+id,resultKey='result:'+id;
   source.value=read(draftKey,code);stdin.value=read(inputKey,input);
   let backup=read(recoveryKey,null);
-  let worker,timer,disposed=false,busy=false,request,result,attemptFailed=false;
+  let timer,disposed=false,busy=false,request,result,attemptFailed=false;
+  try{const saved=JSON.parse(read(resultKey,'null'));if(saved&&typeof saved.code==='string'&&typeof saved.input==='string'&&typeof saved.output==='string'){result={code:saved.code,input:saved.input};output.textContent=saved.output;}}catch{}
   let inputSaved=!isInMemory(inputKey)||hasSaved(inputKey,stdin.value);
   let draftSaved=!isInMemory(draftKey)||hasSaved(draftKey,source.value);
   let backupSaved=backup===null||hasSaved(recoveryKey,backup);
@@ -68,7 +70,7 @@ export function mountEditor(target,{id,code,input='',persistent=false,getDatabas
   }
   function cancel(message='Stopped.') {
     const focusRun=document.activeElement===stop;
-    clearTimeout(timer);worker?.terminate();worker=undefined;
+    clearTimeout(timer);stopRunner(message);
     attemptFailed=true;setBusy(false);
     status.textContent=message+(persistent?' The previously saved database is still available.':'');
     if(focusRun)run.focus();
@@ -94,44 +96,33 @@ export function mountEditor(target,{id,code,input='',persistent=false,getDatabas
   });
   setBusy(false);
   run.addEventListener('click',()=>{
-    if(busy||disposed)return;
+    if(busy||disposed)return;recoveryButton.hidden=true;
     request={code:source.value,input:stdin.value,persistent,database:getDatabase()};
     attemptFailed=false;setBusy(true);runWarning.hidden=true;diagnostics.hidden=true;status.textContent='Preparing to run…';
-    deadline(120000,'Build stopped after two minutes. Check your connection if this is the first run.');
-    if(!worker){
-      worker=new Worker(new URL('./compiler/worker.js',import.meta.url));
-      worker.onerror=error=>{
-        runWarning.textContent='Compiler worker failed to start.';
-        runWarning.hidden=false;
-        diagnostics.textContent=error.message;diagnostics.hidden=false;
-        cancel('Compiler worker failed. Choose Run code to retry.');
-      };
-      worker.onmessage=async({data})=>{
+    execute(request,async data=>{
         if(disposed)return;
         if(data.type==='stage'){
           status.textContent={loading:'Loading compiler…',compiling:'Compiling…',linking:'Linking…',running:'Running…'}[data.stage];
-          if(data.stage==='running')deadline(5000,'Program stopped after five seconds.');
           return;
         }
         clearTimeout(timer);
+        if(data.type==='cancelled'){attemptFailed=true;status.textContent=data.message;setBusy(false);return;}
         if(data.type==='error'){
           attemptFailed=true;
-          runWarning.textContent='Failed during '+data.phase+'. Read the messages and check your edit.';
+          runWarning.textContent=data.runtimeLoad?'The code runner files could not be loaded. Your source and previous output are kept. Use Reload lesson to retry online.':'Failed during '+data.phase+'. Read the messages and check your edit.';
+          recoveryButton.hidden=!data.runtimeLoad;
           runWarning.hidden=false;
           diagnostics.textContent=[data.output,data.diagnostics,data.message].filter(Boolean).join('\n');
           diagnostics.hidden=!diagnostics.textContent;
-          status.textContent='Failed during '+data.phase;
-          worker.terminate();worker=undefined;
+          status.textContent=data.runtimeLoad?'Code runner files could not be loaded':'Failed during '+data.phase;
         } else {
-          result=request;output.textContent=data.output||'(no output)';
+          result={code:request.code,input:request.input};output.textContent=data.output||'(no output)';write(resultKey,JSON.stringify({...result,output:output.textContent}));
           diagnostics.textContent=data.diagnostics||'';diagnostics.hidden=!diagnostics.textContent;
           status.textContent=`Finished · exit ${data.exitCode}`;
           try {await onResult(data);}catch(error){notice(error.message);}
         }
         if(!disposed)setBusy(false);
-      };
-    }
-    worker.postMessage(request);
+      }).catch(error=>{status.textContent=error.message;setBusy(false);});
   });
-  return {source,stdin,root,dispose(){disposed=true;clearTimeout(timer);worker?.terminate();}};
+  return {source,stdin,root,save(){if(busy)throw Error('Wait for the current run and file save to finish.');save();inputSaved=write(inputKey,stdin.value);if(!draftSaved||!inputSaved)throw Error('Your source or input could not be saved. Download your source and copy the input before reloading.');},snapshot(){return {code:source.value,input:stdin.value,result,output:output.textContent};},restore(saved){if(!saved)return;source.value=saved.code;stdin.value=saved.input;result=saved.result;output.textContent=saved.output;showDraftStatus();showResult();},dispose(){disposed=true;clearTimeout(timer);if(busy)stopRunner('Stopped after leaving the lesson.');}};
 }

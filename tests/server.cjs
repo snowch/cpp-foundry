@@ -1,6 +1,6 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const defaultRoot=process.env.SITE_ROOT?path.resolve(process.env.SITE_ROOT):path.resolve(__dirname,'../dist');
-const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.gz':'application/gzip','.cpp':'text/plain','.svg':'image/svg+xml'};
+const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.woff2':'font/woff2','.css':'text/css','.gz':'application/gzip','.cpp':'text/plain','.svg':'image/svg+xml'};
 exports.start=async({root=defaultRoot}={})=>{
   root=path.resolve(root);
   const server=http.createServer((req,res)=>{

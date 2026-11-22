@@ -48,6 +48,11 @@ jobs:
           name: browser-checks
           path: test-results/
           if-no-files-found: ignore
+      - name: Retain verified runtime assets for older open tabs
+        if: github.event_name != 'pull_request'
+        run: node tools/retain-for-publish.mjs
+        env:
+          PUBLISHED_COURSE_URL: https://snowch.github.io/cpp-foundry/
       - name: Upload site
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3

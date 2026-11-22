@@ -128,3 +128,9 @@ Limits are 256 KB source, 64 KB preloaded stdin, 100 KB output, 1 MB database, a
 Upstream JavaScript/memfs sources are pinned at `df1180d80184733c6a01599f76b92b4001d20f87`. Local changes support USTAR path prefixes and UTF-8 argv/stdin/output with streaming decoding. A normal nonzero exit is reported separately from the program’s output. Existing upstream WASI/file compatibility fixes are retained. Third-party notices and licenses are served in [`dist/compiler/`](dist/compiler/); see [runtime provenance](docs/runtime.md).
 
 Finite successful tests establish the demonstrated behaviors, not complete C++20 conformance, absence of undefined behavior for every edited program, race freedom for arbitrary extensions, or production database reliability.
+
+## Shared course controls
+
+The header's **Code runner** starts or frees the local C++ compiler and lets you choose its idle timeout (30 minutes by default). It stays ready between lessons in the same tab. **App status** checks for published updates and can save a verified complete course and compiler for offline use. Wait for “Downloaded and ready to use offline” before disconnecting. Native-terminal investigations and external documentation still need their separate tools or internet access.
+
+See [course style](docs/course-style.md), [offline/update design](docs/offline-update-design.md) and [shared runner design](docs/code-runner-design.md). These changes preserve existing lesson URLs, drafts, completion marks and the Workbench database.

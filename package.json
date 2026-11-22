@@ -8,7 +8,7 @@
     "export":"node tools/export.mjs",
     "build":"node tools/build.mjs",
     "audit:learning":"node tools/audit_learning_path.mjs --write",
-    "test":"node tools/audit_learning_path.mjs && node tools/validate_curriculum.mjs && node tests/release.cjs && node tests/diagrams.cjs && node tests/compiler.cjs && node tests/interface.cjs",
+    "test":"node tools/audit_learning_path.mjs && node tools/validate_curriculum.mjs && node tests/legacy-retention.cjs && node tests/release.cjs && node tests/diagrams.cjs && node tests/compiler.cjs && node tests/interface.cjs && node tests/offline-runner.cjs && node tests/update-journey.cjs",
     "test:native":"python3 tools/check_native.py && python3 tools/check_models.py"
   },
   "devDependencies":{"playwright":"1.62.1"}
