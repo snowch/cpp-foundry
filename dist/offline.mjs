@@ -92,7 +92,7 @@ function render() {
   $('retry-update').textContent=retryingCheck?'Checking…':'Retry';
   const release=runningRelease;
   $('retry-update').classList.toggle('primary',$('download-update').hidden&&$('restart-update').hidden);
-  $('offline-size').textContent=release?otherCourseDownloaded?`${progressSize(release.bytes)} for this version. Your saved offline copy remains available.`:repair?`${progressSize(release.bytes)} for the complete course, including recordings. Verified files are kept when repairing it.`:`${progressSize(release.bytes)} for the complete course, including recordings. Save the offline copy before disconnecting.`:'Connect to check the download size.';
+  $('offline-size').textContent=release?otherCourseDownloaded?`${progressSize(release.bytes)} for this version. Your saved offline copy remains available.`:repair?`${progressSize(release.bytes)} for the complete course, including the browser compiler. Verified files are kept when repairing it.`:`${progressSize(release.bytes)} for the complete course, including the browser compiler. Save the offline copy before disconnecting.`:'Connect to check the download size.';
   $('offline-size').hidden=transferring||Boolean(downloaded||ready||available)||$('download-update').hidden;
   $('remove-offline').hidden=!supported||!(snapshot.saved||snapshot.partial||snapshot.active||snapshot.pending);
   const completeOfflineCopy=Boolean(snapshot.offlineReady||(snapshot.pendingReady&&snapshot.pendingSaved));
