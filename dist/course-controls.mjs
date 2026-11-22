@@ -59,7 +59,7 @@ dialog.querySelector('[data-stop]').onclick=()=>stopRunner();
 dialog.querySelector('#runner-idle').value=String(minutes);
 dialog.querySelector('#runner-idle').onchange=event=>{minutes=Number(event.target.value);try{localStorage.setItem(key,String(minutes));}catch{}if(worker&&!pending)checkIdle();};
 intro.addEventListener('cancel',event=>{event.preventDefault();intro.close('cancel');origin?.focus();});intro.querySelector('[data-back]').onclick=()=>intro.close('run');intro.querySelector('[data-settings]').onclick=()=>{intro.close();dialog.showModal();};
-addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkIdle();});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkIdle();});
 addEventListener('pagehide',()=>stopRunner());
 const theme=document.querySelector('#theme');
 function themeLabel(){theme.textContent=document.documentElement.dataset.theme==='dark'?'Light theme':'Dark theme';}themeLabel();
