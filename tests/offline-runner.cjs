@@ -1,0 +1,31 @@
+const {chromium}=require('playwright'),{start}=require('./server.cjs'),assert=require('node:assert/strict'),fs=require('node:fs');
+(async()=>{
+ const {server,url}=await start({root:'.build/site'}),browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true});
+ try{
+ const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+ await page.goto(url+'#/lesson/first-program');await page.locator('.source').waitFor();
+ await page.waitForFunction(()=>navigator.serviceWorker.controller);
+ assert.equal(requests.some(u=>u.endsWith('.gz')),false,'reading does not load compiler');
+ await page.locator('#code-runner-open').click();await page.locator('[data-start]').click();
+ await page.waitForFunction(()=>document.querySelector('#runner-summary').textContent==='Ready',null,{timeout:120000});
+ await page.locator('#runner-idle').selectOption('60');await page.locator('#code-runner-dialog [data-close]').click();
+ await page.locator('.source').fill('#include <iostream>\nint main(){std::cout<<"warm A";}');
+ const run=async()=>{await page.locator('.run').click();await page.waitForFunction(()=>document.querySelector('.editor')?.dataset.busy==='false',null,{timeout:120000});};
+ await run();assert.equal(await page.locator('.output').textContent(),'warm A');assert.equal(await page.locator('#runner-intro').isVisible(),false,'explicit start must suppress intro');
+ await page.locator('#completed').check();const assets=requests.filter(u=>u.endsWith('.gz')).length;
+ await page.locator('.lesson-nav a').last().click();await page.locator('.source').waitFor();await run();assert.equal(requests.filter(u=>u.endsWith('.gz')).length,assets,'no compiler refetch between lessons');
+ await page.locator('#app-status-open').click();await page.waitForFunction(()=>!document.querySelector('#download-update').hidden&&!document.querySelector('#download-update').disabled);
+ await page.locator('#download-update').click();await page.waitForFunction(()=>document.querySelector('#version-status').textContent.includes('Downloaded and ready'),null,{timeout:120000});
+ await page.locator('#app-status-close').click();await context.setOffline(true);
+ await page.locator('.lesson-nav a').last().click();await page.reload();await page.locator('.source').waitFor();await run();assert.match(await page.locator('.status').textContent(),/exit 0/);
+ const fresh=await context.newPage();await fresh.goto(url+'#/lesson/first-program');await fresh.locator('.source').waitFor();assert.match(await fresh.locator('.source').inputValue(),/warm A/);assert.equal(await fresh.locator('#completed').isChecked(),true);
+ await fresh.locator('#code-runner-open').click();assert.equal(await fresh.locator('#runner-idle').inputValue(),'60');await fresh.locator('[data-start]').click();await fresh.waitForFunction(()=>document.querySelector('#runner-summary').textContent==='Ready',null,{timeout:120000});await fresh.locator('[data-close]').click();await fresh.locator('.run').click();await fresh.waitForFunction(()=>document.querySelector('.editor').dataset.busy==='false',null,{timeout:120000});assert.equal(await fresh.locator('.output').textContent(),'warm A');
+ await context.setOffline(false);await page.goto(url+'#/lesson/first-program');await page.locator('.source').waitFor();await page.locator('#code-runner-open').click();await page.locator('[data-stop]').click();await page.locator('[data-close]').click();
+ await page.locator('#app-status-open').click();await page.locator('#app-status-details').evaluate(el=>el.open=true);await page.locator('#remove-offline').click();await page.locator('#confirm-remove').click();await page.locator('#app-status-close').click();assert.match(await page.locator('.source').inputValue(),/warm A/);assert.equal(await page.locator('#completed').isChecked(),true);
+ assert.deepEqual(errors,[]);await context.close();console.log('PASS no silent compiler download; header start, warm navigation, idle preference, verified full offline save, fresh offline tab compilation, removal preserves drafts/completion');
+ const failure=await browser.newContext({serviceWorkers:'block'});await failure.addInitScript(()=>localStorage.setItem('cpp-foundry:runner-intro:1','1'));
+ await failure.route('**/*.gz',route=>route.fulfill({status:503,body:'unavailable'}));const broken=await failure.newPage();await broken.goto(url+'#/lesson/first-program');await broken.locator('.source').fill('#include <iostream>\nint main(){std::cout<<43;}');await broken.locator('.run').click();const recovery=broken.getByRole('alertdialog');await recovery.waitFor();assert.equal(await recovery.evaluate(el=>el.matches(':modal')),true);
+ await broken.keyboard.press('Escape');assert.equal(await recovery.isVisible(),false);assert.match(await broken.locator('.source').inputValue(),/43/);await broken.evaluate(()=>{Storage.prototype.setItem=function(){throw Error('Storage unavailable for test');};});await broken.locator('.runtime-reload').click();await recovery.waitFor();await broken.locator('#runtime-recovery-dialog-error').waitFor();assert.match(await broken.locator('#runtime-recovery-dialog-error').textContent(),/cancelled/);assert.match(await broken.locator('.source').inputValue(),/43/);await failure.close();console.log('PASS missing runtime triggers persistent modal; Escape keeps work; failed save cancels reload');
+ }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+})().catch(error=>{console.error(error);process.exitCode=1;});

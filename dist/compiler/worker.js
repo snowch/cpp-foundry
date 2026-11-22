@@ -25,7 +25,7 @@ self.onmessage = async ({data}) => {
   const timings = {}, started = performance.now();
   const stage = name => {phase = name; postMessage({type:'stage',stage:name});};
   try {
-    if (typeof data.code !== 'string' || new TextEncoder().encode(data.code).length > 262144)
+    if(data.type!=='prepare' && (typeof data.code !== 'string' || new TextEncoder().encode(data.code).length > 262144))
       throw Error('Source is limited to 256 KB.');
     if (typeof (data.input || '') !== 'string' || new TextEncoder().encode(data.input || '').length > 65536)
       throw Error('Input is limited to 64 KB.');
@@ -41,6 +41,7 @@ self.onmessage = async ({data}) => {
     stage('loading');
     await Promise.all([api.ready,compileStreaming('clang'),compileStreaming('lld')]);
     timings.load = performance.now() - started;
+    if(data.type==='prepare'){postMessage({type:'ready'});return;}
     api.memfs.addFile('main.cpp', data.code);
     if (data.database) {
       const bytes = new Uint8Array(data.database);
@@ -73,6 +74,7 @@ self.onmessage = async ({data}) => {
     postMessage({type:'done',output:output.trim(),diagnostics:diagnostics.trim(),exitCode,timings,
       wasmBytes:bytes.length,database});
   } catch(error) {
-    postMessage({type:'error',phase,message:error.message,output:output.trim(),diagnostics:diagnostics.trim()});
+    if(phase==='loading'){modules.clear();assets.clear();}
+    postMessage({type:'error',phase,runtimeLoad:phase==='loading'&&!/limited to/.test(error.message),message:error.message,output:output.trim(),diagnostics:diagnostics.trim()});
   } finally {busy=false;}
 };

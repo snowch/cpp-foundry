@@ -9,7 +9,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     const context=await browser.newContext({viewport:{width:1440,height:1050},acceptDownloads:true});
     const page=await context.newPage(),errors=[];
     page.on('pageerror',error=>errors.push(error.message));
-    await page.goto(url);
+    await page.addInitScript(()=>localStorage.setItem('cpp-foundry:runner-intro:1','1'));await page.goto(url);
     await page.locator('.hero').waitFor();
     assert.equal(await page.locator('.chapter-card').count(),10);
     await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
@@ -36,7 +36,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
       else assert.ok((await page.locator('.source').inputValue()).includes('int main'));
     }
     console.log(`PASS all ${lessons.length} routes, readings, questions, experiments, native/browser controls`);
-    await page.goto(url+'#/lesson/bplus-routing');await page.locator('#part-select').waitFor();
+    await page.goto(url+'#/lesson/bplus-routing');await page.locator('.contents-toggle').click();await page.locator('#part-select').waitFor();
     assert.equal(await page.locator('#part-select').inputValue(),'reliability');
     await page.locator('#part-select').selectOption('advanced');
     await page.waitForFunction(()=>location.hash==='#/lesson/lost-update-schedule'&&document.querySelector('#part-select')?.value==='advanced');

@@ -1,3 +1,6 @@
+import './course-controls.mjs';
+import {registerReadingState,restoreReadingState} from './experiment-state.mjs';
+import {materialSymbol} from './material-symbols.mjs';
 import {parts,chapters,lessons,byId} from './course.js';
 import {read,write,hasSaved,isInMemory,onStorage,loadDatabase,storeDatabase,validateDatabase} from './storage.js';
 import {mountEditor,download} from './editor.js';
@@ -22,10 +25,10 @@ function renderHome(){
   document.title='C++ Foundry · Learn by building';
   const next=lessons.find(l=>!done(l.id))||lessons[0];
   main.innerHTML=`<div class="container">
-    <section class="hero"><div><h1>Learn C++20</h1><p class="lead">Start with one program that prints a greeting. Build up to resource ownership, algorithms and a record store. The first chapter assumes no C++ experience.</p><div class="actions"><a class="button" href="#/lesson/${next.id}">${doneCount(lessons)?'Continue learning':'Start the course'} <span aria-hidden="true">→</span></a></div><p class="hero-note">Most examples run in the browser. Lessons that require a native toolchain include terminal commands.</p></div><div class="hero-code" aria-label="Read-only first program"><pre>${escape(lessons[0].code)}</pre><div class="code-result">Starter output is ${escape(lessons[0].expected)}</div></div></section>
+    <section class="hero"><div><h1>Learn C++20</h1><p class="lead">Start with one program that prints a greeting. Build up to resource ownership, algorithms and a record store. The first chapter assumes no C++ experience.</p><div class="actions"><a class="button" href="#/lesson/${next.id}">${doneCount(lessons)?'Continue learning':'Start the course'} <span aria-hidden="true">→</span></a></div><p class="hero-note">Most examples run in the browser. Lessons that require a native toolchain include terminal commands.</p></div><figure class="home-concept"><svg viewBox="0 0 540 310" role="img" aria-labelledby="home-concept-title home-concept-desc"><title id="home-concept-title">From C++ source to a greeting</title><desc id="home-concept-desc">The compiler translates the C++ source into a program. Running the program writes Hello, Ada! to Program output.</desc><g class="concept-box"><rect x="15" y="20" width="225" height="115" rx="12"/><rect x="300" y="20" width="225" height="115" rx="12"/><rect x="15" y="195" width="225" height="100" rx="12"/><rect x="300" y="195" width="225" height="100" rx="12"/></g><g class="concept-links" fill="none"><path d="M245 78h45m-10-7 10 7-10 7M412 145v40m-7-10 7 10 7-10M290 245h-40m10-7-10 7 10 7"/></g><g class="concept-text"><text x="32" y="52">C++ source</text><text x="32" y="93" class="concept-code">std::cout &lt;&lt;</text><text x="32" y="116" class="concept-code">"Hello, Ada!";</text><text x="320" y="52">Compiler</text><text x="320" y="93" class="concept-small">Translates the source</text><text x="320" y="230">Running program</text><text x="320" y="266" class="concept-small">Writes the greeting</text><text x="32" y="230">Program output</text><text x="32" y="266" class="concept-code">Hello, Ada!</text></g></svg><figcaption>The first lesson follows a greeting from C++ source to program output. Browser examples compile and run on your device.</figcaption></figure></section>
     <section class="course-prerequisites" aria-labelledby="prerequisites-heading"><div class="section-heading"><h2 id="prerequisites-heading">Before you start</h2><p>The first chapter starts from scratch. Follow the course in order; later lessons link to the earlier material they use.</p></div><dl class="prerequisites-list">
       <div><dt>No programming background needed</dt><dd>You do not need previous programming, C or C++ experience. Basic arithmetic and comfort typing and editing text are enough to begin.</dd></div>
-      <div><dt>A browser and internet access</dt><dd>Use an up-to-date browser; Chrome is the tested option. Internet access is needed to load the site and compiler. A laptop or desktop keyboard makes code editing easier.</dd></div>
+      <div><dt>A browser and internet access</dt><dd>Use an up-to-date browser; Chrome is the tested option. Internet access is needed on your first visit. Use <strong>App status</strong> to save the complete course and compiler before going offline. A laptop or desktop keyboard makes code editing easier.</dd></div>
       <div><dt>No installation to get started</dt><dd>The browser examples run on this page. You do not need to install a compiler or create an account for these lessons.</dd></div>
       <div><dt>A native toolchain later</dt><dd>Lessons marked Native terminal need a compatible C++20 compiler and standard library, locally or in GitHub Codespaces. You can arrange this when you reach them. Codespaces requires a GitHub account. <a href="https://github.com/snowch/cpp-foundry#local-development-and-native-programs">Native setup details →</a></dd></div>
     </dl></section>
@@ -45,7 +48,7 @@ function renderCourse(selected){
     }).join('')}</section>`).join('')}</div></div>
     <section class="capstone-callout"><div><h2>Record-store Workbench</h2><p>Run the complete program and inspect a saved file.</p></div><a href="#/workbench" class="button">Open Workbench →</a></section></div>`;
 }
-function contents(current){const group=chapters.find(c=>c.id===current.chapter).part;return `<aside class="contents"><button type="button" class="contents-toggle" aria-expanded="false" aria-controls="contents-body"><span>Course contents</span><span aria-hidden="true">⌄</span></button><div class="contents-body" id="contents-body"><h2>In this course part</h2><a class="progress-label" href="#/course">${doneCount(lessons)}/${lessons.length} complete · all chapters</a><label class="part-label" for="part-select">Course part</label><select id="part-select" class="part-select" aria-label="Course part">${parts.map((part,index)=>`<option value="${part.id}" ${part.id===group?'selected':''}>${number(index)} · ${part.title}</option>`).join('')}</select>${chapters.filter(c=>c.part===group).map(chapter=>`<details ${chapter.id===current.chapter?'open':''}><summary>${number(chapters.indexOf(chapter))} · ${chapter.title}</summary><ol>${lessons.filter(l=>l.chapter===chapter.id).map(l=>`<li><a href="#/lesson/${l.id}" ${l.id===current.id?'aria-current="page"':''}>${done(l.id)?'✓ ':''}${l.title}</a></li>`).join('')}</ol></details>`).join('')}</div></aside>`;}
+function contents(current){const group=chapters.find(c=>c.id===current.chapter).part;return `<aside class="contents"><button type="button" class="contents-toggle" aria-expanded="false" aria-controls="contents-body"><span>Course lessons</span><small>${doneCount(lessons)} / ${lessons.length} complete</small>${materialSymbol("expand_more")}</button><div class="contents-body" id="contents-body"><h2>In this course part</h2><a class="progress-label" href="#/course">${doneCount(lessons)}/${lessons.length} complete · all chapters</a><label class="part-label" for="part-select">Course part</label><select id="part-select" class="part-select" aria-label="Course part">${parts.map((part,index)=>`<option value="${part.id}" ${part.id===group?'selected':''}>${number(index)} · ${part.title}</option>`).join('')}</select>${chapters.filter(c=>c.part===group).map(chapter=>`<details ${chapter.id===current.chapter?'open':''}><summary>${number(chapters.indexOf(chapter))} · ${chapter.title}</summary><ol>${lessons.filter(l=>l.chapter===chapter.id).map(l=>`<li><a href="#/lesson/${l.id}" ${l.id===current.id?'aria-current="page"':''}>${done(l.id)?'✓ ':''}${l.title}</a></li>`).join('')}</ol></details>`).join('')}</div></aside>`;}
 function renderLesson(lesson){
   const chapter=chapters.find(c=>c.id===lesson.chapter),index=lessons.indexOf(lesson),chapterLessons=lessons.filter(l=>l.chapter===chapter.id),part=parts.find(p=>p.id===chapter.part);
   document.title=lesson.title+' · C++ Foundry';
@@ -53,17 +56,18 @@ function renderLesson(lesson){
   const edit=edits[lesson.id];
   const editorName=lesson.native?`<code>${path}</code> in your checkout`:'the editable <code>main.cpp</code> below';
   const runAction=lesson.native?'rerun the terminal command below':'choose <strong>Run code</strong> again';
-  main.innerHTML=`<div class="reading-layout">${contents(lesson)}<article class="lesson-article"><p class="breadcrumbs"><a href="#/course/${part.id}">${part.title}</a> / ${chapter.title}</p><p class="lesson-position">Lesson ${chapterLessons.indexOf(lesson)+1} of ${chapterLessons.length} in this chapter</p><h1>${lesson.title}</h1><div class="lesson-meta">${lesson.native?'Native investigation · C++20':'Runnable in your browser · C++20'}</div>${lesson.prerequisites?.length?`<p class="lesson-prerequisites">Read first: ${lesson.prerequisites.map(id=>`<a href="#/lesson/${id}">${escape(byId.get(id).title)}</a>`).join(', ')}</p>`:''}${lesson.introductions?.length?`<section class="lesson-foundations" aria-label="New terms and notation"><h2>New terms and notation</h2>${lesson.introductions.map(item=>`<p>${escape(item.text)}</p>`).join('')}</section>`:''}${lesson.body.map(p=>`<p>${escape(p)}</p>`).join('')}
+  main.innerHTML=`<div class="reading-layout"><div class="course-location">${contents(lesson)}<nav class="breadcrumbs" aria-label="Breadcrumb"><span aria-hidden="true">/</span> <a href="#/course/${part.id}">${part.title}</a> <span aria-hidden="true">/</span> <span aria-current="page">${chapter.title}</span></nav></div><article class="lesson-article"><p class="lesson-position">Lesson ${chapterLessons.indexOf(lesson)+1} of ${chapterLessons.length} in this chapter</p><h1>${lesson.title}</h1><div class="lesson-meta">${lesson.native?'Native investigation · C++20':'Runnable in your browser · C++20'}</div>${lesson.prerequisites?.length?`<p class="lesson-prerequisites">Read first: ${lesson.prerequisites.map(id=>`<a href="#/lesson/${id}">${escape(byId.get(id).title)}</a>`).join(', ')}</p>`:''}${lesson.introductions?.length?`<section class="lesson-foundations" aria-label="New terms and notation"><h2>New terms and notation</h2>${lesson.introductions.map(item=>`<p>${escape(item.text)}</p>`).join('')}</section>`:''}${lesson.body.map(p=>`<p>${escape(p)}</p>`).join('')}
     ${renderDiagram(lesson.id)}<section class="experiment" aria-labelledby="experiment-title"><h2 id="experiment-title">Run the starter, then try a change</h2>
       <ol><li>${lesson.native?`The checkout supplies <code>${path}</code>. From the repository root, enter the command below in a Linux or Codespaces terminal. It compiles and runs the starter in a fresh temporary directory.`:'The editor starts with the complete starter program unless it reopens a saved draft. For the original run, use <strong>Restore starter source</strong> in <strong>Editor tools</strong> if needed. Choose <strong>Run code</strong> and read <strong>Program output</strong>.'}</li>
       ${edit?`<li>In ${editorName}, replace ${edit.all?'both occurrences of ':''}<code>${escape(edit.before)}</code> with <code>${escape(edit.after)}</code>. Then ${runAction}.${edit.error?' This edit deliberately tests a compiler diagnostic.':''}</li><li>${escape(edit.observe)}</li>`:`<li>${escape(lesson.experiment)}</li>`}</ol></section>
-    <div id="lesson-editor"></div>
+    <label class="prediction-label" for="prediction">Your prediction (optional)</label><textarea id="prediction" class="prediction" rows="2" placeholder="What do you expect the starter or your edit to show?"></textarea><div id="lesson-editor"></div>
     <details class="disclosure"><summary>Original program output</summary><pre class="expected">${escape(lesson.expected)}</pre></details><p>${escape(lesson.walkthrough)}</p>
     <aside class="callout"><strong>Common mistake</strong>${escape(lesson.pitfall)}</aside>
     <section class="question"><h2>Check your understanding</h2><p>${escape(lesson.question)}</p><div class="choices">${lesson.choices.map((choice,i)=>`<button class="choice" data-choice="${i}" aria-pressed="false">${escape(choice)}</button>`).join('')}</div><div class="feedback" role="status"></div></section>
     ${lesson===chapterLessons.at(-1)?`<details class="disclosure"><summary>Optional chapter project</summary><p>${escape(chapter.project)}${chapter.id==='records'?' <a href="#/workbench">Open the Workbench →</a>':''}</p><p>Use your checkout for a project that spans multiple files. The lesson editor runs one source file.</p></details>`:''}
-    <label class="completion"><input id="completed" type="checkbox" ${done(lesson.id)?'checked':''}> Mark lesson as done <small>You can change this mark at any time.</small></label>
+    ${referenceRow(lesson)}<label class="completion"><input id="completed" type="checkbox" ${done(lesson.id)?'checked':''}> Mark lesson complete <small>You can change this mark at any time.</small></label>
     <nav class="lesson-nav" aria-label="Lesson navigation">${index?`<a href="#/lesson/${lessons[index-1].id}"><small>← Previous</small>${lessons[index-1].title}</a>`:'<a href="#/course"><small>← Back</small>Course outline</a>'}${index<lessons.length-1?`<a href="#/lesson/${lessons[index+1].id}"><small>Next →</small>${lessons[index+1].title}</a>`:'<a href="#/workbench"><small>Build next →</small>Record-store Workbench</a>'}</nav></article></div>`;
+  const prediction=document.querySelector('#prediction');prediction.value=read('prediction:'+lesson.id);prediction.oninput=()=>{if(!write('prediction:'+lesson.id,prediction.value))notice('Prediction kept in this tab. Browser storage could not save it.');};
   const target=document.querySelector('#lesson-editor');
   if(lesson.native){
     const command=nativeCommand(lesson);
@@ -73,7 +77,7 @@ function renderLesson(lesson){
       catch {notice('Select and copy the terminal command above.');}
     };
   } else {
-    const editor=mountEditor(target,{id:lesson.id,code:lesson.code,input:lesson.input||'',notice});dispose=()=>editor.dispose();
+    const editor=mountEditor(target,{id:lesson.id,code:lesson.code,input:lesson.input||'',notice});registerReadingState(editor);dispose=()=>editor.dispose();
   }
   document.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{
     document.querySelectorAll('[data-choice]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});
@@ -117,7 +121,7 @@ LOAD</pre><p>Use uppercase commands and put names in quotation marks. IDs are wh
   }
   const editor=mountEditor(document.querySelector('#workbench-editor'),{id:'workbench',code:source,input:'INSERT 1 "Ada" 90\nINSERT 2 "Grace" 95\nLIST\nSAVE\n',persistent:true,getDatabase:()=>bytes,notice,
     onResult:async result=>{if(result.database&&result.exitCode===0)await save(result.database);}});
-  dispose=()=>editor.dispose();
+  registerReadingState({...editor,save(){if(unsaved)throw Error('The current database could not be saved. Download people.cpf before restarting.');editor.save();}});restoreReadingState();dispose=()=>editor.dispose();
   downloadButton.onclick=()=>{if(bytes)download('people.cpf',bytes);};
   document.querySelector('#choose-import').onclick=()=>importInput.click();
   importInput.onchange=async()=>{
@@ -129,7 +133,7 @@ LOAD</pre><p>Use uppercase commands and put names in quotation marks. IDs are wh
   };
 }
 function render(){
-  dispose();dispose=()=>{};const token=++routeToken;
+  dispose();registerReadingState(null);dispose=()=>{};const token=++routeToken;
   const route=(location.hash||'#/').slice(1).split('/').filter(Boolean);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===route[0]||(a.dataset.nav==='course'&&route[0]==='lesson'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if(!route.length)renderHome();
@@ -137,7 +141,7 @@ function render(){
   else if(route[0]==='lesson'&&byId.has(route[1]))renderLesson(byId.get(route[1]));
   else if(route[0]==='workbench')renderWorkbench(token).catch(error=>notice(error.message));
   else {document.title='Page not found · C++ Foundry';main.innerHTML='<div class="container empty"><h1>That lesson could not be found.</h1><a href="#/course">Open the course outline →</a></div>';}
-  window.scrollTo(0,0);
+  window.scrollTo(0,0);restoreReadingState();
 }
 addEventListener('hashchange',render);
 main.addEventListener('click',event=>{
@@ -156,3 +160,18 @@ onStorage(key=>{
   }else if(!location.hash||location.hash==='#/'||location.hash.startsWith('#/course'))render();
 });
 render();
+
+function referenceRow(lesson){
+ const text=lesson.code+' '+lesson.body.join(' '),refs=[];
+ const add=(label,url,note)=>refs.push(`<li><a href="${url}" target="_blank" rel="noopener">${label} (new tab)</a><p>${note}</p></li>`);
+ if(/cout|cin|getline/.test(text))add('Input and output','https://en.cppreference.com/w/cpp/io.html','Look up std::cout, std::cin and stream operations used in this program.');
+ if(/\bif\s*\(/.test(text))add('if statement','https://en.cppreference.com/w/cpp/language/if.html','Check which statements run when the condition is true or false.');
+ if(/\bfor\s*\(/.test(text))add('for loops','https://en.cppreference.com/w/cpp/language/for.html','Check the initialization, condition and update in the loop.');
+ if(/vector/.test(text))add('std::vector','https://en.cppreference.com/w/cpp/container/vector.html','Check element access, size and the operations used in this lesson.');
+ if(/string/.test(text))add('std::string','https://en.cppreference.com/w/cpp/string/basic_string.html','Check how this program stores and changes text.');
+ if(/unique_ptr|shared_ptr|make_unique/.test(text))add('Smart pointers','https://en.cppreference.com/w/cpp/memory.html','Check ownership and object lifetime for the pointer type used here.');
+ if(/thread|mutex|atomic/.test(text))add('Concurrency support','https://en.cppreference.com/w/cpp/thread.html','Check the synchronization operation and its guarantees.');
+ if(/throw|catch/.test(text))add('Exceptions','https://en.cppreference.com/w/cpp/language/exceptions.html','Check how a thrown exception reaches a matching catch handler.');
+ if(!refs.length)add('C++ language reference','https://en.cppreference.com/w/cpp/language.html','Find the declarations and expressions introduced in this lesson.');
+ return `<details class="resource-row"><summary>${materialSymbol('menu_book')}<span><strong>References</strong><small>C++ syntax and library operations used in this lesson</small></span>${materialSymbol('chevron_right')}</summary><div class="resource-body"><ul>${refs.join('')}</ul></div></details>`;
+}
