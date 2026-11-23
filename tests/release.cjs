@@ -19,7 +19,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
       return route.continue();
     });
     await page.addInitScript(()=>localStorage.setItem('cpp-foundry:runner-intro:1','1'));await page.goto(url);await page.locator('.hero').waitFor();
-    assert.equal(await page.locator('.chapter-card').count(),10);
+    assert.equal(await page.locator('.foundry-lab-card').count(),10);
     await page.goto(url+'#/course');await page.locator('.outline-chapter').first().waitFor();
     assert.equal(await page.locator('.outline-chapter').count(),54);
     assert.equal(await page.locator('.lesson-links li').count(),270);

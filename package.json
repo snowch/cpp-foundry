@@ -1,15 +1,18 @@
 {
-  "name":"cpp-foundry",
-  "version":"0.1.0",
-  "private":true,
-  "type":"module",
-  "scripts":{
-    "serve":"python3 -m http.server 8080 --directory dist",
-    "export":"node tools/export.mjs",
-    "build":"node tools/build.mjs",
-    "audit:learning":"node tools/audit_learning_path.mjs --write",
-    "test":"node tools/audit_learning_path.mjs && node tools/validate_curriculum.mjs && node tests/legacy-retention.cjs && node tests/release.cjs && node tests/diagrams.cjs && node tests/compiler.cjs && node tests/interface.cjs && node tests/offline-runner.cjs && node tests/update-journey.cjs",
-    "test:native":"python3 tools/check_native.py && python3 tools/check_models.py"
+  "name": "cpp-foundry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python3 -m http.server 8080 --directory dist",
+    "export": "node tools/export.mjs",
+    "build": "node tools/build.mjs",
+    "audit:learning": "node tools/audit_learning_path.mjs --write",
+    "test": "node tools/audit_learning_path.mjs && node tools/validate_curriculum.mjs && node tests/legacy-retention.cjs && node tests/release.cjs && node tests/diagrams.cjs && node tests/compiler.cjs && node tests/interface.cjs && node tests/offline-runner.cjs && node tests/update-journey.cjs",
+    "test:native": "python3 tools/check_native.py && python3 tools/check_models.py",
+    "test:hub": "node tests/hub-selection.cjs && node tests/lab-hub.cjs"
   },
-  "devDependencies":{"playwright":"1.62.1"}
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
 }
