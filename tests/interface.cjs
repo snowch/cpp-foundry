@@ -11,7 +11,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     page.on('pageerror',error=>errors.push(error.message));
     await page.addInitScript(()=>localStorage.setItem('cpp-foundry:runner-intro:1','1'));await page.goto(url);
     await page.locator('.hero').waitFor();
-    assert.equal(await page.locator('.chapter-card').count(),10);
+    assert.equal(await page.locator('.foundry-lab-card').count(),10);
     await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
     await page.locator('nav [data-nav=course]').click();
     await page.locator('.outline-chapter').first().waitFor();
