@@ -12,11 +12,13 @@ In a binary min-heap, every parent is no greater than its children. This guarant
 
 Heap validation should compare every parent-child edge, not require the entire array to be sorted.
 
-![A minimum heap imposes a partial order](../../diagrams/heap-order.svg)
+[Open figure: Heap order constrains parents, not siblings](../../diagrams/heap-order.html)
 
-Each parent is no greater than its children. Siblings need not be ordered, and the underlying array is not a sorted sequence. Separate tie-breaking rules determine which equivalent-priority value comes first.
+Why is 1 the minimum even though the array is not fully sorted?
 
-Text description: Parent: minimum at the root. Left child: not below parent. Right child: not below parent. Parent → Left child (parent <= child); Parent → Right child (parent <= child).
+Why is 1 the minimum even though the array is not fully sorted? Nodes: 1, 2, 8, 5. Connections: 1 leads to 2 (≤); 1 leads to 8 (≤); 2 leads to 5 (≤). After inserting 5,2,8,1, the heap array is [1,2,8,5]. Every parent is no greater than its children.. Sibling order is not a sorting guarantee. The starter reports minimum=1 and valid=1; repeated extraction is a separate operation.
+
+Sibling order is not a sorting guarantee. The starter reports minimum=1 and valid=1; repeated extraction is a separate operation.
 
 ```cpp
 #include <iostream>

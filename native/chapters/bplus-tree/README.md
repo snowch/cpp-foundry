@@ -12,11 +12,13 @@ A B+ index keeps payload keys in leaves and uses separator values to choose a le
 
 It is not an arbitrary-height serialized B+ tree. Value-owned leaf vectors make structural ownership explicit while the lessons focus on routing and occupancy.
 
-![A separator routes a search to a leaf](../../diagrams/bplus-routing.svg)
+[Open figure: The fifth key splits the four-key leaf](../../diagrams/bplus-routing.html)
 
-The separator is a routing fence for this bounded teaching index. This is not an arbitrary-height production B+ tree. A range scan can continue across leaves after routing to its starting leaf.
+Which leaf receives boundary key 3 after the split?
 
-Text description: Root separator: routing boundary. Left leaf: keys below boundary. Right leaf: keys at/above it. Root separator → Left leaf (lower keys); Root separator → Right leaf (other keys).
+Which leaf receives boundary key 3 after the split? Before inserting 5. Leaf capacity 4: index 0 = 1, index 1 = 2, index 2 = 3, index 3 = 4. One full leaf.; After inserting 5. Nodes: 3, [1,2], [3,4,5]. Connections: 3 leads to [1,2] (< 3); 3 leads to [3,4,5] (≥ 3). Two leaves: sizes 2 and 3. key 2 routes to leaf 0; key 3 routes to leaf 1.. This is the bounded teaching index. The routing fence repeats the first right-hand key; rows remain in leaves. It is not an arbitrary-height production B+ tree.
+
+This is the bounded teaching index. The routing fence repeats the first right-hand key; rows remain in leaves. It is not an arbitrary-height production B+ tree.
 
 ```cpp
 #include <algorithm>
@@ -165,6 +167,14 @@ Before this chapter: [A scoped guard prevents eviction while a page is borrowed]
 A leaf split redistributes an overflowing sorted key sequence into two leaves and adds a routing boundary. Here five keys split into two on the left and three on the right.
 
 Insertion prepares a complete candidate leaf collection before swapping it into the live index. Allocation failure during preparation therefore does not partially publish the new routing structure.
+
+[Open figure: The fifth key splits the four-key leaf](../../diagrams/bplus-split.html)
+
+Which leaf receives boundary key 3 after the split?
+
+Which leaf receives boundary key 3 after the split? Before inserting 5. Leaf capacity 4: index 0 = 1, index 1 = 2, index 2 = 3, index 3 = 4. One full leaf.; After inserting 5. Nodes: 3, [1,2], [3,4,5]. Connections: 3 leads to [1,2] (< 3); 3 leads to [3,4,5] (≥ 3). Two leaves: sizes 2 and 3. key 2 routes to leaf 0; key 3 routes to leaf 1.. This is the bounded teaching index. The routing fence repeats the first right-hand key; rows remain in leaves. It is not an arbitrary-height production B+ tree.
+
+This is the bounded teaching index. The routing fence repeats the first right-hand key; rows remain in leaves. It is not an arbitrary-height production B+ tree.
 
 ```cpp
 #include <algorithm>
@@ -613,6 +623,14 @@ Deletion can leave a non-root leaf below its minimum occupancy. If an adjacent s
 
 Derived separators in this model update automatically from the current leaf contents.
 
+[Open figure: A sibling can donate before merging](../../diagrams/bplus-borrow.html)
+
+Which key moves when deleting 1 leaves the left leaf underfull?
+
+Which key moves when deleting 1 leaves the left leaf underfull? Before deletion · two leaves: index 0 = 1, index 1 = 2, index 2 = 3, index 3 = 4, index 4 = 5. Left [1,2]; right [3,4,5]; separator 3.. Delete 1, then borrow 3: index 0 = removed, index 1 = 2, index 2 = 3, index 3 = 4, index 4 = 5. Left [2,3]; right [4,5]; routing separator becomes 4.. These fixed key positions preserve identity, not physical page slots. Each non-root leaf requires at least two keys in this bounded model; the donor has spare occupancy.
+
+These fixed key positions preserve identity, not physical page slots. Each non-root leaf requires at least two keys in this bounded model; the donor has spare occupancy.
+
 ```cpp
 #include <algorithm>
 #include <cstddef>
@@ -762,6 +780,14 @@ Before this chapter: [A scoped guard prevents eviction while a page is borrowed]
 If an underfull leaf and its sibling fit together but the sibling cannot donate, merging removes a child from the routing root. Ownership of all surviving keys must transfer before the removed leaf representation disappears.
 
 This bounded model merges value vectors in a candidate state, then publishes the complete result.
+
+[Open figure: Neither sibling can donate after the second deletion](../../diagrams/bplus-merge.html)
+
+Why do keys 2,3,4 end up in one leaf?
+
+Why do keys 2,3,4 end up in one leaf? Operation; Left leaf; Right leaf; Repair. Insert 1..5; [1,2]; [3,4,5]; None; erase(5); [1,2]; [3,4]; Both at minimum; erase(1); [2]; [3,4]; Right cannot donate; merge; Final; [2,3,4]; No second leaf; leaves=1; valid=1. . . The missing right leaf is not zeroed storage. This is the bounded teaching index’s occupancy rule, not a claim that every deletion requires merging.
+
+The missing right leaf is not zeroed storage. This is the bounded teaching index’s occupancy rule, not a claim that every deletion requires merging.
 
 ```cpp
 #include <algorithm>

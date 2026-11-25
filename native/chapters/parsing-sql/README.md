@@ -246,11 +246,13 @@ A parser should produce a query representation rather than modify table state wh
 
 Select owns the parsed numeric filter through optional. Execution can inspect that value without revisiting the source text.
 
-![Keep parsing separate from execution](../../diagrams/sql-select-ast.svg)
+[Open figure: Parsing creates a description before execution](../../diagrams/sql-select-ast.html)
 
-The parser recognizes only the documented SELECT subset and rejects trailing tokens. Constructing an AST does not execute a query or imply support for the full SQL language.
+What differs between SELECT all and SELECT by ID?
 
-Text description: SQL text: external characters. Lexer and parser: tokens become an AST. Validated query: execution may begin. SQL text → Lexer and parser (then); Lexer and parser → Validated query (then).
+What differs between SELECT all and SELECT by ID? SQL input; Parsed table; Optional ID field. SELECT * FROM people;; people; absent: select all; SELECT * FROM people WHERE id=7;; people; present: 7. . . The parser validates the documented subset and rejects trailing tokens. Building the parsed description does not execute a query or imply full SQL support.
+
+The parser validates the documented subset and rejects trailing tokens. Building the parsed description does not execute a query or imply full SQL support.
 
 ```cpp
 #include <charconv>

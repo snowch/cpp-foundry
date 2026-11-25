@@ -10,11 +10,13 @@ A comparator answers whether one value comes before another; a strict ordering m
 
 The remove algorithm compacts retained values into a prefix and returns its logical end. It cannot change a container’s size through iterators. Erasing the remaining suffix performs physical removal; C++20 std::erase combines these steps for supported containers.
 
-![Logical removal precedes physical erasure](../../diagrams/lib-remove-erase.svg)
+[Open figure: Logical end and vector size are different boundaries](../../diagrams/lib-remove-erase.html)
 
-remove returns the logical end without shrinking the vector. The trailing values after remove are unspecified; the diagram deliberately does not depict them as the removed elements.
+Why does the program print 4, then 2, then 2?
 
-Text description: Initial sequence: 1 2 2 3 : size 4. After remove(2): retained prefix: 1 3. After erase: size 2; suffix removed. Initial sequence → After remove(2) (then); After remove(2) → After erase (then).
+Why does the program print 4, then 2, then 2? Original vector: index 0 = 1, index 1 = 2, index 2 = 2, index 3 = 3. size=4.. After std::remove(...,2): index 0 = 1, index 1 = 3, index 2 = ?, index 3 = ?. Logical end is index 2; size is still 4. The trailing values are unspecified.. After erase(end,v.end()): index 0 = 1, index 1 = 3, index 2 = not live, index 3 = not live. size=2. Capacity need not shrink.. Question marks mean unspecified trailing values, not uninitialized storage or reliably removed 2s. The last two displayed positions are boundary markers after erase, not two remaining live elements.
+
+Question marks mean unspecified trailing values, not uninitialized storage or reliably removed 2s. The last two displayed positions are boundary markers after erase, not two remaining live elements.
 
 ```cpp
 #include <algorithm>
@@ -196,6 +198,14 @@ Rerun the terminal command. Compare the three prefix values with the unchanged s
 Before this chapter: [Treat stream iteration as single pass](../library-iterators/README.md)
 
 lower_bound identifies the first element not less than a key, while upper_bound identifies the first element greater than it. equal_range returns their half-open interval. The range must satisfy the algorithm’s partitioning requirements under the same comparison relation.
+
+[Open figure: Two bounds enclose every equal key](../../diagrams/lib-bounds-duplicates.html)
+
+Why does equal_range return first position 1 and count 3?
+
+Why does equal_range return first position 1 and count 3? Search key 2: index 0 = 1, index 1 = 2, index 2 = 2, index 3 = 2, index 4 = 4. The duplicate interval is [1,4); its length is 4−1=3.. The sorted/partitioned input contract is required. The upper bound is the first greater element, not the last equal element.
+
+The sorted/partitioned input contract is required. The upper bound is the first greater element, not the last equal element.
 
 ```cpp
 #include <algorithm>

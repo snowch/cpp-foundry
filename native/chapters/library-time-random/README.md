@@ -10,11 +10,13 @@ A duration is an amount of time with a unit; a time point is a position on a par
 
 chrono attaches a period and representation to duration values. Adding compatible durations produces a suitable common unit. Converting to a coarser integral unit can lose information, so duration_cast makes that decision visible rather than silently treating all counts as seconds.
 
-![Duration conversion can discard a remainder](../../diagrams/lib-chrono-units.svg)
+[Open figure: An integral duration conversion discards the remainder](../../diagrams/lib-chrono-units.html)
 
-This fixture uses positive durations. duration_cast to integral seconds truncates toward zero; floor and round express other policies, particularly for negative values.
+Where do the extra 750 milliseconds go?
 
-Text description: 2 seconds + 750 ms: common unit: ms. 2750 milliseconds: duration count: 2750. Cast to whole seconds: 2; fractional part lost. 2 seconds + 750 ms → 2750 milliseconds (then); 2750 milliseconds → Cast to whole seconds (then).
+Where do the extra 750 milliseconds go? Quantity; Exact stored duration; Converted whole seconds. 2s + 750ms; 2750ms; 2s; Remainder; 750ms; Not represented in the integer seconds count. . . The fixture is positive. duration_cast to integral seconds truncates toward zero; floor and round express different policies, especially for negative durations.
+
+The fixture is positive. duration_cast to integral seconds truncates toward zero; floor and round express different policies, especially for negative durations.
 
 ```cpp
 #include <chrono>

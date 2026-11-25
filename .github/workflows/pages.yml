@@ -40,6 +40,8 @@ jobs:
       - run: npm run build
       - run: npm run test:hub
       - run: npm run test:navigation
+      - name: Verify readable original concept models
+        run: npm run test:visuals
       - run: npm test
         env:
           SITE_ROOT: .build/site

@@ -12,6 +12,14 @@ A worker capturing local references borrows objects owned by its caller. The cal
 
 Destruction order matters: declare borrowed state before the thread owner so reverse destruction releases the thread first.
 
+[Open figure: Join orders a worker’s last access before the read](../../diagrams/joined-lifetime.html)
+
+When may main read result safely?
+
+When may main read result safely? Dependency; Main; Worker. 1; result=0; launch borrowed access; Starts; 2; join waits; Write result=42; finish; 3; join returns; print joined=42; No further access. Completion order, not a timing trace. . The referenced result stays alive until after the join. This does not measure parallel execution or make unsynchronized earlier reads safe.
+
+The referenced result stays alive until after the join. This does not measure parallel execution or make unsynchronized earlier reads safe.
+
 ```cpp
 #include <iostream>
 #include <thread>
@@ -150,6 +158,14 @@ A spurious wakeup is a wait returning even though no notification establishing t
 Condition-variable notifications are not stored permits and waits can wake spuriously. A waiter must check a shared predicate while holding the mutex. The predicate also needs a shutdown alternative so an empty closed queue can stop waiting.
 
 This bounded queue has capacity two and transfers integer values by ownership into a deque.
+
+[Open figure: Wait for the predicate, then recheck under the lock](../../diagrams/condition-queue.html)
+
+Why does closing the queue still allow accepted work to drain?
+
+Why does closing the queue still allow accepted work to drain? After waiting: queue nonempty OR closed. Queue has an item. Pop the front item. Continue consuming accepted values, including after close.; Queue empty and closed. Return no value. The consumer exits; main joins before reading sum=15.. Waiting releases and later reacquires the mutex; the predicate is checked again before access. Close rejects new work but this fixture drains queued items. A notification alone is not an item.
+
+Waiting releases and later reacquires the mutex; the predicate is checked again before access. Close rejects new work but this fixture drains queued items. A notification alone is not an item.
 
 ```cpp
 #include <condition_variable>

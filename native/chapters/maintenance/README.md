@@ -84,6 +84,14 @@ A numeric slot can be freed and later reused for a different object. A stale han
 
 Generation wrap and synchronized reuse are additional protocol limits; adding a small tag is not an unlimited ABA proof.
 
+[Open figure: A reused slot is not the same generation](../../diagrams/generation-handles.html)
+
+Why must the old handle be rejected even though slot 0 is live again?
+
+Why must the old handle be rejected even though slot 0 is live again? State; Slot index; Generation; Value. Old handle; 0; 1; Identifies the old record; Initial live slot; 0; 1; 10; After reuse; 0; 2; 20; Validation; Index matches; Generation differs; Reject stale handle. . . The generation check prevents a stale logical handle from silently naming a replacement record. It does not by itself manage concurrent memory lifetime or generation wrap.
+
+The generation check prevents a stale logical handle from silently naming a replacement record. It does not by itself manage concurrent memory lifetime or generation wrap.
+
 ```cpp
 #include <iostream>
 
@@ -224,11 +232,13 @@ Compaction or checkpointing can produce a new immutable generation while readers
 
 This ownership model does not by itself synchronize a real concurrent publication; the atomic-handle and locking lessons supply that separate boundary.
 
-![Publish a new generation without breaking old readers](../../diagrams/generation-publication.svg)
+[Open figure: Old readers retain the old generation](../../diagrams/generation-publication.html)
 
-The picture separates publication from reclamation. Existing readers keep their old generation alive; a handle swap alone does not justify freeing old storage or prove durable file replacement.
+Why is old_size 3 while new_size is 2?
 
-Text description: Build new generation: old generation still live. Publish new handle: new readers use it. Retire old generation: after its readers finish. Build new generation → Publish new handle (then); Publish new handle → Retire old generation (then).
+Why is old_size 3 while new_size is 2? Before publication: Old immutable vector contains [1,2,3]. current shared owner Old immutable vector; reader shared owner Old immutable vector. After replacing current: Old immutable vector contains [1,2,3]. reader keeps old generation alive Old immutable vector; New immutable vector contains [2,3]. current owns new generation New immutable vector. The old generation can be reclaimed only after its last owner releases it. Replacing a handle is separate from reclamation and does not prove durable file replacement.
+
+The old generation can be reclaimed only after its last owner releases it. Replacing a handle is separate from reclamation and does not prove durable file replacement.
 
 ```cpp
 #include <iostream>

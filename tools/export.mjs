@@ -1,9 +1,15 @@
+import {learningModels} from '../dist/learning-models.js';
+import {learningFigure} from '../dist/learning-model.js';
 import fs from 'node:fs';
 import {lessons,chapters,parts} from '../dist/course.js';
 import {diagrams} from '../dist/diagrams.js';
 import {edits,nativeCommand} from '../dist/experiment-edits.js';
 import {diagramDescription,diagramSvg} from '../dist/diagram-view.js';
 fs.mkdirSync('native/diagrams',{recursive:true});
+const modelCSS='/* Semantic light/dark colors;'+fs.readFileSync('dist/course-style.css','utf8').split('/* Semantic light/dark colors;')[1];
+for(const [id,model]of Object.entries(learningModels))fs.writeFileSync(`native/diagrams/${id}.html`,
+  '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+model.title+'</title><style>body{margin:24px;font:17px/1.65 system-ui;max-width:900px}figure{margin:0;padding:20px;border:1px solid #a9bfba;border-radius:10px}'+modelCSS+'</style>'+learningFigure(model,id)+'</html>');
+
 for(const diagram of diagrams)fs.writeFileSync(`native/diagrams/${diagram.lesson}.svg`,diagramSvg(diagram)+'\n');
 const experimentMarkdown=lesson=>{
   const edit=edits[lesson.id], path=`native/examples/${lesson.id}.cpp`;
@@ -14,6 +20,9 @@ const experimentMarkdown=lesson=>{
     codeBlock('With',edit.after),`Rerun the terminal command.${edit.error?' This edit deliberately tests a compiler diagnostic.':''} ${edit.observe}`].join('\n\n');
 };
 const diagramMarkdown=id=>{
+  const model=learningModels[id];
+  if(model)return `\n\n[Open figure: ${model.title}](../../diagrams/${id}.html)\n\n${model.question}\n\n${model.description}\n\n${model.note}`;
+
   const diagram=diagrams.find(item=>item.lesson===id);
   return diagram?`\n\n![${diagram.title}](../../diagrams/${id}.svg)\n\n${diagram.caption}\n\nText description: ${diagramDescription(diagram)}`:'';
 };

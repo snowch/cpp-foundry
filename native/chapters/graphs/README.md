@@ -73,11 +73,13 @@ In an unweighted graph, breadth-first search uses a FIFO queue to discover verti
 
 The distance vector doubles as visited state: minus one means undiscovered, while zero is the source distance.
 
-![Breadth-first traversal expands a frontier](../../diagrams/breadth-first.svg)
+[Open figure: FIFO discovery follows unweighted distance layers](../../diagrams/breadth-first.html)
 
-The FIFO queue explores unweighted distance layers. Marking a vertex on discovery prevents repeated enqueues; weighted shortest paths require a different contract. Repeat the expansion until the queue is empty.
+Why do vertices 1 and 2 both have distance 1?
 
-Text description: Start vertex: mark and enqueue. FIFO frontier: pop earliest discovery. Undiscovered neighbors: mark and enqueue. Start vertex → FIFO frontier (then); FIFO frontier → Undiscovered neighbors (then).
+Why do vertices 1 and 2 both have distance 1? Nodes: 0, 1, 2, 3. Connections: 0 leads to 1; 0 leads to 2; 1 leads to 3; 2 leads to 3. Distance layers: 0→0, 1→1, 2→1, 3→2. Mark on discovery to avoid enqueueing vertex 3 twice.. These edges are directed and unweighted. FIFO BFS is not the weighted shortest-path algorithm.
+
+These edges are directed and unweighted. FIFO BFS is not the weighted shortest-path algorithm.
 
 ```cpp
 #include <iostream>
@@ -230,6 +232,14 @@ A topological order places every directed dependency before its dependent. Kahn�
 
 If fewer than all vertices are emitted, a directed cycle prevents a complete order. The algorithm must report that outcome instead of treating a partial result as complete.
 
+[Open figure: A task is ready only after all incoming edges are handled](../../diagrams/topological-order.html)
+
+Why can vertex 3 run only after both 1 and 2?
+
+Why can vertex 3 run only after both 1 and 2? Nodes: 0, 1, 2, 3. Connections: 0 leads to 1; 0 leads to 2; 1 leads to 3; 2 leads to 3. Initial indegrees: [0,1,1,2]. Processing 0 readies 1 and 2; both must be processed before indegree[3] reaches zero.. The starter emits 0,1,2,3 and complete=1. A directed cycle prevents all vertices from being emitted; this is a dependency order, not BFS distance.
+
+The starter emits 0,1,2,3 and complete=1. A directed cycle prevents all vertices from being emitted; this is a dependency order, not BFS distance.
+
 ```cpp
 #include <iostream>
 #include <queue>
@@ -307,6 +317,14 @@ Before this chapter: [Make scheduling ties deterministic](../heaps/README.md)
 Breadth-first hop counts do not minimize arbitrary edge weights. For nonnegative weights, Dijkstra’s algorithm repeatedly settles the smallest tentative distance using a priority queue. Stale queue entries must be skipped.
 
 The teaching fixture uses small integer weights with a bounded total. A general interface must check distance addition and reject negative weights.
+
+[Open figure: A lower total cost can use more edges](../../diagrams/weighted-path.html)
+
+Why are distances to 1 and 3 equal to 2 and 3?
+
+Why are distances to 1 and 3 equal to 2 and 3? Nodes: 0, 1, 2, 3. Connections: 0 leads to 1 (5); 0 leads to 2 (1); 2 leads to 1 (1); 1 leads to 3 (1); 2 leads to 3 (9). 0→2→1 costs 2; continuing to 3 costs 3. The direct alternatives cost 5 and 10.. All supplied weights are nonnegative. The priority queue selects smallest total distance; FIFO shortest-edge-count reasoning would answer a different question.
+
+All supplied weights are nonnegative. The priority queue selects smallest total distance; FIFO shortest-edge-count reasoning would answer a different question.
 
 ```cpp
 #include <functional>

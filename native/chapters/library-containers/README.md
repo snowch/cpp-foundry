@@ -10,11 +10,13 @@ Contiguous storage places elements next to one another. Stable access means a sa
 
 A vector owns a contiguous sequence. reserve changes capacity, while resize changes the number of live elements. Reallocation invalidates pointers, references, and iterators into its old storage; an index can be retained only when intervening edits preserve positions.
 
-![Reallocation changes where elements live](../../diagrams/lib-vector-invalidation.svg)
+[Open figure: Reallocation changes storage, not the one live value](../../diagrams/lib-vector-invalidation.html)
 
-Pointers, references, and iterators into the old vector storage are invalidated. An index is useful only if other edits have not changed positions; reserve changes capacity, not size.
+Why can v.at(0) still read 3 after reserving more capacity?
 
-Text description: Before reserve: elements in old storage. Capacity grows: new storage allocated. After reallocation: reacquire element access. Before reserve → Capacity grows (then); Capacity grows → After reallocation (then).
+Why can v.at(0) still read 3 after reserving more capacity? Before reserve(32) · illustrative reallocation case: Backing allocation A contains [3] · size=1; capacity≥8. v owns storage A Backing allocation A; Allocation B contains not created yet. . If the old capacity was below 32: Old allocation A contains released storage; lifetime ended. ; New allocation B contains [3] · size=1; capacity≥32. v now owns storage B New allocation B. This shows the reallocation case. If old capacity already met 32, reserve keeps that storage instead. Exact capacities and addresses are not promised. When reallocation occurs, old element observers are invalid; the index 0 can reacquire the current element as long as positions have not otherwise changed.
+
+This shows the reallocation case. If old capacity already met 32, reserve keeps that storage instead. Exact capacities and addresses are not promised. When reallocation occurs, old element observers are invalid; the index 0 can reacquire the current element as long as positions have not otherwise changed.
 
 ```cpp
 #include <iostream>
@@ -209,11 +211,13 @@ A hash function maps a key to a numeric code used to choose a search bucket or s
 
 Unordered containers provide average constant-time lookup, with linear worst cases. Equivalent keys must produce equal hashes; different keys may collide. reserve plans for a number of elements under the current maximum load factor, while rehash requests bucket capacity.
 
-![Rehash changes buckets, not the key/value contract](../../diagrams/lib-unordered-contracts.svg)
+[Open figure: Rehash reorganizes buckets, not logical key equality](../../diagrams/lib-unordered-contracts.html)
 
-Equivalent keys must have equal hashes; collisions are permitted. Rehash reorganizes buckets and invalidates iterators, but references and pointers to surviving elements remain valid. No iteration order is promised.
+Why does Ada still have count 2 after rehash?
 
-Text description: Key and hash: select a bucket. Bucket candidates: compare keys for equality. After rehash: reacquire iterators. Key and hash → Bucket candidates (then); Bucket candidates → After rehash (then).
+Why does Ada still have count 2 after rehash? State; Logical entries; Observer rule. After two increments; Ada → 2; Grace absent; Equivalent keys must have equal hashes; After rehash(100); Ada → 2; Grace absent; Iterators invalidated; surviving element references remain valid. . . Bucket count is at least the requested bound, not necessarily exactly 100. Collisions are permitted and iteration order is unspecified. The output is count 2 and contains(Grace)=0.
+
+Bucket count is at least the requested bound, not necessarily exactly 100. Collisions are permitted and iteration order is unspecified. The output is count 2 and contains(Grace)=0.
 
 ```cpp
 #include <iostream>

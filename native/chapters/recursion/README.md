@@ -146,11 +146,13 @@ Naive Fibonacci recursion revisits the same subproblems. Memoization stores each
 
 Cache size and arithmetic range are separate limits. This example uses a fixed small state space with optional entries to distinguish uncomputed from a real zero.
 
-![Cache completed subproblems](../../diagrams/memoization.svg)
+[Open figure: Two callers can need the same subproblem](../../diagrams/memoization.html)
 
-Memoization avoids recomputing the same completed state. The cache key must include every input that affects the answer; caching does not by itself prevent cycles in recursive dependencies.
+Why should the second request reuse fib(2)?
 
-Text description: Request a subproblem: look up its key. Cache hit: reuse saved result. Cache miss: compute and store. Request a subproblem → Cache hit (found); Request a subproblem → Cache miss (absent).
+Why should the second request reuse fib(2)? Nodes: fib(4), fib(3), fib(2), fib(1). Connections: fib(4) leads to fib(3); fib(4) leads to fib(2); fib(3) leads to fib(2) (reuse); fib(3) leads to fib(1). A small dependency excerpt from fib(10), whose result is 55. Completed answers are cached by their n value.. This is not the complete call tree. Memoization requires all answer-affecting inputs in the key; caching alone does not make cyclic dependencies terminate.
+
+This is not the complete call tree. Memoization requires all answer-affecting inputs in the key; caching alone does not make cyclic dependencies terminate.
 
 ```cpp
 #include <array>

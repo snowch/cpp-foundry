@@ -72,11 +72,13 @@ Before this chapter: [Hash equality and rehash contracts](../library-containers/
 
 Erasing from a vector invalidates iterators and references at or after the erased position. erase returns a valid iterator to the next surviving element, possibly end. A loop must decide whether to advance based on whether it erased an element.
 
-![An erase loop has two different next steps](../../diagrams/lib-erase-return.svg)
+[Open figure: Erasing and keeping choose different next iterators](../../diagrams/lib-erase-return.html)
 
-The keep branch increments. The erase branch uses the iterator returned by vector::erase without incrementing again; the old iterator and later vector positions are invalidated.
+Why must the erase path avoid a second increment?
 
-Text description: Current iterator: inspect the value. Keep element: increment iterator. Erase element: take returned iterator. Current iterator → Keep element (keep); Current iterator → Erase element (erase).
+Why must the erase path avoid a second increment? At current iterator it. Odd value · keep. ++it. Advance past the retained element.; Even value · erase. it = v.erase(it). Use the returned iterator to the next surviving position.. For [1,2,4,3], erasing 2 moves 4 into its position; the next iteration must inspect 4. The final output is 13. Old iterators at/after a vector erase are invalidated.
+
+For [1,2,4,3], erasing 2 moves 4 into its position; the next iteration must inspect 4. The final output is 13. Old iterators at/after a vector erase are invalidated.
 
 ```cpp
 #include <iostream>
@@ -204,11 +206,13 @@ Before this chapter: [Hash equality and rehash contracts](../library-containers/
 
 Input iterators can represent a single-pass source. Reading advances shared stream state, so copying an input iterator does not provide an independently rewindable sequence. A default stream iterator acts as the end sentinel once extraction fails or input ends.
 
-![A stream iterator consumes one shared input](../../diagrams/lib-stream-iterators.svg)
+[Open figure: One stream position is consumed](../../diagrams/lib-stream-iterators.html)
 
-The stream is consumed as accumulation proceeds. Copying an input iterator does not produce an independently rewindable source; materialize values when multiple passes are needed.
+Why does accumulate consume 3,4,5 only once?
 
-Text description: Input characters: 3 4 5. Input iterator: extracts values once. Accumulator: total becomes 12. Input characters → Input iterator (then); Input iterator → Accumulator (then).
+Why does accumulate consume 3,4,5 only once? Consumed value; Running total; Still available input. 3; 3; 4 5; 4; 7; 5; 5; 12; end of stream. . . istream_iterator is single-pass. A copied input iterator does not create an independent rewindable stream; materialize values if another full pass is needed.
+
+istream_iterator is single-pass. A copied input iterator does not create an independent rewindable stream; materialize values if another full pass is needed.
 
 ```cpp
 #include <iostream>

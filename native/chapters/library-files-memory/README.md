@@ -129,11 +129,13 @@ Before this chapter: [A weak observer can detect expired shared ownership](../li
 
 shared_ptr shares ownership through a control block. weak_ptr observes that ownership without extending the managed object’s lifetime. lock obtains a temporary shared owner atomically with respect to the control block’s lifetime, avoiding a separate check-then-access protocol.
 
-![Lock a weak observer before using the value](../../diagrams/lib-weak-ownership.svg)
+[Open figure: Locking a weak observer can temporarily acquire ownership](../../diagrams/lib-weak-ownership.html)
 
-A successful lock holds ownership while the value is used. Once strong ownership ends, later lock attempts fail. The arrows describe lifetime relationships, not synchronization of mutable object state.
+Why does lock succeed inside the scope and expire afterward?
 
-Text description: Shared owner: keeps value alive. Weak observer: does not own value. lock succeeds: temporary shared owner. Shared owner → lock succeeds (shared lifetime); Weak observer → lock succeeds (lock if alive, dashed arrow).
+Why does lock succeed inside the scope and expire afterward? Inside the scope: One allocated int contains 7. owner strong ownership One allocated int; locked temporary strong owner One allocated int; observer weak observation only One allocated int. After both strong owners are destroyed: Int lifetime ended contains released value; lifetime ended. ; Weak observer contains expired() == true. . A successful lock keeps the value alive while locked is held. A later lock can return empty after strong ownership ends. Weak/shared ownership does not synchronize mutable pointee accesses.
+
+A successful lock keeps the value alive while locked is held. A later lock can return empty after strong ownership ends. Weak/shared ownership does not synchronize mutable pointee accesses.
 
 ```cpp
 #include <iostream>
@@ -198,11 +200,13 @@ Before this chapter: [A weak observer can detect expired shared ownership](../li
 
 Polymorphic allocators select a runtime memory_resource while retaining the container’s value interface. A monotonic resource reclaims allocation storage as a group rather than on each individual deallocation. Its storage and the resource object must outlive every allocation still in use.
 
-![Release the arena only after its users finish](../../diagrams/lib-pmr-lifetimes.svg)
+[Open figure: The arena outlives every active allocation](../../diagrams/lib-pmr-lifetimes.html)
 
-The resource and its backing storage must outlive active allocations. Releasing early invalidates storage still held by containers; a null upstream makes an exceeded budget fail explicitly.
+Why is arena.release() after the vector’s scope?
 
-Text description: Arena and storage: constructed first. PMR container: allocates from arena. Destroy container: then release the arena. Arena and storage → PMR container (then); PMR container → Destroy container (then).
+Why is arena.release() after the vector’s scope? Phase; 512-byte buffer / arena; Vector allocations. Create arena; Backing storage alive; None yet; Inner vector scope; Arena available; reserve(4); store value 7; Leave vector scope; Arena still alive; Vector destroyed; arena.release(); Reclaim arena storage; No live vector allocation remains. Required lifetime nesting. . The null upstream resource makes an exceeded budget fail explicitly. Releasing an arena while a container still uses its storage invalidates that storage; it is not a safe way to clear the container.
+
+The null upstream resource makes an exceeded budget fail explicitly. Releasing an arena while a container still uses its storage invalidates that storage; it is not a safe way to clear the container.
 
 ```cpp
 #include <array>

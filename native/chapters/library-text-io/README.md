@@ -10,11 +10,13 @@ Parsing turns characters into a value after checking their spelling. Formatting 
 
 from_chars reports both an error code and a stopping pointer. A successful prefix parse is not necessarily a valid complete field. It avoids locale-dependent stream extraction, but its accepted syntax differs from convenience conversion functions, including whitespace handling.
 
-![A successful prefix is not a complete field](../../diagrams/lib-charconv-complete.svg)
+[Open figure: A successful prefix is not a complete field](../../diagrams/lib-charconv-complete.html)
 
-Accept a complete integer field only when the error code is clear and the stopping pointer reaches the end. Range errors and an invalid first character are distinct failure cases.
+Why is 42 accepted but 42x rejected?
 
-Text description: Text: 42x: parse starts at 4. from_chars: value 42; stops at x. Full-field check: reject trailing text. Text: 42x → from_chars (then); from_chars → Full-field check (then).
+Why is 42 accepted but 42x rejected? Field; Conversion result; Whole field accepted?. 42; No error; end reaches position 2; Yes; 42x; Numeric prefix 42; end stops at x; No: suffix remains; 99999999999999999999; Out of int range; No: error code is set. . . Acceptance requires both a clear error code and a stopping pointer at the field end. No conversion and an out-of-range result are distinct failures.
+
+Acceptance requires both a clear error code and a stopping pointer at the field end. No conversion and an out-of-range result are distinct failures.
 
 ```cpp
 #include <charconv>

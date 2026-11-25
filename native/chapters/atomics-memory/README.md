@@ -79,6 +79,14 @@ compare_exchange compares an atomic object with an expected value and conditiona
 
 Weak compare-exchange can also fail spuriously and is normally used in a loop. This fixture uses the strong operation for one deterministic mismatch.
 
+[Open figure: Failure updates expected with the observed value](../../diagrams/compare-exchange.html)
+
+Why does failed compare-exchange leave value=7 but expected=7?
+
+Why does failed compare-exchange leave value=7 but expected=7? Boundary; Atomic value; expected; Requested replacement. Before comparison; 7; 5; 9; Compare: 7 != 5; 7 unchanged; updated to observed 7; not written; Printed result; value=7; expected=7; changed=0. . . This starter uses compare_exchange_strong. A failed comparison reports the observed value through expected; it does not install the desired 9.
+
+This starter uses compare_exchange_strong. A failed comparison reports the observed value through expected; it does not install the desired 9.
+
 ```cpp
 #include <atomic>
 #include <iostream>
@@ -141,11 +149,13 @@ A release store can publish preceding initialization to a reader that observes i
 
 Keep the published object alive through reader completion and make the single-publication limitation explicit.
 
-![Publication requires a matching synchronization edge](../../diagrams/release-acquire-data.svg)
+[Open figure: A matching observation publishes the prepared batch](../../diagrams/release-acquire-data.html)
 
-The acquire must observe the matching release (or the applicable release sequence) to establish the depicted happens-before relation. Merely using an atomic flag or unrelated relaxed operations does not publish ordinary data safely.
+Which load makes reading [20,22] safe?
 
-Text description: Producer: write ordinary data. Release store: publish ready flag. Acquire observes ready: consumer may read data. Producer → Release store (then); Release store → Acquire observes ready (then).
+Which load makes reading [20,22] safe? Dependency; Writer / main; Reader. 1; Prepare values={20,22}; Poll ready with acquire; 2; Store ready=true with release; Acquire load observes that true; 3; Earlier writes happen-before the reads; Read values; result=42; 4; Join reader; print batch=42; Thread finished. Cross-thread ordering, not elapsed time. The release store → the acquire load that observes it is the synchronizes-with edge.. An arbitrary acquire load is not guaranteed to see the newest write. This example does not publish later unrelated mutations or measure multicore performance.
+
+An arbitrary acquire load is not guaranteed to see the newest write. This example does not publish later unrelated mutations or measure multicore performance.
 
 ```cpp
 #include <array>

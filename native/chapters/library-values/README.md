@@ -70,11 +70,13 @@ Before this chapter: [Keep algorithm results tied to a living range](../library-
 
 variant owns one alternative from a closed set and tracks which is active. visit dispatches a callable to that active value, while get_if allows a nonthrowing type check. Some throwing transitions can leave a variant valueless_by_exception; it is not a universal never-empty sum type.
 
-![A tag chooses one active alternative](../../diagrams/lib-variant-visit.svg)
+[Open figure: Only the active alternative is visited](../../diagrams/lib-variant-visit.html)
 
-Only the active branch is visited. The visitor must be well-formed for all alternatives. This shows the ordinary active-value case, not a possible valueless_by_exception state.
+Which visitor branch prints number=7 and which prints text=Ada?
 
-Text description: Variant tag: which alternative?. Integer active: visit integer handler. String active: visit string handler. Variant tag → Integer active (integer); Variant tag → String active (string).
+Which visitor branch prints number=7 and which prints text=Ada? Active variant alternative at the time of visit. First visit: int 7. Integer branch → number=7. ; Second visit: string Ada. String branch → text=Ada. . The starter assigns the string between the two visits. Only one alternative is active at each visit; the visitor must be valid for all alternatives. valueless_by_exception is outside this ordinary-value example.
+
+The starter assigns the string between the two visits. Only one alternative is active at each visit; the visitor must be valid for all alternatives. valueless_by_exception is outside this ordinary-value example.
 
 ```cpp
 #include <iostream>

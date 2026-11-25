@@ -200,11 +200,13 @@ Commit validates the transaction’s base revision, prepares the candidate copy,
 
 This atomicity is a model of observable commit boundaries. It does not make unsynchronized threads safe to access the map concurrently.
 
-![A private candidate needs a fresh commit check](../../diagrams/transaction-commit.svg)
+[Open figure: The revision check precedes publication](../../diagrams/transaction-commit.html)
 
-A stale revision rejects the commit rather than overwriting a newer state. Rollback discards private changes. This model does not claim a complete multi-client durable transaction engine.
+What happens if the transaction’s observed revision is stale?
 
-Text description: Begin: copy state and revision. Edit private candidate: committed state unchanged. Commit check: publish if revision agrees. Begin → Edit private candidate (then); Edit private candidate → Commit check (then).
+What happens if the transaction’s observed revision is stale? Prepare private candidate; set row 1 to 99. Observed revision still current · starter. Publish candidate; advance revision. The live row becomes 99.; Revision changed · comparison case. Reject commit. Keep the newer live state; do not overwrite it.. Rollback discards private changes. This bounded transaction fixture does not establish a complete multi-client durable storage engine.
+
+Rollback discards private changes. This bounded transaction fixture does not establish a complete multi-client durable storage engine.
 
 ```cpp
 #include <iostream>

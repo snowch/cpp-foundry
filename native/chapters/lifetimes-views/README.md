@@ -16,11 +16,13 @@ A raw pointer can express observation while another object owns the resource. Th
 
 Keep ownership visible in the surrounding interface. This example stops using the observer before resetting its unique owner.
 
-![Ownership and observation are different edges](../../diagrams/observer-owner.svg)
+[Open figure: Ownership and observation reach one resource](../../diagrams/observer-owner.html)
 
-Solid arrow: ownership. Dashed arrow: observation. Destroying the owner can invalidate the observer; the observer does not prolong the resource lifetime.
+Why does observer not keep the int alive after owner.reset()?
 
-Text description: Owner: controls lifetime. Observer: borrows access. Resource: must still be alive. Owner → Resource (owns); Observer → Resource (borrows, dashed arrow).
+Why does observer not keep the int alive after owner.reset()? Before reset: One allocated int contains 42. owner owns via unique_ptr One allocated int; observer borrows; does not own One allocated int. After reset and observer = nullptr: Old int: lifetime ended contains released resource; lifetime ended. ; owner and observer contains both empty after the explicit assignments. . Only the owner releases the resource. reset does not automatically clear raw aliases; the starter explicitly sets observer to nullptr before later use.
+
+Only the owner releases the resource. reset does not automatically clear raw aliases; the starter explicitly sets observer to nullptr before later use.
 
 ```cpp
 #include <iostream>
@@ -226,6 +228,14 @@ std::span<T> is a view of consecutive T elements owned elsewhere. It gives a sta
 A mutable span is a borrowed window into existing elements. Writing through it changes the owner’s elements. A span<const T> instead offers read-only access through that view while still depending on the owner’s lifetime.
 
 Neither span variant automatically synchronizes concurrent access. Const access through one path does not make mutation through another path impossible.
+
+[Open figure: Two views reach one backing array](../../diagrams/view-mutation.html)
+
+Why does middle.front()=9 change the value seen by read_only?
+
+Why does middle.front()=9 change the value seen by read_only? Before mutation: index 0 = 1, index 1 = 2, index 2 = 3. middle is a one-element span over index 1.. After mutation through middle: index 0 = 1, index 1 = 9, index 2 = 3. read_only spans the same array and prints 193.. A span does not own or copy the elements. span<const int> prevents writes through that view; it does not prevent another valid writable view from changing the same array.
+
+A span does not own or copy the elements. span<const int> prevents writes through that view; it does not prevent another valid writable view from changing the same array.
 
 ```cpp
 #include <array>

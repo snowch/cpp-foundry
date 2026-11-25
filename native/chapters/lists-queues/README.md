@@ -227,11 +227,13 @@ A bounded ring queue reuses an array by wrapping physical positions. The logical
 
 Reject a full insertion before changing any queue state. This makes the failure behavior easy to test.
 
-![Queue positions wrap within fixed storage](../../diagrams/ring-buffer.svg)
+[Open figure: Logical order can wrap across array index zero](../../diagrams/ring-buffer.html)
 
-Head and tail positions alone may not distinguish empty from full. The lesson maintains an explicit size; wrapping positions does not overwrite a live element when the full check rejects insertion.
+Where does the successful push(4) store its value?
 
-Text description: Push at tail: if capacity permits. Advance tail: wrap modulo capacity. Pop at head: advance head similarly. Push at tail → Advance tail (then); Advance tail → Pop at head (then).
+Where does the successful push(4) store its value? Full: head=0, count=3: index 0 = 1, index 1 = 2, index 2 = 3. The first push(4) is rejected; nothing is overwritten.. After pop returns 1: index 0 = 1, index 1 = 2, index 2 = 3. head=1, count=2; index 0 is no longer a live queue member.. After successful push(4): index 0 = 4, index 1 = 2, index 2 = 3. Logical pop order follows indices 1 → 2 → 0: values 2,3,4.. Three fixed slots remain in the same positions. The explicit count distinguishes full from empty; old bits in a removed slot are not a live element.
+
+Three fixed slots remain in the same positions. The explicit count distinguishes full from empty; old bits in a removed slot are not a live element.
 
 ```cpp
 #include <array>

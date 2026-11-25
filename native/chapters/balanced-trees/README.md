@@ -12,11 +12,13 @@ A binary search tree partitions keys around each node: smaller keys go left and 
 
 The shared implementation is an AVL tree; the following lessons examine how rotations preserve this ordering while controlling height.
 
-![Search-tree ordering divides the key domain](../../diagrams/tree-ordering.svg)
+[Open figure: The ancestor bounds the whole subtree](../../diagrams/tree-ordering.html)
 
-This schematic assumes unique keys. Every descendant, not just each immediate child, must satisfy its ancestor bounds. Balance and ownership are additional invariants, not consequences of ordering.
+Which path finds key 3?
 
-Text description: Root key: 20. Left subtree: keys below 20. Right subtree: keys above 20. Root key → Left subtree (less); Root key → Right subtree (greater).
+Which path finds key 3? Nodes: 4, 2, 6, 1, 3. Connections: 4 leads to 2 (< 4); 4 leads to 6 (> 4); 2 leads to 1 (< 2); 2 leads to 3 (> 2). Search 3: root 4 → left 2 → right 3. In-order output is 1,2,3,4,6.. Every descendant must satisfy its ancestor bounds, not just the immediate child. This starter uses unique keys; ordering does not imply balance.
+
+Every descendant must satisfy its ancestor bounds, not just the immediate child. This starter uses unique keys; ordering does not imply balance.
 
 ```cpp
 #include <algorithm>
@@ -351,6 +353,14 @@ A single rotation raises a child and moves the child’s inner subtree to the ol
 
 unique_ptr moves make each structural ownership transfer explicit. Rotations do not allocate new nodes or copy owned subtrees.
 
+[Open figure: Rotations change links while preserving keys](../../diagrams/avl-single-rotation.html)
+
+Why is the repaired root 20 with children 10 and 30?
+
+Why is the repaired root 20 with children 10 and 30? Before repair: the supplied insertion shape. Nodes: 10, 20, 30. Connections: 10 leads to 20 (right); 20 leads to 30 (right). ; After repair. Nodes: 20, 10, 30. Connections: 20 leads to 10 (left); 20 leads to 30 (right). In-order remains 10,20,30.. For 10,20,30, rotate left at 10; the reverse insertion uses a right rotation. For 30,10,20, rotate left at 10 then right at 30. Key values and node identities do not change; the parent/child links do.
+
+For 10,20,30, rotate left at 10; the reverse insertion uses a right rotation. For 30,10,20, rotate left at 10 then right at 30. Key values and node identities do not change; the parent/child links do.
+
 ```cpp
 #include <algorithm>
 #include <cmath>
@@ -516,6 +526,14 @@ Before this chapter: [Check a hash implementation against an independent model](
 A left-right or right-left insertion creates an inner-heavy child. First rotate that child into an outer-heavy shape, then rotate the parent. Both updates must recompute affected heights in dependency order.
 
 Treat the two rotations as structural operations with the same ordering invariant rather than as a special-case key swap.
+
+[Open figure: Rotations change links while preserving keys](../../diagrams/avl-double-rotation.html)
+
+Why is the repaired root 20 with children 10 and 30?
+
+Why is the repaired root 20 with children 10 and 30? Before repair: the supplied insertion shape. Nodes: 30, 10, 20. Connections: 30 leads to 10 (left); 10 leads to 20 (right). ; After repair. Nodes: 20, 10, 30. Connections: 20 leads to 10 (left); 20 leads to 30 (right). In-order remains 10,20,30.. For 10,20,30, rotate left at 10; the reverse insertion uses a right rotation. For 30,10,20, rotate left at 10 then right at 30. Key values and node identities do not change; the parent/child links do.
+
+For 10,20,30, rotate left at 10; the reverse insertion uses a right rotation. For 30,10,20, rotate left at 10 then right at 30. Key values and node identities do not change; the parent/child links do.
 
 ```cpp
 #include <algorithm>

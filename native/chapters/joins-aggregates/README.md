@@ -78,11 +78,13 @@ A hash join groups rows from its build input by key, then looks up each key from
 
 The starter uses an ordered map and looks up one supplied key. The vector for that key holds all matching values. Use this run to inspect matches per key. A hash container would use a different lookup mechanism.
 
-![A join separates build and probe work](../../diagrams/hash-join-buckets.svg)
+[Open figure: One probe can emit several matching pairs](../../diagrams/hash-join-buckets.html)
 
-Bucket membership produces candidates; the join still relies on equality semantics. Duplicate matches produce multiple pairs. An inner join drops unmatched rows; outer joins need an explicit unmatched-row policy.
+Why does probing key 1 produce AX and AY?
 
-Text description: Build side: group rows by join key. Probe side: look up matching bucket. Emit matching pairs: duplicates multiply rows. Build side → Probe side (then); Probe side → Emit matching pairs (then).
+Why does probing key 1 produce AX and AY? Stage; Key 1; Key 3. Build rows grouped by key; [X,Y]; [Z]; Probe A with key 1; Match X and Y; Not probed; Emitted pairs; AX; AY; No output. Build buckets → probe → matching pairs. . This small fixture uses std::map for the bucket grouping. It demonstrates duplicate matching multiplicity, not expected constant-time hash lookup or a complete join executor. Actual key equality defines a match.
+
+This small fixture uses std::map for the bucket grouping. It demonstrates duplicate matching multiplicity, not expected constant-time hash lookup or a complete join executor. Actual key equality defines a match.
 
 ```cpp
 #include <iostream>

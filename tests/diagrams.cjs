@@ -13,7 +13,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   assert.ok(diagram.caption.length>80);
   const svg=fs.readFileSync(`native/diagrams/${diagram.lesson}.svg`,'utf8');
   assert.ok(svg.includes('<title'));assert.ok(svg.includes('<desc'));assert.ok(!/https?:\/\//.test(svg.replace('http://www.w3.org/2000/svg','')));
-  assert.ok(fs.readFileSync(`native/chapters/${byId.get(diagram.lesson).chapter}/README.md`,'utf8').includes(`../../diagrams/${diagram.lesson}.svg`));
+  assert.ok(fs.readFileSync(`native/chapters/${byId.get(diagram.lesson).chapter}/README.md`,'utf8').includes(`../../diagrams/${diagram.lesson}.html`));
  }
  const {server,url}=await start();
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||(fs.existsSync('/usr/bin/chromium')?'/usr/bin/chromium':chromium.executablePath()),headless:true,args:['--no-sandbox']});
@@ -25,6 +25,14 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
    for(const diagram of diagrams){
     await page.goto(url+'#/lesson/'+diagram.lesson);
     await page.locator('.concept-diagram').waitFor();
+    if(await page.locator('.learning-model').count()){
+      assert.equal(await page.locator('.learning-model').count(),1);
+      assert.ok((await page.locator('.learning-model figcaption').textContent()).length>30);
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${diagram.lesson} at ${width}px`);
+      await page.locator('.lm-description summary').click();
+      assert.ok((await page.locator('.lm-description p').innerText()).length>80);
+      continue;
+    }
     assert.equal(await page.locator('.concept-diagram svg[role=img]').count(),1);
     assert.equal(await page.locator('.concept-diagram title').textContent(),diagram.title);
     const failures=await page.locator('.concept-diagram svg').evaluate(svg=>{

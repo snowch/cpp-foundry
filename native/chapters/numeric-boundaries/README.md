@@ -12,6 +12,14 @@ Usual arithmetic conversions can turn a negative signed value into an unsigned v
 
 The right type still depends on the domain. Do not use a negative sentinel in a size field when optional or a named status can represent absence.
 
+[Open figure: Mathematical comparison avoids unsigned reinterpretation](../../diagrams/mixed-sign.html)
+
+Why is std::cmp_less(-1,1u) true?
+
+Why is std::cmp_less(-1,1u) true? Comparison; Interpretation; Result. std::cmp_less(-1,1u); Compare the mathematical values −1 and 1; true; std::cmp_equal(-1,1u); Different mathematical values; false; Ordinary mixed-sign expression · contrast; Conversion rules may convert −1 to unsigned; Must reason about operand types. . . The starter uses the comparison helpers deliberately. The contrast is a language-rule explanation, not another printed starter expression.
+
+The starter uses the comparison helpers deliberately. The contrast is a language-rule explanation, not another printed starter expression.
+
 ```cpp
 #include <iostream>
 #include <utility>
@@ -143,6 +151,14 @@ For nonnegative unsigned values, multiplication fits when one factor is zero or 
 
 Unsigned wrapping is defined, but that does not make a wrapped row count or allocation size acceptable to the application.
 
+[Open figure: The guard must not overflow before the operation](../../diagrams/checked-multiply.html)
+
+Why is the maximum unsigned input rejected for multiplication by 2?
+
+Why is the maximum unsigned input rejected for multiplication by 2? Is multiplication representable?. 6 × 7 fits. Return 42. ; UINT_MAX × 2 does not fit. Return no value. Check a safe division bound before multiplying.. The helper reports an unrepresentable result without first computing a wrapped product. The exact unsigned maximum depends on the target width.
+
+The helper reports an unrepresentable result without first computing a wrapped product. The exact unsigned maximum depends on the target width.
+
 ```cpp
 #include <iostream>
 #include <limits>
@@ -209,6 +225,14 @@ Before this chapter: [State the language baseline explicitly](../cpp-standards/R
 Signed integer division must reject zero denominators and the minimum-value divided by minus one case when that quotient is not representable. Negating the minimum value has the same representability problem.
 
 Validate before performing the operation. A CPU trap or a Wasm trap is not an ordinary C++ error result that the caller can safely ignore.
+
+[Open figure: A nonzero divisor is not the only safety check](../../diagrams/checked-division.html)
+
+Why are both divisor 0 and INT_MIN/-1 rejected?
+
+Why are both divisor 0 and INT_MIN/-1 rejected? Checked integer divide. 9 / 2. Return 4. Integer division truncates toward zero.; Divisor is zero. Reject. ; Minimum int divided by -1. Reject if the positive quotient is unrepresentable. . Do not evaluate the dangerous quotient as an overflow test. The supplied target uses the asymmetric two’s-complement signed range.
+
+Do not evaluate the dangerous quotient as an overflow test. The supplied target uses the asymmetric two’s-complement signed range.
 
 ```cpp
 #include <iostream>

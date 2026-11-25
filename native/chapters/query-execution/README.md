@@ -301,11 +301,13 @@ A query pipeline can separate selection, ordering, and projection into distinct 
 
 This fixture filters high scores, orders by descending score with an ID tie-breaker, and projects names. It deliberately materializes a small bounded candidate vector.
 
-![Rows move through an operator pipeline](../../diagrams/operator-composition.svg)
+[Open figure: Operators have different responsibilities](../../diagrams/operator-composition.html)
 
-This is the lesson’s operator order. Different orderings may change results, and a limit can stop upstream consumption early. The picture does not imply that each intermediate stage materializes a table.
+Which stage selects rows and which orders the selected names?
 
-Text description: Scan: produce input rows. Filter: keep matching rows. Project and limit: shape and bound output. Scan → Filter (then); Filter → Project and limit (then).
+Which stage selects rows and which orders the selected names? Read fixture rows; Filter score ≥ 90. Exclude rows that do not match.; Sort selected rows. Score descending; break ties with ID ascending.; Print names. Only selected rows reach this output.. This is the order in the supplied program. The filter explicitly stores a selected vector; do not infer that every possible query pipeline materializes every stage or that this program applies LIMIT.
+
+This is the order in the supplied program. The filter explicitly stores a selected vector; do not infer that every possible query pipeline materializes every stage or that this program applies LIMIT.
 
 ```cpp
 #include <algorithm>

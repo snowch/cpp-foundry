@@ -178,6 +178,14 @@ A declared length is untrusted data. Even when the bytes fit the input, the appl
 
 Check both the format’s remaining-byte condition and the schema’s maximum before constructing an owning result.
 
+[Open figure: The length prefix bounds the following payload](../../diagrams/codec-length-prefix.html)
+
+Which bytes form the three-character name Ada?
+
+Which bytes form the three-character name Ada? Encoded bytes: index 0 = 3, index 1 = A, index 2 = d, index 3 = a. Offset 0 declares three payload bytes; offsets 1..3 contain the name.. Check that the declared length fits both the format policy and the available bytes before making a view or copy. The length byte is not part of the name.
+
+Check that the declared length fits both the format policy and the available bytes before making a view or copy. The length byte is not part of the name.
+
 ```cpp
 #include <iostream>
 #include <span>
@@ -249,11 +257,13 @@ An import should decode into temporary owned state and publish only after every 
 
 The example’s two-field fixture is deliberately small. A full table additionally validates uniqueness, row count, text, and trailing-byte rejection.
 
-![Publish decoded state only after validation](../../diagrams/codec-candidate-import.svg)
+[Open figure: A partial candidate never replaces the live values](../../diagrams/codec-candidate-import.html)
 
-The worked program reads two fields into temporary storage. If either field is truncated, the decoder leaves the previous values intact. A full importer also checks properties such as row uniqueness and trailing bytes.
+Why does the failed second read leave live as [7,8]?
 
-Text description: Untrusted bytes: check lengths and fields. Candidate state: validate full structure. Publish candidate: replace committed state. Untrusted bytes → Candidate state (then); Candidate state → Publish candidate (then).
+Why does the failed second read leave live as [7,8]? Step; Private candidate; Live values. Before decoding; empty; [7,8]; Read first complete u32; [1]; [7,8]; Read second u32: truncated; Reject this candidate; [7,8]; swap is not reached; Discard partial result; [7,8]. . . The input contains only four bytes. The worked decoder stages two fields; a full importer must additionally validate its schema, uniqueness and complete input consumption.
+
+The input contains only four bytes. The worked decoder stages two fields; a full importer must additionally validate its schema, uniqueness and complete input consumption.
 
 ```cpp
 #include <cstdint>

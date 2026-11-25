@@ -10,11 +10,13 @@ A range gives a beginning and an end for traversal. A view is a lightweight rang
 
 A view is a lightweight range abstraction, not necessarily a container of computed results. filter and transform usually perform work during iteration. This lvalue pipeline borrows the vector, so the source must outlive its use and iterator invalidation rules still apply.
 
-![A view pipeline computes during traversal](../../diagrams/lib-lazy-views.svg)
+[Open figure: A consumer drives the lazy pipeline](../../diagrams/lib-lazy-views.html)
 
-These are conceptual stages, not three stored containers. This pipeline borrows the source vector; each traversal performs work and must respect source lifetime and invalidation.
+Which values are filtered and squared when the loop requests them?
 
-Text description: Source vector: 1 2 3 4. Filter even values: 2 and 4 pass. Transform square: 4 and 16 are yielded. Source vector → Filter even values (then); Filter even values → Transform square (then).
+Which values are filtered and squared when the loop requests them? Source vector [1,2,3,4]. The view borrows the vector.; Filter even values. Traversal selects 2 and 4.; Transform each selected value. Yield 4 and 16 to the printing loop.. These are conceptual traversal stages, not three stored containers. Constructing the view alone does not evaluate every result. Source lifetime and invalidation rules still apply.
+
+These are conceptual traversal stages, not three stored containers. Constructing the view alone does not evaluate every result. Source lifetime and invalidation rules still apply.
 
 ```cpp
 #include <iostream>

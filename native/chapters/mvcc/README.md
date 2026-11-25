@@ -16,6 +16,14 @@ A committed version is visible when its begin stamp is at or before the reader s
 
 This bounded single-row model stores owning optional values and rejects stamp exhaustion before incrementing. It is not a complete multi-row MVCC transaction engine.
 
+[Open figure: Visibility uses half-open committed intervals](../../diagrams/version-intervals.html)
+
+Why do snapshots 1 and 2 see 10 and 20 respectively?
+
+Why do snapshots 1 and 2 see 10 and 20 respectively? Version value; Visibility interval; Reader result. 10; [1,2); snapshot 1 → 10; 20; [2,forever); snapshot 2 → 20. . . The begin stamp is inclusive and end stamp exclusive. Stamps are logical versions, not seconds; uncommitted visibility and concurrent reclamation are separate contracts.
+
+The begin stamp is inclusive and end stamp exclusive. Stamps are logical versions, not seconds; uncommitted visibility and concurrent reclamation are separate contracts.
+
 ```cpp
 #include <algorithm>
 #include <iostream>
@@ -455,11 +463,13 @@ The oldest registered snapshot bounds which historical versions can still be vis
 
 This is a bounded logical reclamation model. Concurrent registration, iterator lifetime, and physical page reuse need additional synchronized ownership rules.
 
-![An old reader keeps required versions alive](../../diagrams/oldest-reader-gc.svg)
+[Open figure: An old reader keeps the earlier version alive](../../diagrams/oldest-reader-gc.html)
 
-Reclamation must retain every version required by an active snapshot. This lesson is a bounded one-row MVCC model; releasing one reader does not permit deleting history still needed by another.
+Why are three versions retained until snapshot 1 is released?
 
-Text description: Register snapshot: reader keeps old revision. New commit: new version becomes current. Reader releases: reclaim unneeded history. Register snapshot → New commit (then); New commit → Reader releases (then).
+The fixture has value 10 visible in [1,2), value 20 in [2,3), and current value 30 from version 3 onward. Active snapshot 1 requires value 10. The conservative oldest-reader horizon also retains intermediate value 20, so three versions remain. After releasing that reader with no other active reader, the horizon becomes 3: values 10 and 20 can be reclaimed, leaving current value 30. Version stamps are not wall-clock times.
+
+Version numbers are committed stamps, not times. The implementation uses a bounded sentinel for forever and an oldest-active-reader horizon. Releasing one reader cannot reclaim data another active reader needs.
 
 ```cpp
 #include <algorithm>

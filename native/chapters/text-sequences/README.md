@@ -20,6 +20,14 @@ std::string owns a sequence of char units. With UTF-8 input, a character can occ
 
 The record store limits UTF-8 bytes because the file format stores a byte length. Display width and Unicode segmentation require different algorithms.
 
+[Open figure: UTF-8 bytes do not count displayed letters](../../diagrams/string-bytes.html)
+
+Why does Zoë occupy four bytes?
+
+Why does Zoë occupy four bytes? Starter string: Zoë. Z uses byte offsets 0: 5A; o uses byte offsets 1: 6F; ë uses byte offsets 2 through 3: C3, AB. std::string::size counts char code units; this fixture uses UTF-8 and eight-bit bytes. Code points are not always complete grapheme clusters.
+
+std::string::size counts char code units; this fixture uses UTF-8 and eight-bit bytes. Code points are not always complete grapheme clusters.
+
 ```cpp
 #include <iostream>
 #include <string>
@@ -86,6 +94,14 @@ An amortized cost spreads total work across a sequence of operations, including 
 A vector may own more storage than it currently uses for live elements. reserve requests capacity without constructing new elements. resize changes size and constructs or destroys elements as needed.
 
 Avoid asserting an exact growth factor: the standard specifies capacity guarantees and amortized behavior, not a universal doubling policy.
+
+[Open figure: Reserved capacity is not live element count](../../diagrams/vector-capacity.html)
+
+Why does reserve(20) leave size 2 but resize(4) creates two zeros?
+
+Why does reserve(20) leave size 2 but resize(4) creates two zeros? Operation; Live elements; Storage contract. Initial vector; [1,2] · size 2; Capacity is at least 2; reserve(20); [1,2] · size 2; Capacity at least 20; no extra elements; resize(4); [1,2,0,0] · size 4; Two new int elements are value-initialized. . . Do not index reserved capacity beyond size. Exact capacity growth is implementation-dependent.
+
+Do not index reserved capacity beyond size. Exact capacity growth is implementation-dependent.
 
 ```cpp
 #include <iostream>
@@ -304,6 +320,14 @@ Allocation obtains storage in which objects can live. Constructing an object est
 A slice needs both a start and a length that fit the source. Validate using subtraction after checking the start, rather than adding start+length where an unsigned sum could wrap.
 
 A string_view slice borrows the source. Returning an owning string instead is useful when the caller cannot maintain the source lifetime.
+
+[Open figure: Validate the complete requested interval](../../diagrams/safe-slicing.html)
+
+Why is [0,4) inside Lovelace but [2,9) outside Ada?
+
+Why is [0,4) inside Lovelace but [2,9) outside Ada? Accepted range. Lovelace: index 0 = L, index 1 = o, index 2 = v, index 3 = e, index 4 = l, index 5 = a, index 6 = c, index 7 = e. Start 0, length 4: select Love.; Rejected request. Owner length; Requested start; Requested count; Decision. 3 (Ada); 2; 9; Reject before forming the view. . . A valid start alone is insufficient; the whole count must fit the remaining owner. The returned view borrows text and does not extend its lifetime.
+
+A valid start alone is insufficient; the whole count must fit the remaining owner. The returned view borrows text and does not extend its lifetime.
 
 ```cpp
 #include <iostream>

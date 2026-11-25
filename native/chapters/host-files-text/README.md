@@ -146,6 +146,14 @@ UTF-8 uses continuation bytes for multibyte code points. A byte-oriented storage
 
 This fixture exposes the two bytes of one code point; full validation also checks overlong encodings, surrogates, and maximum scalar values.
 
+[Open figure: A byte offset can fall inside one UTF-8 scalar](../../diagrams/text-byte-slices.html)
+
+Why is offset 1 not the start of another character in ë?
+
+Why is offset 1 not the start of another character in ë? One scalar, two UTF-8 bytes. ë uses byte offsets 0 through 1: C3, AB. The starter prints lead=c3 and continuation=ab. Indexing std::string accesses code units; an arbitrary byte slice need not be valid UTF-8 or align with grapheme boundaries.
+
+The starter prints lead=c3 and continuation=ab. Indexing std::string accesses code units; an arbitrary byte slice need not be valid UTF-8 or align with grapheme boundaries.
+
 ```cpp
 #include <iomanip>
 #include <iostream>

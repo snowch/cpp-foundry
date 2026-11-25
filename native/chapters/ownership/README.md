@@ -156,11 +156,13 @@ RAII means acquiring a resource as part of an object’s initialization and rele
 
 Destructors should release resources without throwing. Cleanup is often best delegated to existing owners such as std::vector, std::unique_ptr, std::fstream, and std::lock_guard. You do not need a custom destructor when members already do the right thing.
 
-![A resource follows its owner’s lifetime](../../diagrams/raii.svg)
+[Open figure: An owner releases its resource when its lifetime ends](../../diagrams/raii.html)
 
-The sequence includes normal return and exception unwinding after successful construction. It does not describe abrupt process termination; a partially constructed owner is not destroyed as a complete object.
+What still runs when an exception leaves work?
 
-Text description: Enter scope: construct the owner. Use the resource: owner remains alive. Leave scope: destructor releases. Enter scope → Use the resource (then); Use the resource → Leave scope (then).
+What still runs when an exception leaves work? Resource-owning local object was constructed successfully. Normal block exit. Owner destructor releases the resource. ; Exception unwinds the block. Owner destructor releases the resource. The enclosing catch then handles the exception.. The supplied work function throws. This rule covers normal destruction and exception unwinding, not abrupt process termination or destruction of a complete object whose construction never finished.
+
+The supplied work function throws. This rule covers normal destruction and exception unwinding, not abrupt process termination or destruction of a complete object whose construction never finished.
 
 ```cpp
 #include <iostream>
@@ -235,11 +237,13 @@ Prefer ordinary values first. When an object needs a separate lifetime or stable
 
 std::move is a cast that permits moving; the selected move operation performs the transfer. A moved-from unique_ptr is empty. Other moved-from library objects are generally valid but have an unspecified value unless their contract says more.
 
-![Move a resource, not the object’s identity](../../diagrams/moves.svg)
+[Open figure: An owning handle moves while its source object remains](../../diagrams/moves.html)
 
-This sketches transfer by a move-capable owner. The moved-from object still needs a valid destruction path; its other usable operations depend on its type’s contract. A move is not guaranteed to transfer an allocation for every type.
+Why is first empty after moving it into second?
 
-Text description: Before move: source owns resource. Move construction: destination takes it. After move: source still exists. Before move → Move construction (then); Move construction → After move (then).
+Why is first empty after moving it into second? Before the move: Allocated string contains page 7. first owns Allocated string. After std::move(first): Same resource contains page 7. second now owns Same resource; Moved-from unique_ptr first contains empty. . After second.reset(): Resource lifetime ended contains released string; lifetime ended. ; unique_ptr second contains empty. . This specific unique_ptr move transfers ownership. Move behavior for other types follows their own contracts; a generic move is not guaranteed to transfer an allocation.
+
+This specific unique_ptr move transfers ownership. Move behavior for other types follows their own contracts; a generic move is not guaranteed to transfer an allocation.
 
 ```cpp
 #include <iostream>

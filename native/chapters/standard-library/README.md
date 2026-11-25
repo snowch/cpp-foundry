@@ -16,6 +16,14 @@ Standard algorithms commonly use a half-open range [first,last): first names an 
 
 The past-the-end iterator is a boundary marker and must not be dereferenced. It remains useful as the not-found result of search algorithms.
 
+[Open figure: The end iterator is a boundary, not an element](../../diagrams/iterator-ranges.html)
+
+Why must found be compared with end before dereferencing?
+
+Why must found be compared with end before dereferencing? Original vector: index 0 = 2, index 1 = 4, index 2 = 6. find(...,4) reaches index 1. A search for absent 9 returns the end boundary after index 2.. The range is [begin,end). end is not another stored element and must not be dereferenced.
+
+The range is [begin,end). end is not another stored element and must not be dereferenced.
+
 ```cpp
 #include <algorithm>
 #include <iostream>

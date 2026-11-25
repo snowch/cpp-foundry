@@ -10,11 +10,13 @@ An asynchronous result separates producing an answer from asking for it. A promi
 
 promise and future separate result production from consumption through a shared state. A promise normally makes that state ready once, while an ordinary future permits one retrieval through get. Readiness synchronization publishes the produced result; it does not automatically protect unrelated shared objects.
 
-![A shared state carries a value or exception](../../diagrams/lib-future-promise.svg)
+[Open figure: The shared result state connects producer and consumer](../../diagrams/lib-future-promise.html)
 
-An ordinary future permits one get. An exception is transported through the same shared state. Result readiness does not provide a general lock for later mutations of unrelated shared objects.
+When can result.get() return 42?
 
-Text description: Producer: promise sets result. Shared state: becomes ready. Consumer future: get waits and observes. Producer → Shared state (then); Shared state → Consumer future (then).
+When can result.get() return 42? Participant; Action; Dependency. main; get_future(); Obtain the one future before moving the promise; worker; set_value(42); Make the shared result ready; main; result.get(); Wait for readiness; consume the value. One shared result state. . An ordinary future permits one get. The same shared state can transport an exception in other cases; the unchanged starter sets a value. Result readiness is not a general lock for unrelated objects.
+
+An ordinary future permits one get. The same shared state can transport an exception in other cases; the unchanged starter sets a value. Result readiness is not a general lock for unrelated objects.
 
 ```cpp
 #include <future>

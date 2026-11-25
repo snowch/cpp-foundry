@@ -236,11 +236,13 @@ A deleted slot cannot always be changed to never-used empty state. Other keys ma
 
 Tombstones affect performance and eventual rebuild policy, but they are first a correctness issue.
 
-![A deleted probe slot is not an empty slot](../../diagrams/tombstones.svg)
+[Open figure: A deleted probe slot must not stop a search](../../diagrams/tombstones.html)
 
-A tombstone preserves the search path after deletion. An unused empty slot can terminate an unsuccessful search; a bounded probe count is still needed when no empty slot remains.
+How can key 8 remain findable after key 1 is deleted?
 
-Text description: Hash selects start: begin probe sequence. Tombstone encountered: keep probing. Matching key or empty: found or absent. Hash selects start → Tombstone encountered (then); Tombstone encountered → Matching key or empty (then).
+How can key 8 remain findable after key 1 is deleted? Hash capacity 7: both keys start at bucket 1: index 0 = empty, index 1 = 1→10, index 2 = 8→80, index 3 = empty, index 4 = empty, index 5 = empty, index 6 = empty. Key 8 probes from index 1 to index 2.. After erase(1): index 0 = empty, index 1 = deleted, index 2 = 8→80, index 3 = empty, index 4 = empty, index 5 = empty, index 6 = empty. get(8) crosses the tombstone at index 1 and finds 80 at index 2.. A tombstone differs from an unused empty slot. An unused slot can end an unsuccessful search; a bounded probe count is still required when no empty slot remains.
+
+A tombstone differs from an unused empty slot. An unused slot can end an unsuccessful search; a bounded probe count is still required when no empty slot remains.
 
 ```cpp
 #include <array>

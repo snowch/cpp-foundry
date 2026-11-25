@@ -228,11 +228,13 @@ A crash can leave a log ending inside a record. Recovery scans only complete val
 
 This is a prefix-recovery model; it does not claim that arbitrary storage-device damage obeys a simple prefix failure model.
 
-![Recovery accepts a validated committed prefix](../../diagrams/wal-torn-tail.svg)
+[Open figure: A complete prepare record is not a commit](../../diagrams/wal-torn-tail.html)
 
-The lesson uses a tiny single-value redo-log model. A valid complete record is not automatically committed; commit markers matter. This picture does not specify production flush ordering or corruption-repair policy.
+Why must the torn commit tail leave the update unpublished?
 
-Text description: Log bytes: may end mid- record. Validate records: stop at an invalid tail. Replay committed work: ignore uncommitted work. Log bytes → Validate records (then); Validate records → Replay committed work (then).
+Why must the torn commit tail leave the update unpublished? Log region; Validation / decision; Recovery effect. P(tx 1,value 42); Complete valid prepare record; Remember tentative value only; C(tx 1); Last byte missing: incomplete tail; No complete commit decision; Recovered state; Keep earlier committed value; Do not publish tentative 42. . . Recovery accepts only the validated committed prefix. The lesson uses a single-value redo model and does not specify production fsync ordering or corruption repair.
+
+Recovery accepts only the validated committed prefix. The lesson uses a single-value redo model and does not specify production fsync ordering or corruption repair.
 
 ```cpp
 #include <iostream>
