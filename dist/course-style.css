@@ -19,3 +19,25 @@
 .foundry-lab-card{display:flex;flex-direction:column;min-width:0;background:var(--surface,var(--white,#fff));border:1px solid var(--line);border-radius:12px;padding:24px;color:var(--ink)}
 .foundry-lab-card h3{font-size:1.2rem;line-height:1.35;margin:0 0 12px}.foundry-lab-card h3 a{color:inherit;text-decoration:none}.foundry-lab-card p{font-size:1rem;margin:0 0 16px}.foundry-lab-card .lab-number,.lab-number{font-size:.88rem;font-weight:600;color:var(--accent,var(--blue));margin:0 0 10px}.foundry-lab-card .lab-requirement,.foundry-lab-card .lab-progress{font-size:.9rem;color:var(--muted)}.lab-open{margin-top:auto;padding-top:12px;font-weight:600;min-height:44px}.lab-primary{display:inline-block;background:var(--accent,var(--blue));color:var(--on-accent,#fff);padding:12px 20px;border-radius:7px;text-decoration:none;font-weight:600;min-height:44px;box-sizing:border-box}.foundry-lab-intro{padding:28px 0;max-width:80ch}.foundry-lab-intro h1{margin:12px 0}.foundry-lab-intro>.lab-number{margin-top:24px}.foundry-lab-outline{padding-bottom:32px}.foundry-lab-outline li{padding:8px 0}.hub-heading{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px}.hub-heading p{color:var(--muted);font-size:.9rem}.foundry-brand-subtitle{display:block;color:var(--muted);font-size:.75em;font-weight:400}
 @media(max-width:900px){.foundry-hub .hub-art{margin-top:32px;max-width:540px;margin-inline:auto}}
+
+/* Foundry location: Course > Part > Chapter > Lesson. */
+.hierarchy-trail,.course-crumbs,#breadcrumbs,.course-location .breadcrumbs{display:flex;align-items:baseline;flex-wrap:wrap;gap:.45rem .65rem;min-width:0;overflow-wrap:anywhere}
+.hierarchy-trail{margin-block:1rem 1.5rem;font-size:.95rem}
+.hierarchy-separator{opacity:.65}
+.hierarchy-filter-label{display:block;margin-block:1.25rem .4rem}
+[data-hierarchy-filter]{max-width:100%;width:100%;padding:.7rem;font:inherit;color:inherit;background:var(--surface,#fff);border:1px solid var(--line,#9caeae);border-radius:.4rem}
+[data-theme=dark] [data-hierarchy-filter]{background:#182d30}
+.hierarchy-chapter{border-top:1px solid var(--line,#9caeae);padding-block:1rem;min-width:0}
+.hierarchy-chapter h3{margin:.3rem 0;font-size:1.05rem}
+.hierarchy-chapter p{font-size:.88rem;margin:.5rem 0;opacity:.85}
+.hierarchy-lessons{list-style:none!important;margin:0!important;padding:0!important}
+.hierarchy-lessons li{margin:0!important;padding:0!important}
+.hierarchy-lessons a{display:flex;gap:.6rem;align-items:baseline;min-height:44px;padding:.6rem!important;overflow-wrap:anywhere;border-radius:.4rem;text-decoration:none}
+.hierarchy-lessons a[aria-current=page]{background:var(--accent-soft,#dceee7);color:var(--accent,#166c5b);font-weight:700}
+.hierarchy-lessons .lesson-number{flex:0 0 2ch}
+.hierarchy-mark{margin-inline-start:auto;font-size:.8rem}
+[data-hierarchy-part][hidden]{display:none!important}
+.lesson-nav a small{display:block}
+.course-row{flex-wrap:wrap}
+
+.brand .foundry-brand-subtitle{display:block;font-size:.8rem;line-height:1.45;letter-spacing:normal;font-weight:500;margin-top:.25rem}

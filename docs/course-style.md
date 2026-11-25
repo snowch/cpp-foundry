@@ -17,3 +17,9 @@ Typography uses locally bundled IBM Plex Sans and IBM Plex Mono with their OFL l
 Follow instructions as a beginner: first run, stated edit, named output, understanding question, completion, next lesson. Verify warm runner reuse, stop/retry, ordinary compiler diagnostics, runtime-load recovery and saved work. Test 320–1440 px, both themes and keyboard focus. Functional success does not establish learning effectiveness.
 
 The Foundry now uses the [focused lab-series hub](lab-series.md): numbered lab cards, scoped progress and stable lesson links.
+
+
+## Foundry navigation
+
+Use Course → Part → Chapter → Lesson. See the [navigation review](navigation-review.md)
+for reading order, learner actions, compatibility and verification.

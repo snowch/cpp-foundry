@@ -39,6 +39,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm run test:hub
+      - run: npm run test:navigation
       - run: npm test
         env:
           SITE_ROOT: .build/site
