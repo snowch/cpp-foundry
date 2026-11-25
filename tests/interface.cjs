@@ -36,10 +36,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
       else assert.ok((await page.locator('.source').inputValue()).includes('int main'));
     }
     console.log(`PASS all ${lessons.length} routes, readings, questions, experiments, native/browser controls`);
-    await page.goto(url+'#/lesson/bplus-routing');await page.locator('.contents-toggle').click();await page.locator('#part-select').waitFor();
-    assert.equal(await page.locator('#part-select').inputValue(),'reliability');
-    await page.locator('#part-select').selectOption('advanced');
-    await page.waitForFunction(()=>location.hash==='#/lesson/lost-update-schedule'&&document.querySelector('#part-select')?.value==='advanced');
+    await page.goto(url+'#/lesson/bplus-routing');await page.locator('.contents-toggle').click();await page.locator('[data-hierarchy-filter]').waitFor();
+    assert.equal(await page.locator('[data-hierarchy-filter]').inputValue(),'reliability');
+    await page.locator('[data-hierarchy-filter]').selectOption('advanced');
+    assert.equal(new URL(page.url()).hash,'#/lesson/bplus-routing');await page.locator('.contents-body a[href="#/lesson/lost-update-schedule"]').click();await page.waitForFunction(()=>location.hash==='#/lesson/lost-update-schedule');
     await page.goto(url+'#/course/reliability');await page.waitForFunction(()=>document.querySelectorAll('.course-part').length===1);
     assert.equal(await page.locator('.outline-chapter').count(),4);
     assert.equal(await page.locator('.lesson-links li').count(),29);
@@ -61,7 +61,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
     assert.equal(await page.locator('.contents-body').isVisible(),false);
     await page.locator('.contents-toggle').click();
     assert.equal(await page.locator('.contents-toggle').getAttribute('aria-expanded'),'true');
-    assert.equal(await page.locator('#part-select').isVisible(),true);
+    assert.equal(await page.locator('[data-hierarchy-filter]').isVisible(),true);
     await page.locator('.contents-toggle').click();
     assert.equal(await page.locator('.contents-body').isVisible(),false);
     assert.equal(await page.locator('.lesson-nav a').last().isVisible(),true);
